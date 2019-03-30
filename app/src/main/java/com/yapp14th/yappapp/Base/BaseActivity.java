@@ -39,16 +39,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayout();
 
     // 툴바 필요할 시 사용
-    protected void setToolbar() {
+    protected void setToolbar(String title, boolean isBackBtn) {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
+            if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
+                toolbar.setTitle(title);
+            }
             setSupportActionBar(toolbar);
 
             ActionBar actionbar = getSupportActionBar();
-            if (actionbar != null) {
+            if (actionbar != null && isBackBtn) { // 이전 버튼을 보여주고 싶지 않을 경우
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
+                // 이전 버튼 이미지 추가
+//                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
+
             }
         }
     }
