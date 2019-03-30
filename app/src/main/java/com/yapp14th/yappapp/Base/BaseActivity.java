@@ -9,23 +9,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.yapp14th.yappapp.R;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
     private Dialog mProgressDialog;
 
@@ -36,25 +33,29 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        setUpToolbar();
         bindViews();
     }
 
     protected abstract int getLayout();
 
-    private void setUpToolbar() {
+    // 툴바 필요할 시 사용
+    protected void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+
+            ActionBar actionbar = getSupportActionBar();
+            if (actionbar != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
+            }
         }
     }
 
+
     private void bindViews() {
         ButterKnife.bind(this);
-    }
-
-    @NonNull
-    protected Toolbar getToolbar() {
-        return toolbar;
     }
 
     public void showProgress() {
@@ -131,5 +132,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Snackbar.make(findViewById(layout), Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY), duration).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home :
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
