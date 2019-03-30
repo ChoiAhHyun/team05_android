@@ -2,7 +2,7 @@ package com.yapp14th.yappapp.view;
 
 import android.os.Bundle;
 
-import com.yapp14th.yappapp.BaseActivity;
+import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
 
 public class MainActivity extends BaseActivity {

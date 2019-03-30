@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp;
+package com.yapp14th.yappapp.Base;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.yapp14th.yappapp.R;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp;
+package com.yapp14th.yappapp.Base;
 
 import android.app.Dialog;
 import android.content.Context;
