@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+    implementation 'com.github.nihad92:SwipeableCards:1.0.19'
 
 
 }
