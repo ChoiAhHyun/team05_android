@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -52,7 +55,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (actionbar != null && isBackBtn) { // 이전 버튼을 보여주고 싶지 않을 경우
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 // 이전 버튼 이미지 추가
-//                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_background);
+                Drawable drawable= getResources().getDrawable(R.drawable.icon_back);
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 24, 24, true));
+                getSupportActionBar().setHomeAsUpIndicator(newdrawable);
 
             }
         }

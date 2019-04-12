@@ -3,17 +3,36 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.yapp14th.yappapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
+            android:usesCleartextTraffic="true"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="GoogleAppIndexingWarning">
+
+        <activity android:name=".view.CategorySelectActivity">
+        </activity>
+        <activity android:name=".view.MemberInfoInputActivity">
+        </activity>
+        <activity android:name=".view.SignUpActivity">
+        </activity>
+        <activity android:name=".view.LoginActivity">
+        </activity>
+        <activity android:name=".view.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".view.MainActivity">
         </activity>
-
     </application>
 
 </manifest>

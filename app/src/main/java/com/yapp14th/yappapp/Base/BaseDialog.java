@@ -3,13 +3,14 @@ package com.yapp14th.yappapp.Base;
 import android.app.Dialog;
 import android.content.Context;
 
+import com.yapp14th.yappapp.R;
+
 import androidx.annotation.NonNull;
-import butterknife.ButterKnife;
 
 public class BaseDialog extends Dialog {
 
     public BaseDialog(@NonNull Context context) {
-        super(context);
+        super(context, R.style.DialogCustomTheme);
     }
 
     public BaseDialog(@NonNull Context context, int themeResId) {
@@ -19,6 +20,5 @@ public class BaseDialog extends Dialog {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        ButterKnife.bind(this);
     }
 }
