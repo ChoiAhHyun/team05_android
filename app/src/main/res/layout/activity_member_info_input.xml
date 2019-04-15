@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@color/color_3346ff"
-                android:text="다음 (2/3)"
+                android:text="다음"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:lineSpacingExtra="3sp"

@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/color_eff5f9"
         tools:context=".view.SignUpActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -139,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@color/color_3346ff"
-                    android:text="다음 (1/3)"
+                    android:text="다음"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:layout_alignParentBottom="true"
