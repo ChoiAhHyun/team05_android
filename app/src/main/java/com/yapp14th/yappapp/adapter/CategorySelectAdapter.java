@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.yapp14th.yappapp.R;
@@ -24,7 +24,7 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CategorySelectViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_single_text, parent, false));
+        return new CategorySelectViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_category_select, parent, false));
     }
 
     @Override
@@ -40,13 +40,13 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private class CategorySelectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView category_text;
+        CheckBox category_text;
 
         public CategorySelectViewHolder(@NonNull View itemView) {
             super(itemView);
-            category_text = itemView.findViewById(R.id.text);
+            category_text = itemView.findViewById(R.id.checkbox);
 
-            itemView.setOnClickListener(this);
+            category_text.setOnClickListener(this);
 
         }
 

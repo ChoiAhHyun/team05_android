@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/color_eff5f9"
         tools:context=".view.CategorySelectActivity">
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -17,14 +18,31 @@
             android:layout_height="wrap_content"
             android:text="관심 카테고리를 선택해 주세요."
             android:textSize="13sp"
+            android:layout_marginTop="40dp"
             android:layout_marginLeft="35dp"
             android:textColor="@color/color_9699a6"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
-            android:layout_marginTop="54dp"
-            android:paddingLeft="8dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/next_btn2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="60dp"
+            android:background="@color/color_3346ff"
+            android:text="다음"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:lineSpacingExtra="3sp"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 </LinearLayout>
