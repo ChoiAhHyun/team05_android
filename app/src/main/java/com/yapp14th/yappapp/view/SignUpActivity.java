@@ -1,6 +1,7 @@
 package com.yapp14th.yappapp.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,13 +9,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.yanzhenjie.album.Album;
+import com.yanzhenjie.album.AlbumConfig;
 import com.yapp14th.yappapp.Base.BaseActivity;
+import com.yapp14th.yappapp.MediaLoader;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
+import java.util.Locale;
+
 import butterknife.BindView;
+import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +44,9 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.pw_confirm_edit)
     EditText pw_confirm_edit;
 
+    @BindView(R.id.profile_image)
+    public CircleImageView profile_image;
+
     private ImageSelectModeDialog imageSelectModeDialog;
 
     public static Intent newIntent(Context context) {
@@ -54,6 +64,11 @@ public class SignUpActivity extends BaseActivity {
         setToolbar("회원가입", true);
         initialize();
 
+        //TODO Album initialize -> 앱 실행 시 한 번만 초기화하도록 바꾸기
+        Album.initialize(AlbumConfig.newBuilder(this)
+                .setAlbumLoader(new MediaLoader())
+                .setLocale(Locale.getDefault())
+                .build());
     }
 
     private void initialize() {
@@ -61,11 +76,21 @@ public class SignUpActivity extends BaseActivity {
         next_btn.setOnClickListener(onClickListener);
     }
 
+    private DialogInterface.OnDismissListener onDismissListener = dialog -> {
+        ImageSelectModeDialog modeDialog = (ImageSelectModeDialog) dialog;
+        if (modeDialog.getAlbumPath() != null){
+            Album.getAlbumConfig()
+                    .getAlbumLoader()
+                    .load(profile_image, modeDialog.getAlbumPath());
+        }
+    };
+
     private View.OnClickListener onClickListener = v -> {
         switch (v.getId()) {
             case R.id.profile_add_btn :
                 imageSelectModeDialog = new ImageSelectModeDialog(this);
                 imageSelectModeDialog.setContentView(R.layout.dialog_image_selectmode);
+                imageSelectModeDialog.setOnDismissListener(onDismissListener);
                 imageSelectModeDialog.show();
                 break;
             case R.id.next_btn :

@@ -28,7 +28,7 @@
                 android:layout_width="116dp"
                 android:layout_height="116dp"
                 android:layout_centerInParent="true"
-                android:src="@color/white"
+                android:src="@drawable/profile_pic"
                 app:civ_border_width="0.5dp"
                 app:civ_border_color="#7380fb"/>
 
