@@ -23,14 +23,11 @@
             android:layout_marginTop="43dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_image"
                 android:layout_width="116dp"
                 android:layout_height="116dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/profile_pic"
-                app:civ_border_width="0.5dp"
-                app:civ_border_color="#7380fb"/>
+                android:src="@drawable/profile_pic"/>
 
         <ImageView
                 android:id="@+id/profile_add_btn"

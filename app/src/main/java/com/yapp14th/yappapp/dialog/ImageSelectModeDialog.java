@@ -21,9 +21,6 @@ import butterknife.ButterKnife;
 
 public class ImageSelectModeDialog extends BaseDialog {
 
-    @BindView(R.id.default_image_btn)
-    TextView default_image_btn;
-
     @BindView(R.id.camera_btn)
     TextView camera_btn;
 
@@ -61,7 +58,6 @@ public class ImageSelectModeDialog extends BaseDialog {
 
     private void initialize() {
 
-        default_image_btn.setOnClickListener(onClickListener);
         camera_btn.setOnClickListener(onClickListener);
         album_btn.setOnClickListener(onClickListener);
         delete_image_btn.setOnClickListener(onClickListener);
@@ -71,8 +67,6 @@ public class ImageSelectModeDialog extends BaseDialog {
 
     private View.OnClickListener onClickListener = v -> {
         switch (v.getId()) {
-            case R.id.default_image_btn :
-                break;
             case R.id.camera_btn :
                 Album.camera(mContext)
                         .image()
@@ -111,6 +105,9 @@ public class ImageSelectModeDialog extends BaseDialog {
                         .start();
                 break;
             case R.id.delete_image_btn :
+                albumPath = null;
+                onDismissListener.onDismiss(ImageSelectModeDialog.this);
+                ImageSelectModeDialog.this.dismiss();
                 break;
             case R.id.cancel_btn :
                 this.dismiss();

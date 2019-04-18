@@ -96,6 +96,9 @@ public class SignUpActivity extends BaseActivity {
                     .getAlbumLoader()
                     .load(profile_image, modeDialog.getAlbumPath());
         }
+        else {
+            profile_image.setImageResource(R.drawable.profile_pic);
+        }
     };
 
     private View.OnClickListener onClickListener = v -> {
