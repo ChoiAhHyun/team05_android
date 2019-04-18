@@ -102,7 +102,18 @@
                     android:paddingBottom="15dp"
                     android:lineSpacingExtra="1sp"
                     android:layout_below="@id/pw_text"
-                    android:hint="숫자+영문 조합,6자리 이상"/>
+                    android:hint="숫자+영문 조합, 6~12자리"/>
+            <TextView
+                android:id="@+id/pw_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pw_edit"
+                android:layout_alignLeft="@+id/pw_edit"
+                android:layout_marginLeft="5dp"
+                android:textSize="10sp"
+                android:textColor="@color/color_ff1616"
+                android:text="숫자+영문 조합, 6~12자리로 입력해주세요"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
         <RelativeLayout
@@ -130,6 +141,17 @@
                     android:textColor="@color/color_9699a6"
                     android:layout_below="@+id/pw_confirm_text"
                     android:hint="비밀번호를 입력해주세요"/>
+            <TextView
+                android:id="@+id/pw_confirm_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pw_confirm_edit"
+                android:layout_alignLeft="@+id/pw_confirm_edit"
+                android:layout_marginLeft="5dp"
+                android:textSize="10sp"
+                android:textColor="@color/color_ff1616"
+                android:text="비밀번호가 일치하지 않습니다"
+                android:visibility="invisible"/>
         </RelativeLayout>
 
         <RelativeLayout

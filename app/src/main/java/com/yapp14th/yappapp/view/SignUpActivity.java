@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
@@ -19,6 +22,8 @@ import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,8 +46,14 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.pw_edit)
     EditText pw_edit;
 
+    @BindView(R.id.pw_check)
+    TextView pw_check;
+
     @BindView(R.id.pw_confirm_edit)
     EditText pw_confirm_edit;
+
+    @BindView(R.id.pw_confirm_check)
+    TextView pw_confirm_check;
 
     @BindView(R.id.profile_image)
     public CircleImageView profile_image;
@@ -74,6 +85,8 @@ public class SignUpActivity extends BaseActivity {
     private void initialize() {
         profile_add_btn.setOnClickListener(onClickListener);
         next_btn.setOnClickListener(onClickListener);
+        pw_edit.addTextChangedListener(textWatcherPw);
+        pw_confirm_edit.addTextChangedListener(textWatcherConf);
     }
 
     private DialogInterface.OnDismissListener onDismissListener = dialog -> {
@@ -95,7 +108,7 @@ public class SignUpActivity extends BaseActivity {
                 break;
             case R.id.next_btn :
                 // 아이디 중복 체크
-//                if (!id_edit.getText().toString().isEmpty() && !pw_eidt.getText().toString().isEmpty() && !pw_confirm_edit.getText().toString().isEmpty()) {
+//                if (!id_edit.getText().toString().isEmpty() && !pw_edit.getText().toString().isEmpty() && !pw_confirm_edit.getText().toString().isEmpty()) {
 //                    checkUserId(id_edit.getText().toString());
 //                }
 //                else {
@@ -106,6 +119,63 @@ public class SignUpActivity extends BaseActivity {
                 break;
         }
     };
+
+    private TextWatcher textWatcherPw = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String password = pw_edit.getText().toString();
+            if (!isValidPassword(password)){
+                pw_check.setVisibility(View.VISIBLE);
+            }
+            else {
+                pw_check.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    private TextWatcher textWatcherConf = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String password = pw_edit.getText().toString();
+            String confirm = pw_confirm_edit.getText().toString();
+            if (!confirm.equals(password)){
+                pw_confirm_check.setVisibility(View.VISIBLE);
+            }
+            else {
+                pw_confirm_check.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public static boolean isValidPassword(final String password) {
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "^(?=.*[a-zA-Z]+)(?=.*[0-9]+).{6,12}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+    }
 
     private void checkUserId(String id) {
         showProgress();
