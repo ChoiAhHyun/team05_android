@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
@@ -57,7 +58,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 // 이전 버튼 이미지 추가
                 Drawable drawable= getResources().getDrawable(R.drawable.icon_back);
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 24, 24, true));
+                int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, this.getResources().getDisplayMetrics());
+                Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, px, px, true));
                 getSupportActionBar().setHomeAsUpIndicator(newdrawable);
 
             }

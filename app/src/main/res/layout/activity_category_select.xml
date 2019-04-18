@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="관심 카테고리를 선택해 주세요."
             android:textSize="13sp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="35dp"
             android:layout_marginLeft="35dp"
             android:textColor="@color/color_9699a6"/>
 
