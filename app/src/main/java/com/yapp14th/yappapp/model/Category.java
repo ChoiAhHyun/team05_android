@@ -6,8 +6,9 @@ public enum Category {
     activity("야외활동 / 액티비티"),
     write("토론 / 글쓰기 / 독서"),
     study("스터디"),
-    festival("전시회 / 세미나"),
-    music("음악 / 영화"),
+    exhibition("전시회 / 세미나"),
+    music("음악 / 악기"),
+    movie("영화"),
     diy("만들기 / 수공예"),
     volunteer("봉사활동"),
     picture("사진 / 촬영"),
@@ -17,7 +18,8 @@ public enum Category {
     nail("네일아트"),
     car("자동차"),
     interior("인테리어 / 가구 DIY"),
-    concert("콘서트 / 공연");
+    concert("콘서트 / 공연"),
+    etc("자유주제");
 
 
     private String name;

@@ -39,7 +39,7 @@ public class SignUpActivity extends BaseActivity {
     EditText id_edit;
 
     @BindView(R.id.pw_edit)
-    EditText pw_eidt;
+    EditText pw_edit;
 
     @BindView(R.id.pw_confirm_edit)
     EditText pw_confirm_edit;

@@ -22,13 +22,13 @@ import butterknife.ButterKnife;
 public class ImageSelectModeDialog extends BaseDialog {
 
     @BindView(R.id.default_image_btn)
-    TextView defalult_image_btn;
+    TextView default_image_btn;
 
     @BindView(R.id.camera_btn)
     TextView camera_btn;
 
-    @BindView(R.id.elbum_btn)
-    TextView elbum_btn;
+    @BindView(R.id.album_btn)
+    TextView album_btn;
 
     @BindView(R.id.delete_image_btn)
     TextView delete_image_btn;
@@ -61,9 +61,9 @@ public class ImageSelectModeDialog extends BaseDialog {
 
     private void initialize() {
 
-        defalult_image_btn.setOnClickListener(onClickListener);
+        default_image_btn.setOnClickListener(onClickListener);
         camera_btn.setOnClickListener(onClickListener);
-        elbum_btn.setOnClickListener(onClickListener);
+        album_btn.setOnClickListener(onClickListener);
         delete_image_btn.setOnClickListener(onClickListener);
         cancel_btn.setOnClickListener(onClickListener);
 
@@ -87,7 +87,7 @@ public class ImageSelectModeDialog extends BaseDialog {
                         })
                         .start();
                 break;
-            case R.id.elbum_btn :
+            case R.id.album_btn :
                 Album.image(mContext)
                         .singleChoice()
                         .camera(false)
