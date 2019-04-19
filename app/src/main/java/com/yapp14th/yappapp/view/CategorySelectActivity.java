@@ -3,6 +3,8 @@ package com.yapp14th.yappapp.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.layouter.breaker.IRowBreaker;
@@ -12,8 +14,12 @@ import com.yapp14th.yappapp.adapter.CategorySelectAdapter;
 
 import androidx.annotation.IntRange;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 
 public class CategorySelectActivity extends BaseActivity {
+
+    @BindView(R.id.next_btn2)
+    Button next_btn2;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, CategorySelectActivity.class);
@@ -45,6 +51,13 @@ public class CategorySelectActivity extends BaseActivity {
         recyclerView.setAdapter(categorySelectAdapter);
 
         setToolbar("회원가입", true);
+
+        next_btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 }

@@ -14,8 +14,13 @@ import butterknife.BindView;
 public class LoginActivity extends BaseActivity {
 
 
-    @BindView(R.id.sigunup_btn)
+    @BindView(R.id.signup_btn)
     TextView signup_btn;
+
+    @BindView(R.id.signin_btn)
+    TextView signin_btn;
+
+    private Intent intent;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, LoginActivity.class);
@@ -30,12 +35,25 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        signup_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = SignUpActivity.newIntent(LoginActivity.this);
-                startActivity(intent);
-            }
-        });
+        initialize();
     }
+
+    private void initialize() {
+        signin_btn.setOnClickListener(onClickListener);
+        signup_btn.setOnClickListener(onClickListener);
+    }
+
+    private View.OnClickListener onClickListener = v -> {
+        switch (v.getId()) {
+            case R.id.signin_btn :
+                intent = MainActivity.newIntent(LoginActivity.this);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.signup_btn :
+                intent = SignUpActivity.newIntent(LoginActivity.this);
+                startActivity(intent);
+                break;
+        }
+    };
 }

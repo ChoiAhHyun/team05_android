@@ -52,7 +52,7 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(mContext, getAdapterPosition() + " 번째 클릭", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, getAdapterPosition() + " 번째 클릭", Toast.LENGTH_SHORT).show();
         }
     }
 }
