@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="48dp">
             <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_male"
                     android:layout_width="109dp"
                     android:layout_height="109dp"
                     android:src="@color/white"/>
@@ -48,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_female"
                     android:layout_width="109dp"
                     android:layout_height="109dp"
                     android:src="@color/white"/>
@@ -80,7 +82,8 @@
                 android:layout_width="73dp"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:imeOptions="actionNext"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +96,8 @@
                 android:layout_marginRight="12dp"
                 android:gravity="right"
                 android:inputType="number"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+            android:imeOptions="actionNext"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,7 +109,8 @@
                 android:layout_marginRight="6dp"
                 android:gravity="right"
                 android:inputType="number"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                 android:imeOptions="actionDone"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
