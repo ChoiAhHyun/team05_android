@@ -72,6 +72,17 @@
                     android:paddingBottom="12dp"
                     android:lineSpacingExtra="1sp"
                     android:hint="이메일 주소를 입력해주세요"/>
+            <TextView
+                    android:id="@+id/id_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/id_edit"
+                    android:layout_alignLeft="@+id/id_text"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="10sp"
+                    android:textColor="@color/color_ff1616"
+                    android:text="유요한 이메일이 아닙니다."
+                    android:visibility="invisible"/>
         </RelativeLayout>
 
         <RelativeLayout

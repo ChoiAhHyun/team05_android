@@ -120,6 +120,6 @@ public class ImageSelectModeDialog extends BaseDialog {
     }
 
     public interface OnDismissListener extends DialogInterface.OnDismissListener {
-        void onDismiss(String url);
+        void onDismiss(String path);
     }
 }

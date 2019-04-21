@@ -19,15 +19,15 @@ import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.yapp14th.yappapp.common.Constant.EMAIL_PATTERN;
+import static com.yapp14th.yappapp.common.Constant.PASSWORD_PATTERN;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -39,6 +39,9 @@ public class SignUpActivity extends BaseActivity {
 
     @BindView(R.id.id_edit)
     EditText id_edit;
+
+    @BindView(R.id.id_check)
+    TextView id_check;
 
     @BindView(R.id.pw_edit)
     EditText pw_edit;
@@ -56,6 +59,8 @@ public class SignUpActivity extends BaseActivity {
     public CircleImageView profile_image;
 
     private ImageSelectModeDialog imageSelectModeDialog;
+
+    private boolean isId, isPw, isConfirmPw = false;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, SignUpActivity.class);
@@ -76,17 +81,18 @@ public class SignUpActivity extends BaseActivity {
     private void initialize() {
         profile_add_btn.setOnClickListener(onClickListener);
         next_btn.setOnClickListener(onClickListener);
+        id_edit.addTextChangedListener(textWatcherEmail);
         pw_edit.addTextChangedListener(textWatcherPw);
         pw_confirm_edit.addTextChangedListener(textWatcherConf);
     }
 
     private ImageSelectModeDialog.OnDismissListener onDismissListener = new ImageSelectModeDialog.OnDismissListener() {
         @Override
-        public void onDismiss(String url) {
-            if (url != null) {
+        public void onDismiss(String path) {
+            if (path != null) {
                 Album.getAlbumConfig()
                         .getAlbumLoader()
-                        .load(profile_image, url);
+                        .load(profile_image, path);
             }
             else {
                 profile_image.setImageResource(R.drawable.profile_pic);
@@ -108,75 +114,84 @@ public class SignUpActivity extends BaseActivity {
                 imageSelectModeDialog.show();
                 break;
             case R.id.next_btn :
-                // 아이디 중복 체크
-//                if (!id_edit.getText().toString().isEmpty() && !pw_edit.getText().toString().isEmpty() && !pw_confirm_edit.getText().toString().isEmpty()) {
-//                    checkUserId(id_edit.getText().toString());
-//                }
-//                else {
-//                    Toasty.error(getBaseContext(), "모든 정보를 입력해주세요.", Toasty.LENGTH_SHORT).show();
-//                }
-                Intent intent = MemberInfoInputActivity.newIntent(SignUpActivity.this);
-                startActivity(intent);
+                if (isId && isConfirmPw && isPw) {
+                    checkUserId(id_edit.getText().toString());
+                }
+                else {
+                    Toasty.error(getBaseContext(), "양식을 확인해주세요.", Toasty.LENGTH_SHORT).show();
+                }
+
                 break;
+        }
+    };
+
+    private TextWatcher textWatcherEmail = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String email = id_edit.getText().toString().trim();
+            if (email.matches(EMAIL_PATTERN) && s.length() > 0) {
+                id_check.setVisibility(View.INVISIBLE);
+                isId = true;
+            }
+            else {
+                id_check.setVisibility(View.VISIBLE);
+                isId = false;
+            }
         }
     };
 
     private TextWatcher textWatcherPw = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String password = pw_edit.getText().toString();
-            if (!isValidPassword(password)){
-                pw_check.setVisibility(View.VISIBLE);
-            }
-            else {
-                pw_check.setVisibility(View.INVISIBLE);
-            }
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
         @Override
         public void afterTextChanged(Editable s) {
-
+            String password = pw_edit.getText().toString().trim();
+            if (password.matches(PASSWORD_PATTERN) && s.length() > 0) {
+                pw_check.setVisibility(View.INVISIBLE);
+                isPw = true;
+            }
+            else {
+                pw_check.setVisibility(View.VISIBLE);
+                isPw = false;
+            }
         }
     };
 
     private TextWatcher textWatcherConf = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String password = pw_edit.getText().toString();
-            String confirm = pw_confirm_edit.getText().toString();
-            if (!confirm.equals(password)){
-                pw_confirm_check.setVisibility(View.VISIBLE);
-            }
-            else {
-                pw_confirm_check.setVisibility(View.INVISIBLE);
-            }
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
         @Override
         public void afterTextChanged(Editable s) {
-
+            String password = pw_edit.getText().toString();
+            String confirm = pw_confirm_edit.getText().toString();
+            if (confirm.equals(password)) {
+                pw_confirm_check.setVisibility(View.INVISIBLE);
+                isConfirmPw = true;
+            }
+            else {
+                pw_confirm_check.setVisibility(View.VISIBLE);
+                isConfirmPw = false;
+            }
         }
     };
-
-    public static boolean isValidPassword(final String password) {
-        Pattern pattern;
-        Matcher matcher;
-        final String PASSWORD_PATTERN = "^(?=.*[a-zA-Z]+)(?=.*[0-9]+).{6,12}$";
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(password);
-
-        return matcher.matches();
-    }
 
     private void checkUserId(String id) {
         showProgress();
