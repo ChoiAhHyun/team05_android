@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp.common;
+package com.yapp14th.yappapp.etc;
 
 import android.widget.ImageView;
 

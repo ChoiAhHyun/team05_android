@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,13 +7,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+    <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
-    </androidx.appcompat.widget.Toolbar>
+            android:layout_height="match_parent"
+            android:layout_above="@+id/shadow_line"/>
+    <View
+            android:id="@+id/shadow_line"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_above="@id/bottomnavigation"
+            android:alpha="0.5"
+            android:background="@drawable/shadow_border_top"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomnavigation"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation_menu"
+            android:layout_alignParentBottom="true"/>
 
 
 
 
-</LinearLayout>
+</RelativeLayout>

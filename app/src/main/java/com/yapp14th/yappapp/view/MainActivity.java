@@ -3,12 +3,21 @@ package com.yapp14th.yappapp.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
 
-public class MainActivity extends BaseActivity {
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import butterknife.BindView;
 
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+
+    @BindView(R.id.bottomnavigation)
+    BottomNavigationView bottomNavigationView;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -21,10 +30,50 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setToolbar("메인화면", true);
 
+        loadFragment(new HomeFragment());
 
-
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+
+        switch (item.getItemId()) {
+            case R.id.home:
+                fragment = HomeFragment.newInstance();
+                break;
+
+            case R.id.search:
+                fragment = SearchFragment.newInstance();
+                break;
+
+            case R.id.add:
+                fragment = AddFragment.newInstance();
+                break;
+
+            case R.id.alarm:
+                fragment = AlarmFragment.newInstance();
+                break;
+
+            case R.id.myPage:
+                fragment = MypageFragment.newInstance();
+                break;
+        }
+
+        return loadFragment(fragment);
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 }

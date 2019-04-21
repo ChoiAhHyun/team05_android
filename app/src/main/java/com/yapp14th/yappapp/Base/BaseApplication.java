@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
-import com.yapp14th.yappapp.common.MediaLoader;
+import com.yapp14th.yappapp.etc.MediaLoader;
 
 import java.util.Locale;
 
