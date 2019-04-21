@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.yapp14th.yappapp.Base.BaseActivity;
+import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.view.fragment.AddFragment;
 import com.yapp14th.yappapp.view.fragment.AlarmFragment;
@@ -79,5 +80,25 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getVisibleFragment() instanceof HomeFragment) {
+            super.onBackPressed();
+        }
+        else {
+            bottomNavigationView.setSelectedItemId(R.id.home);
+            loadFragment(HomeFragment.newInstance());
+        }
+    }
+
+    public BaseFragment getVisibleFragment() {
+        for (Fragment fragment: getSupportFragmentManager().getFragments()) {
+            if (fragment.isVisible()) {
+                return ((BaseFragment)fragment);
+            }
+        }
+        return null;
     }
 }
