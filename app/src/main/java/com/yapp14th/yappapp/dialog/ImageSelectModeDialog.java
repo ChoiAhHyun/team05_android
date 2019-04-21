@@ -36,7 +36,7 @@ public class ImageSelectModeDialog extends BaseDialog {
     private Context mContext;
     private String albumPath;
 
-    private DialogInterface.OnDismissListener onDismissListener;
+    private OnDismissListener onDismissListener;
 
     public ImageSelectModeDialog(@NonNull Context context) {
         super(context);
@@ -75,7 +75,7 @@ public class ImageSelectModeDialog extends BaseDialog {
                             @Override
                             public void onAction(@NonNull String result) {
                                 albumPath = result;
-                                onDismissListener.onDismiss(ImageSelectModeDialog.this);
+                                onDismissListener.onDismiss(albumPath);
                                 ImageSelectModeDialog.this.dismiss();
                             }
                         })
@@ -98,7 +98,7 @@ public class ImageSelectModeDialog extends BaseDialog {
                             @Override
                             public void onAction(@NonNull ArrayList<AlbumFile> result) {
                             albumPath = result.get(0).getPath();
-                            onDismissListener.onDismiss(ImageSelectModeDialog.this);
+                            onDismissListener.onDismiss(albumPath);
                             ImageSelectModeDialog.this.dismiss();
                             }
                         })
@@ -115,11 +115,11 @@ public class ImageSelectModeDialog extends BaseDialog {
         }
     };
 
-    public String getAlbumPath() {
-        return albumPath;
-    }
-
     public void setOnDismissListener(OnDismissListener listener) {
         onDismissListener = listener;
+    }
+
+    public interface OnDismissListener extends DialogInterface.OnDismissListener {
+        void onDismiss(String url);
     }
 }

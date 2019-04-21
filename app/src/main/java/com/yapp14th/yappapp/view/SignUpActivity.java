@@ -13,15 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yanzhenjie.album.Album;
-import com.yanzhenjie.album.AlbumConfig;
 import com.yapp14th.yappapp.Base.BaseActivity;
-import com.yapp14th.yappapp.MediaLoader;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,12 +71,6 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setToolbar("회원가입", true);
         initialize();
-
-        //TODO Album initialize -> 앱 실행 시 한 번만 초기화하도록 바꾸기
-        Album.initialize(AlbumConfig.newBuilder(this)
-                .setAlbumLoader(new MediaLoader())
-                .setLocale(Locale.getDefault())
-                .build());
     }
 
     private void initialize() {
@@ -89,15 +80,22 @@ public class SignUpActivity extends BaseActivity {
         pw_confirm_edit.addTextChangedListener(textWatcherConf);
     }
 
-    private DialogInterface.OnDismissListener onDismissListener = dialog -> {
-        ImageSelectModeDialog modeDialog = (ImageSelectModeDialog) dialog;
-        if (modeDialog.getAlbumPath() != null){
-            Album.getAlbumConfig()
-                    .getAlbumLoader()
-                    .load(profile_image, modeDialog.getAlbumPath());
+    private ImageSelectModeDialog.OnDismissListener onDismissListener = new ImageSelectModeDialog.OnDismissListener() {
+        @Override
+        public void onDismiss(String url) {
+            if (url != null) {
+                Album.getAlbumConfig()
+                        .getAlbumLoader()
+                        .load(profile_image, url);
+            }
+            else {
+                profile_image.setImageResource(R.drawable.profile_pic);
+            }
         }
-        else {
-            profile_image.setImageResource(R.drawable.profile_pic);
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+
         }
     };
 

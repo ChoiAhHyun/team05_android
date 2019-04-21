@@ -1,10 +1,11 @@
-package com.yapp14th.yappapp;
+package com.yapp14th.yappapp.common;
 
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.yanzhenjie.album.AlbumFile;
 import com.yanzhenjie.album.AlbumLoader;
+import com.yapp14th.yappapp.R;
 
 public class MediaLoader implements AlbumLoader {
     @Override
@@ -16,7 +17,7 @@ public class MediaLoader implements AlbumLoader {
     public void load(ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
-                .error(R.color.white)
+                .error(R.drawable.profile_pic)
                 .placeholder(R.color.white)
                 .into(imageView);
     }
