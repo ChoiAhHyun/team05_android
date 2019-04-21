@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp.view;
+package com.yapp14th.yappapp.view.fragment;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,15 +9,17 @@ import com.yapp14th.yappapp.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class AlarmFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment {
+
     @Override
     protected int getLayout() {
-        return R.layout.fragment_alarm;
+        return R.layout.fragment_home;
     }
 
-    public static AddFragment newInstance() {
-        return new AddFragment();
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

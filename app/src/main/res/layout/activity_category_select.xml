@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/color_eff5f9"
-        tools:context=".view.CategorySelectActivity">
+        tools:context=".view.activity.CategorySelectActivity">
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
-            android:id="@+id/next_btn2"
+            android:id="@+id/next_btn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/color_3346ff"

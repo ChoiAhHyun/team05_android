@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp.view;
+package com.yapp14th.yappapp.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import com.yapp14th.yappapp.R;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
-import es.dmoral.toasty.Toasty;
 
 public class MemberInfoInputActivity extends BaseActivity {
 

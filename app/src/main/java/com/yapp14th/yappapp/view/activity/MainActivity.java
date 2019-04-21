@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp.view;
+package com.yapp14th.yappapp.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.view.fragment.AddFragment;
+import com.yapp14th.yappapp.view.fragment.AlarmFragment;
+import com.yapp14th.yappapp.view.fragment.HomeFragment;
+import com.yapp14th.yappapp.view.fragment.MypageFragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

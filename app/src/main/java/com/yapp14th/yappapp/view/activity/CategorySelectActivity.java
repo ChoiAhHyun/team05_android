@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp.view;
+package com.yapp14th.yappapp.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import butterknife.BindView;
 
 public class CategorySelectActivity extends BaseActivity {
 
-    @BindView(R.id.next_btn2)
+    @BindView(R.id.next_btn)
     Button next_btn2;
 
     public static Intent newIntent(Context context) {

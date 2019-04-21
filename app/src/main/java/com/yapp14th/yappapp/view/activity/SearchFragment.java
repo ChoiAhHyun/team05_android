@@ -1,4 +1,4 @@
-package com.yapp14th.yappapp.view;
+package com.yapp14th.yappapp.view.activity;
 
 import android.os.Bundle;
 import android.view.View;
