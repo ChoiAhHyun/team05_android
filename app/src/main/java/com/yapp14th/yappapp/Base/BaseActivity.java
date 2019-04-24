@@ -112,10 +112,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                             }
                         }
                         else {
-                            // Api < 17. Unfortunately cannot check for isDestroyed()
-                            if (!((Activity) context).isFinishing()) {
-                                dismissWithTryCatch(mProgressDialog);
-                            }
+                                // Api < 17. Unfortunately cannot check for isDestroyed()
+                                if (!((Activity) context).isFinishing()) {
+                                    dismissWithTryCatch(mProgressDialog);
+                                }
                         }
                     }
                     else

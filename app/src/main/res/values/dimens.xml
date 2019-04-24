@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="radius_group">7.2dp</dimen>
+
+    <dimen name="main_bgr_img_width">391.6dp</dimen>
+    <dimen name="main_bgr_img_height">358.6dp</dimen>
+    <dimen name="main_bgr_img_trans_x">-46.64dp</dimen>
+    <dimen name="main_bgr_img_trans_y">-155.32dp</dimen>
+
+    <dimen name="home_card_icon_size">12dp</dimen>
+    <dimen name="home_card_body_text_size">12dp</dimen>
+    <dimen name="user_group_img_size">22dp</dimen>
+    <dimen name="user_group_img_radius">11dp</dimen>
+    <dimen name="user_group_img_margin">12dp</dimen>
+
+</resources>
