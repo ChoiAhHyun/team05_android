@@ -16,7 +16,7 @@
         android:layout_marginRight="@dimen/user_group_img_margin"
         >
         <ImageView
-            android:src="@drawable/user4"
+            android:src="@drawable/sample_user4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/img_user_group_4"/>
@@ -33,7 +33,7 @@
         android:layout_marginRight="@dimen/user_group_img_margin"
         >
         <ImageView
-            android:src="@drawable/user3"
+            android:src="@drawable/sample_user3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/img_user_group_3"/>
@@ -52,7 +52,7 @@
         android:layout_marginRight="@dimen/user_group_img_margin"
         >
         <ImageView
-            android:src="@drawable/user2"
+            android:src="@drawable/sample_user2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/img_user_group_2"/>
@@ -70,7 +70,7 @@
         app:layout_constraintRight_toLeftOf="@id/txt_user_group_count"
         >
         <ImageView
-            android:src="@drawable/user1"
+            android:src="@drawable/sample_user1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/img_user_group_1"/>

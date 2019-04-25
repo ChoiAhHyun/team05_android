@@ -21,6 +21,7 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<GroupCardInfo> modelList;
     private Context mContext;
     private int viewType;
+    private final int VIEW_TYPE_NEAR = 0 , VIEW_TYPE_REAL_TIME = 1;
 
     public GroupCardAdpater(Context mContext, ArrayList<GroupCardInfo> modelList, int viewType){
 
@@ -30,23 +31,30 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return this.viewType;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new GroupCardViewHolder(LayoutInflater.from(mContext).inflate(R.layout.model_near_group, parent, false));
+
+        if (viewType == VIEW_TYPE_NEAR){
+
+            return new GroupCardViewHolder(LayoutInflater.from(mContext).inflate(R.layout.model_near_group, parent, false));
+
+        }else{
+
+            return new GroupCardViewHolder(LayoutInflater.from(mContext).inflate(R.layout.model_realtime_group, parent, false));
+
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 
         GroupCardViewHolder holder = (GroupCardViewHolder) viewHolder;
-
-        for (ImageView img : holder.imgGroups){
-
-
-
-        }
-
 
 
 

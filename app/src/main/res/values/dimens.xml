@@ -12,5 +12,6 @@
     <dimen name="user_group_img_size">22dp</dimen>
     <dimen name="user_group_img_radius">11dp</dimen>
     <dimen name="user_group_img_margin">12dp</dimen>
+    <dimen name="home_card_left_margin">20dp</dimen>
 
 </resources>

@@ -1,6 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:elevation="0dp"
+        app:layout_constraintDimensionRatio="320:91.2">
+
+        <ImageView
+            android:background="@drawable/bgr_rounded"
+            android:id="@+id/img_card_bgr"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_glass"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/info_group"
+        android:layout_width="match_parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:outlineProvider="none"
+        android:background="@drawable/bgr_rounded"
+        android:translationY="40dp"
+        app:layout_constraintDimensionRatio="304:46"
+        app:layout_constraintBottom_toBottomOf="@id/cv"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TextView
+            android:id="@+id/txt_home_card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="1.8sp"
+            android:text="WINE TALK"
+            android:textColor="#010000"
+            android:textSize="15.2sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/model_group_card_time_info"
+            layout="@layout/model_group_card_time_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="9.2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_home_card_title" />
+
+        <include
+            android:id="@+id/model_group_card_loc_info"
+            layout="@layout/model_group_card_loc_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="9.2dp"
+            app:layout_constraintLeft_toRightOf="@id/model_group_card_time_info"
+            app:layout_constraintTop_toBottomOf="@id/txt_home_card_title"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <include
+            layout="@layout/model_user_group_imgs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/info_group"
+
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/img_card_bgr"
             android:scaleType="fitXY"
-            android:src="@drawable/card_bgr_sample"
+            android:src="@drawable/sample_card_bgr"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -22,6 +22,9 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.rv_home_near_group)
     RecyclerView rvNearGroup;
 
+    @BindView(R.id.rv_home_realtime_group)
+    RecyclerView rvRealTime;
+
     @Override
     protected int getLayout() {
         return R.layout.fragment_home;
@@ -32,7 +35,7 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    private GroupCardAdpater adpater;
+    private GroupCardAdpater adapterNear, adapterRealTime;
 
     private ArrayList<GroupCardInfo> nearGroupModelList, realTimeGroupModelList;
 
@@ -42,7 +45,9 @@ public class HomeFragment extends BaseFragment {
 
         setRecyclerView();
 
-        setModelDatas();
+        setNearGroupDatas();
+
+        setRealTimeGroupDatas();
 
         setAdapter();
 
@@ -55,25 +60,51 @@ public class HomeFragment extends BaseFragment {
 
         rvNearGroup.setLayoutManager(lm);
 
+        lm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        lm.scrollToPositionWithOffset(0,0);
+
+        rvRealTime.setLayoutManager(lm);
+
     }
 
-    private void setModelDatas(){
+    private void setNearGroupDatas(){
 
         nearGroupModelList = new ArrayList<GroupCardInfo>();
 
         nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
 
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+    }
+
+    private void setRealTimeGroupDatas(){
+
+        realTimeGroupModelList = new ArrayList<>();
+
+        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
 
     }
 
     private void setAdapter(){
 
-        adpater = new GroupCardAdpater(getActivity(), nearGroupModelList, 0);
+        adapterNear = new GroupCardAdpater(getActivity(), nearGroupModelList, 0);
 
-        rvNearGroup.setAdapter(adpater);
+        rvNearGroup.setAdapter(adapterNear);
+
+        adapterRealTime = new GroupCardAdpater(getActivity(), realTimeGroupModelList, 1);
+
+        rvRealTime.setAdapter(adapterRealTime);
+
     }
 }
