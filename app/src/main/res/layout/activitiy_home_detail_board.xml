@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_board"
+    android:background="@color/white"
+    app:layout_constraintTop_toBottomOf="@id/final_board"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_board_leader_profile"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        android:layout_width="28dp"
+        android:layout_height="28dp" />
+
+    <TextView
+        android:id="@+id/txt_board_leader_name"
+        app:layout_constraintLeft_toRightOf="@id/img_board_leader_profile"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:textColor="#010000"
+        android:text="서유빈"
+        />
+
+    <TextView
+        app:layout_constraintLeft_toRightOf="@id/txt_board_leader_name"
+        app:layout_constraintBottom_toBottomOf="@id/txt_board_leader_name"
+        android:layout_marginLeft="8dp"
+        android:id="@+id/txt_board_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#717486"
+        android:text="2019.04.22"
+        />
+
+    <TextView
+        android:id="@+id/txt_board_content"
+        app:layout_constraintLeft_toLeftOf="@id/txt_board_leader_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_board_leader_name"
+        android:layout_marginTop="4dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#010000"
+        android:lineSpacingExtra="1.5sp"
+        android:text="모임 끝나고 가볍게 술 마시려고 하는데 참여하실 수 있는 분 계신가요? 댓글로 남겨주시면좋을 것 같아요! 장소는 모임하는 근처인 강남역"
+        />
+
+    <TextView
+        android:id="@+id/final_detail"
+        app:layout_constraintLeft_toLeftOf="@id/txt_board_leader_name"
+        app:layout_constraintTop_toBottomOf="@id/txt_board_content"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#717486"
+        android:lineSpacingExtra="1.5sp"
+        android:text="자세히 보기"
+        />
+
+    <ImageView
+        app:layout_constraintRight_toLeftOf="@id/txt_board_cnt_comments"
+        android:layout_marginRight="4dp"
+        android:src="@drawable/comment_icon"
+        android:layout_width="16dp"
+        android:layout_height="12dp"
+        app:layout_constraintTop_toTopOf="@id/txt_board_cnt_comments"
+        app:layout_constraintBottom_toBottomOf="@id/txt_board_cnt_comments"/>
+
+    <TextView
+        android:id="@+id/txt_board_cnt_comments"
+        app:layout_constraintTop_toBottomOf="@id/final_detail"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:textColor="#484747"
+        android:text="12"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

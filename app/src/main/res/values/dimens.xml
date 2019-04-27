@@ -14,4 +14,9 @@
     <dimen name="user_group_img_margin">12dp</dimen>
     <dimen name="home_card_left_margin">20dp</dimen>
 
+    <dimen name="home_detail_margin_left">32dp</dimen>
+
+    <dimen name="user_img_list_width">38dp</dimen>
+    <dimen name="user_img_list_margin">8dp</dimen>
+
 </resources>

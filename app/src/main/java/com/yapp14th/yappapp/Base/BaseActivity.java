@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -53,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
                 toolbar.setTitle(title);
             }
+
             setSupportActionBar(toolbar);
 
             ActionBar actionbar = getSupportActionBar();
@@ -71,13 +73,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
-
-    protected void setToolbarColor(int color){
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.transparent)));
-
-        toolbar.setBackgroundColor(color);
-    }
-
 
     private void bindViews() {
         ButterKnife.bind(this);
