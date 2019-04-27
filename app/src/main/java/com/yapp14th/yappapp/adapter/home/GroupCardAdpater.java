@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -22,12 +23,25 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
     private int viewType;
     private final int VIEW_TYPE_NEAR = 0 , VIEW_TYPE_REAL_TIME = 1;
+    private ItemOnCickListener mItemOnClickListener;
 
     public GroupCardAdpater(Context mContext, ArrayList<GroupCardInfo> modelList, int viewType){
 
         this.mContext = mContext;
         this.modelList = modelList;
         this.viewType = viewType;
+
+    }
+
+    public interface ItemOnCickListener{
+
+        void onClickListener(GroupCardInfo model, View sharedView);
+
+    }
+
+    public void setOnItemClickListener(ItemOnCickListener mItemOnClickListener){
+
+        this.mItemOnClickListener = mItemOnClickListener;
 
     }
 
@@ -54,18 +68,39 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 
-        GroupCardViewHolder holder = (GroupCardViewHolder) viewHolder;
+            GroupCardViewHolder holder = (GroupCardViewHolder) viewHolder;
 
+            GroupCardInfo model = modelList.get(position);
 
+            holder.imgCardBgr.setTransitionName(model.getTitle());
+
+            holder.itemView.setOnClickListener(onClickListener(modelList.get(position), holder.imgCardBgr));
+
+            //TODO
+            //set View Data
 
     }
+
+    private View.OnClickListener onClickListener(final GroupCardInfo model, final ImageView sharedImage){
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemOnClickListener.onClickListener(model, sharedImage);
+            }
+        };
+
+        return listener;
+
+    }
+
 
     @Override
     public int getItemCount() {
         return modelList.size();
     }
 
-    private class GroupCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class GroupCardViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imgCardBgr, imgUser1, imgUser2, imgUser3, imgUser4;
         private TextView txtCardTitle, txtDate, txtTime, txtLocName, txtDist, txtUsersCnt;
@@ -100,10 +135,6 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
-        @Override
-        public void onClick(View v) {
-
-        }
     }
 
 }

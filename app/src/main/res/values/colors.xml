@@ -18,5 +18,7 @@
     <color name="color_fefefe">#fefefe</color>
     <color name="color_0000ff">#0000ff</color>
     <color name="color_ff1616">#ff1616</color>
-    <color name="transparent">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="page_bgr">#f7f7f7</color>
+    <color name="blur_black">#70000000</color>
 </resources>

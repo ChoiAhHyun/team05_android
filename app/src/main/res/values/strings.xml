@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">YappApp</string>
     <string name="main_bgr_ratio">391.6:358.6</string>
+    <string name="intent_str_transition_view">transitionNameOfView</string>
 </resources>

@@ -13,7 +13,15 @@ public class GroupCardInfo implements Parcelable {
     private String distance;
     private ArrayList<String> imgSrcPath;
 
-    public GroupCardInfo(String title, String date,String time, String locName, String distance, ArrayList<String> imgSrcPath){
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public GroupCardInfo(String title, String date, String time, String locName, String distance, ArrayList<String> imgSrcPath){
 
         this.title = title;
         this.time = time;

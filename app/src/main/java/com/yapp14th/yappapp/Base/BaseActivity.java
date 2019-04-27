@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,7 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private int mProgressCount = 0;
     private boolean mIsShowProgress = false;
+    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // 툴바 필요할 시 사용
     protected void setToolbar(String title, boolean isBackBtn) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
@@ -53,6 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
 
             ActionBar actionbar = getSupportActionBar();
+
             if (actionbar != null && isBackBtn) { // 이전 버튼을 보여주고 싶지 않을 경우
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 // 이전 버튼 이미지 추가
@@ -62,8 +66,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, px, px, true));
                 getSupportActionBar().setHomeAsUpIndicator(newdrawable);
 
+                toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
             }
         }
+    }
+
+    protected void setToolbarColor(int color){
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.transparent)));
+
+        toolbar.setBackgroundColor(color);
     }
 
 

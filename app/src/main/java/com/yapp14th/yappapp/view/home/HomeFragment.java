@@ -1,7 +1,7 @@
-package com.yapp14th.yappapp.view.fragment;
+package com.yapp14th.yappapp.view.home;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.yapp14th.yappapp.Base.BaseFragment;
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -100,11 +103,34 @@ public class HomeFragment extends BaseFragment {
 
         adapterNear = new GroupCardAdpater(getActivity(), nearGroupModelList, 0);
 
+        adapterNear.setOnItemClickListener(itemClickListener);
+
         rvNearGroup.setAdapter(adapterNear);
 
+
         adapterRealTime = new GroupCardAdpater(getActivity(), realTimeGroupModelList, 1);
+
+        adapterRealTime.setOnItemClickListener(itemClickListener);
 
         rvRealTime.setAdapter(adapterRealTime);
 
     }
+
+    private GroupCardAdpater.ItemOnCickListener itemClickListener = new GroupCardAdpater.ItemOnCickListener() {
+        @Override
+        public void onClickListener(GroupCardInfo model, View sharedView) {
+
+            Intent intent = new Intent(getActivity(), HomeDetailActivity.class);
+            intent.putExtra(getString(R.string.intent_str_transition_view), ViewCompat.getTransitionName(sharedView));
+            intent.putExtra("groupInfo", model);
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                    Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
+            startActivityForResult(intent, 1, options.toBundle());
+
+
+        }
+    };
+
+
 }
