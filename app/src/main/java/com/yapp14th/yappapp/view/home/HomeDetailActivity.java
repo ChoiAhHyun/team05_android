@@ -10,15 +10,19 @@ import android.transition.Fade;
 import android.transition.Transition;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
+import com.yapp14th.yappapp.dialog.ConfirmDialog;
+import com.yapp14th.yappapp.utils.TransitionIssue;
 
 import java.util.ArrayList;
 
@@ -27,6 +31,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 public class HomeDetailActivity extends BaseActivity implements Transition.TransitionListener {
@@ -46,6 +51,9 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     @BindView(R.id.rv_user_imgs)
     RecyclerView rv;
 
+    @BindView(R.id.btn_home_detail)
+    Button btn;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_home_detail;
@@ -53,6 +61,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private UserImagesAdpater adapter;
     private ArrayList<Integer> imgSrcs = new ArrayList<>();
+    private ConfirmDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +72,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         hideNotTransitionedViews();
 
-        setTransitionName();
+        setTransitionInfo();
 
         setBoard(true);
 
@@ -71,22 +80,31 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void setView(){
 
-        getWindow().getSharedElementEnterTransition().addListener(this);
-
-        exclude(this);
-
-        ct.setExpandedTitleTextAppearance(R.style.ExpandedAppBarBlack);
-
-        ct.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarBlack);
-
         setToolbar();
 
         setRecyclerView();
 
+        setDialog();
+
+        setButton();
+
     }
 
-    private void setRecyclerView(){
+    private void setDialog(){
 
+        dialog = new ConfirmDialog(this, "Title","subTitle", true);
+
+        dialog.setOkButtonClickListener(okButtonClickListener);
+
+    }
+
+    private ConfirmDialog.OkButtonListener okButtonClickListener = (str) -> {
+        Toast.makeText(this, "hihi", Toast.LENGTH_SHORT).show();
+    };
+
+    private void setButton(){ btn.setOnClickListener( v -> dialog.show()); }
+
+    private void setRecyclerView(){
 
         LinearLayoutManager lm = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         lm.scrollToPositionWithOffset(0,0);
@@ -96,13 +114,18 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     }
 
-    private void setAdapter(){
+    private void setTestModel(){
 
         //demo
+        imgSrcs.add(R.drawable.sample_user1);
+        imgSrcs.add(R.drawable.sample_user1);
+        imgSrcs.add(R.drawable.sample_user1);
 
-        imgSrcs.add(R.drawable.sample_user1);
-        imgSrcs.add(R.drawable.sample_user1);
-        imgSrcs.add(R.drawable.sample_user1);
+    }
+
+    private void setAdapter(){
+
+        setTestModel();
 
         adapter = new UserImagesAdpater(this, imgSrcs);
 
@@ -110,6 +133,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     }
 
     private void setToolbar(){
+
+        ct.setExpandedTitleTextAppearance(R.style.ExpandedAppBarBlack);
+
+        ct.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarBlack);
 
         setToolbar("모임 상세", true);
 
@@ -143,7 +170,11 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     }
 
-    private void setTransitionName(){
+    private void setTransitionInfo(){
+
+        getWindow().getSharedElementEnterTransition().addListener(this);
+
+        TransitionIssue.removeBlink(this);
 
         postponeEnterTransition();
 
@@ -154,20 +185,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         startPostponedEnterTransition();
     }
 
-    public static void exclude(Activity context){   // transition 시 화면 반짝이 제거
-
-        Fade fade = new Fade();
-
-        View decor = context.getWindow().getDecorView();
-
-        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true );
-        fade.excludeTarget(android.R.id.statusBarBackground, true);
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
-
-        context.getWindow().setEnterTransition(fade);
-        context.getWindow().setExitTransition(fade);
-
-    }
 
     @Override
     public void onTransitionStart(Transition transition) { }

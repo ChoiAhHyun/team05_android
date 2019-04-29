@@ -19,4 +19,6 @@
     <dimen name="user_img_list_width">38dp</dimen>
     <dimen name="user_img_list_margin">8dp</dimen>
 
+    <dimen name="dialog_radius">10dp</dimen>
+
 </resources>
