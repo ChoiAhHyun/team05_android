@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:elevation="10dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:elevation="4dp"
     app:cardCornerRadius="8dp"
     android:layout_width="212dp"
     android:layout_height="280dp"
     android:background="@drawable/card_style_bgr_with_shadow"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    card_view:cardElevation="10dp"
+    card_view:cardPreventCornerOverlap="false"
     android:layout_margin="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout

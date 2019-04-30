@@ -17,6 +17,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
@@ -63,6 +64,8 @@ public class HomeFragment extends BaseFragment {
 
         rvNearGroup.setLayoutManager(lm);
 
+        new PagerSnapHelper().attachToRecyclerView(rvNearGroup);
+
         lm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false){
             @Override
             public boolean canScrollVertically() {
@@ -79,11 +82,11 @@ public class HomeFragment extends BaseFragment {
 
         nearGroupModelList = new ArrayList<GroupCardInfo>();
 
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        for (int i=0; i<40;i ++){
+
+            nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+
+        }
 
     }
 
@@ -107,7 +110,6 @@ public class HomeFragment extends BaseFragment {
 
         rvNearGroup.setAdapter(adapterNear);
 
-
         adapterRealTime = new GroupCardAdpater(getActivity(), realTimeGroupModelList, 1);
 
         adapterRealTime.setOnItemClickListener(itemClickListener);
@@ -116,20 +118,17 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    private GroupCardAdpater.ItemOnCickListener itemClickListener = new GroupCardAdpater.ItemOnCickListener() {
-        @Override
-        public void onClickListener(GroupCardInfo model, View sharedView) {
+    private GroupCardAdpater.ItemOnCickListener itemClickListener = (model, sharedView) -> {
 
-            Intent intent = new Intent(getActivity(), HomeDetailActivity.class);
-            intent.putExtra(getString(R.string.intent_str_transition_view), ViewCompat.getTransitionName(sharedView));
-            intent.putExtra("groupInfo", model);
+        Intent intent = new Intent(getActivity(), HomeDetailActivity.class);
+        intent.putExtra(getString(R.string.intent_str_transition_view), ViewCompat.getTransitionName(sharedView));
+        intent.putExtra("groupInfo", model);
 
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                    Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
-            startActivityForResult(intent, 1, options.toBundle());
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
+        startActivityForResult(intent, 1, options.toBundle());
 
 
-        }
     };
 
 

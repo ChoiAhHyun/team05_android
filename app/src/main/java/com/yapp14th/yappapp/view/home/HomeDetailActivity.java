@@ -98,9 +98,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     }
 
-    private ConfirmDialog.OkButtonListener okButtonClickListener = (str) -> {
-        Toast.makeText(this, "hihi", Toast.LENGTH_SHORT).show();
-    };
+    private ConfirmDialog.OkButtonListener okButtonClickListener = (str) -> Toast.makeText(this, "hihi", Toast.LENGTH_SHORT).show();
 
     private void setButton(){ btn.setOnClickListener( v -> dialog.show()); }
 

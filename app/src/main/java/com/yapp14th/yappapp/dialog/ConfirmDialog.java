@@ -54,7 +54,6 @@ public class ConfirmDialog {
 
         edt = dlg.findViewById(R.id.edt_dialog);
         edt.addTextChangedListener(watcher);
-        //edt.addTextChangedListener();
 
         txtHint = dlg.findViewById(R.id.txt_dialog_hint);
 
