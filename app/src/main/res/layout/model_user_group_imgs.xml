@@ -5,77 +5,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv4"
-        app:cardCornerRadius="@dimen/user_group_img_radius"
+    <ImageView
+        android:id="@+id/img_user_group_4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="@dimen/user_group_img_size"
         android:layout_height="@dimen/user_group_img_size"
-        app:layout_constraintRight_toRightOf="@id/cv3"
+        app:layout_constraintRight_toRightOf="@id/img_user_group_3"
         android:layout_marginRight="@dimen/user_group_img_margin"
-        >
-        <ImageView
-            android:src="@drawable/sample_user4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/img_user_group_4"/>
-    </androidx.cardview.widget.CardView>
+        />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv3"
-        app:cardCornerRadius="@dimen/user_group_img_radius"
+    <ImageView
+        android:id="@+id/img_user_group_3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="@dimen/user_group_img_size"
         android:layout_height="@dimen/user_group_img_size"
-        app:layout_constraintRight_toRightOf="@id/cv2"
-        android:layout_marginRight="@dimen/user_group_img_margin"
-        >
-        <ImageView
-            android:src="@drawable/sample_user3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/img_user_group_3"/>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintRight_toRightOf="@id/img_user_group_2"
+        android:layout_marginRight="@dimen/user_group_img_margin" />
 
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv2"
-        app:cardCornerRadius="@dimen/user_group_img_radius"
+    <ImageView
+        android:id="@+id/img_user_group_2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="@dimen/user_group_img_size"
         android:layout_height="@dimen/user_group_img_size"
-        app:layout_constraintRight_toRightOf="@id/cv1"
-        android:layout_marginRight="@dimen/user_group_img_margin"
-        >
-        <ImageView
-            android:src="@drawable/sample_user2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/img_user_group_2"/>
+        app:layout_constraintRight_toRightOf="@id/img_user_group_1"
+        android:layout_marginRight="@dimen/user_group_img_margin" />
 
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv1"
-        app:cardCornerRadius="@dimen/user_group_img_radius"
+    <ImageView
+        android:id="@+id/img_user_group_1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="@dimen/user_group_img_size"
         android:layout_marginRight="6dp"
         android:layout_height="@dimen/user_group_img_size"
-        app:layout_constraintRight_toLeftOf="@id/txt_user_group_count"
-        >
-        <ImageView
-            android:src="@drawable/sample_user1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/img_user_group_1"/>
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintRight_toLeftOf="@id/txt_user_group_count" />
     
     <TextView
         android:id="@+id/txt_user_group_count"

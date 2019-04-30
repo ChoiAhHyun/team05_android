@@ -66,15 +66,13 @@ public class HomeFragment extends BaseFragment {
 
         new PagerSnapHelper().attachToRecyclerView(rvNearGroup);
 
-        lm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
+        lm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+
         lm.scrollToPositionWithOffset(0,0);
 
         rvRealTime.setLayoutManager(lm);
+        rvRealTime.setNestedScrollingEnabled(false);
+        rvRealTime.setHasFixedSize(false);
 
     }
 
@@ -84,7 +82,11 @@ public class HomeFragment extends BaseFragment {
 
         for (int i=0; i<40;i ++){
 
-            nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+            ArrayList<String> strs = new ArrayList<>();
+
+            for(int j=0; j<i+1; j++) strs.add("s");
+
+            nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
 
         }
 
@@ -92,13 +94,17 @@ public class HomeFragment extends BaseFragment {
 
     private void setRealTimeGroupDatas(){
 
-        realTimeGroupModelList = new ArrayList<>();
+        realTimeGroupModelList = new ArrayList<GroupCardInfo>();
 
-        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
-        realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",new ArrayList<>()));
+        for (int i=0; i<40;i ++){
+
+            ArrayList<String> strs = new ArrayList<>();
+
+            for(int j=0; j<i+1; j++) strs.add("s");
+
+            realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
+
+        }
 
     }
 

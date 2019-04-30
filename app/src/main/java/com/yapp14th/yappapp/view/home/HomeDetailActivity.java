@@ -1,6 +1,7 @@
 package com.yapp14th.yappapp.view.home;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -22,6 +23,7 @@ import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
+import com.yapp14th.yappapp.model.BoardInfo;
 import com.yapp14th.yappapp.utils.TransitionIssue;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -206,10 +209,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     @BindView(R.id.txt_board_temp)
     TextView txtBoardTemp;
 
-    @Nullable
-    @BindView(R.id.container_board)
-    ConstraintLayout containerBoard;
-
+    @BindView(R.id.layout_board)
+    View boardContainer;
 
     private void setBoard(boolean isExist){
 
@@ -221,9 +222,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             imgLeaderProfile.setBackground(new ShapeDrawable(new OvalShape()));
             imgLeaderProfile.setClipToOutline(true);
 
+            boardContainer.setOnClickListener(v -> {
+                Intent intent = new Intent(HomeDetailActivity.this, BoardDetailActivity.class);
+                intent.putExtra("leaderInfo",new BoardInfo("","","",""));
+                startActivity(intent);
+            });
+
+
         }else{
 
-            containerBoard.setVisibility(View.GONE);
+            boardContainer.setVisibility(View.GONE);
 
         }
 

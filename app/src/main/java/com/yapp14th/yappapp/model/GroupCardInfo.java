@@ -17,6 +17,10 @@ public class GroupCardInfo implements Parcelable {
         return title;
     }
 
+    public ArrayList<String> getImgSrcPath() {
+        return imgSrcPath;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

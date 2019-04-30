@@ -1,6 +1,9 @@
 package com.yapp14th.yappapp.adapter.home;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +77,8 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             holder.imgCardBgr.setTransitionName(model.getTitle());
 
+            setUserImages(holder, model);
+
             holder.itemView.setOnClickListener(onClickListener(modelList.get(position), holder.imgCardBgr));
 
             //TODO
@@ -81,14 +86,27 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
+    private void setUserImages(GroupCardViewHolder holder, GroupCardInfo model){
+
+        int cntImgs = model.getImgSrcPath().size();
+
+        for (int i=0 ; i < 4; i++){
+
+            if (i >= cntImgs) holder.imgGroups.get(i).setVisibility(View.INVISIBLE);
+
+            else holder.imgGroups.get(i).setVisibility(View.VISIBLE);
+
+            holder.imgGroups.get(i).setImageDrawable(mContext.getDrawable( R.drawable.sample_user1 ));
+
+        }
+
+        holder.txtUsersCnt.setText(cntImgs <= 4 ? "" : "+"+String.valueOf(cntImgs - 4));
+
+    }
+
     private View.OnClickListener onClickListener(final GroupCardInfo model, final ImageView sharedImage){
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mItemOnClickListener.onClickListener(model, sharedImage);
-            }
-        };
+        View.OnClickListener listener = v -> mItemOnClickListener.onClickListener(model, sharedImage);
 
         return listener;
 
@@ -102,7 +120,7 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private class GroupCardViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imgCardBgr, imgUser1, imgUser2, imgUser3, imgUser4;
+        private ImageView imgCardBgr;
         private TextView txtCardTitle, txtDate, txtTime, txtLocName, txtDist, txtUsersCnt;
         private ArrayList<ImageView> imgGroups;
 
@@ -113,15 +131,10 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             imgGroups = new ArrayList<>();
 
-            imgGroups.add(itemView.findViewById(R.id.img_user_group_1));
-            imgGroups.add(itemView.findViewById(R.id.img_user_group_2));
-            imgGroups.add(itemView.findViewById(R.id.img_user_group_3));
-            imgGroups.add(itemView.findViewById(R.id.img_user_group_3));
-
-//            imgUser1 = itemView.findViewById(R.id.img_user_group_1);
-//            imgUser2 = itemView.findViewById(R.id.img_user_group_2);
-//            imgUser3 = itemView.findViewById(R.id.img_user_group_3);
-//            imgUser4 = itemView.findViewById(R.id.img_user_group_4);
+            setImageArray(itemView.findViewById(R.id.img_user_group_1));
+            setImageArray(itemView.findViewById(R.id.img_user_group_2));
+            setImageArray(itemView.findViewById(R.id.img_user_group_3));
+            setImageArray(itemView.findViewById(R.id.img_user_group_4));
 
             txtCardTitle = itemView.findViewById(R.id.txt_home_card_title);
 
@@ -132,6 +145,14 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             txtLocName = itemView.findViewById(R.id.txt_home_card_loc_name);
 
             txtUsersCnt = itemView.findViewById(R.id.txt_user_group_count);
+
+        }
+
+        private void setImageArray(ImageView img){
+
+            img.setBackground(new ShapeDrawable(new OvalShape()));
+            img.setClipToOutline(true);
+            imgGroups.add(img);
 
         }
 
