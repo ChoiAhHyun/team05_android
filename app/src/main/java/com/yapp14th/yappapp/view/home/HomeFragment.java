@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
@@ -17,6 +18,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -64,7 +66,7 @@ public class HomeFragment extends BaseFragment {
 
         rvNearGroup.setLayoutManager(lm);
 
-        new PagerSnapHelper().attachToRecyclerView(rvNearGroup);
+        new LinearSnapHelper().attachToRecyclerView(rvNearGroup);
 
         lm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
