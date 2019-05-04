@@ -1,19 +1,29 @@
 package com.yapp14th.yappapp.view.home;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.model.GroupCardInfo;
+import com.yapp14th.yappapp.utils.PermissionGPS;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
@@ -31,6 +41,10 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.rv_home_realtime_group)
     RecyclerView rvRealTime;
 
+    private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
+    private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
+    private PermissionGPS permissionGPS;
+
     @Override
     protected int getLayout() {
         return R.layout.fragment_home;
@@ -44,6 +58,14 @@ public class HomeFragment extends BaseFragment {
     private GroupCardAdpater adapterNear, adapterRealTime;
 
     private ArrayList<GroupCardInfo> nearGroupModelList, realTimeGroupModelList;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        gpsCheck();
+
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -138,6 +160,80 @@ public class HomeFragment extends BaseFragment {
 
 
     };
+
+    private void gpsCheck(){
+
+        permissionGPS = new PermissionGPS((AppCompatActivity) getActivity());
+
+        isPermission = permissionGPS.callPermission(this);
+
+        permissionGPS.getLocation();
+
+        getGPs();
+
+    }
+
+    private void getGPs(){
+        
+        if (isPermission) {
+
+            if (permissionGPS.isGetLocation()) afterAccessToGPS();
+
+            else permissionGPS.showSettingsAlert();
+
+        }
+    }
+
+    private void afterAccessToGPS(){
+
+        isAccessFineLocation = true;
+
+        double latitude = permissionGPS.getLatitude();
+        double longitude = permissionGPS.getLongitude();
+
+        Toast.makeText(getActivity().getApplicationContext(), "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!isAccessFineLocation) {
+            permissionGPS.getLocation();
+            if(permissionGPS.isGetLocation()) afterAccessToGPS();
+        }
+
+    }
+
+    private Boolean isAccessFineLocation = false;
+    private Boolean isAccessCoarseLocation = false;
+    private Boolean isPermission = false;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+
+        if (requestCode == PERMISSIONS_ACCESS_FINE_LOCATION
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            isAccessFineLocation = true;
+
+        } else if (requestCode == PERMISSIONS_ACCESS_COARSE_LOCATION
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            isAccessCoarseLocation = true;
+        }
+
+        if (isAccessFineLocation || isAccessCoarseLocation) {
+            isPermission = true;
+
+            permissionGPS.getLocation();
+            getGPs();
+
+        }
+
+    }
 
 
 }

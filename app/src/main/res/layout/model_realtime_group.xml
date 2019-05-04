@@ -29,7 +29,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/info_group"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         android:layout_height="wrap_content"
@@ -37,9 +39,8 @@
         android:outlineProvider="none"
         android:background="@drawable/bgr_rounded"
         android:translationY="40dp"
-        app:layout_constraintDimensionRatio="304:46"
         app:layout_constraintBottom_toBottomOf="@id/cv"
-        tools:layout_editor_absoluteX="8dp">
+        >
 
         <TextView
             android:id="@+id/txt_home_card_title"

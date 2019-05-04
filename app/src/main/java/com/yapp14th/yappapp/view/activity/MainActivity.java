@@ -101,4 +101,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
         return null;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+
+    }
 }
