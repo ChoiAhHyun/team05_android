@@ -61,12 +61,18 @@ public class SignUpActivity extends BaseActivity {
     @BindView(R.id.pw_confirm_check)
     TextView pw_confirm_check;
 
+    @BindView(R.id.nickname_edit)
+    EditText nickname_edit;
+
+    @BindView(R.id.nickname_check)
+    TextView nickname_check;
+
     @BindView(R.id.profile_image)
     public CircleImageView profile_image;
 
     private ImageSelectModeDialog imageSelectModeDialog;
 
-    private boolean isId, isPw, isConfirmPw = false;
+    private boolean isNickname, isId, isPw, isConfirmPw = false;
 
     private String userImagePath;
 
@@ -89,6 +95,7 @@ public class SignUpActivity extends BaseActivity {
     private void initialize() {
         profile_add_btn.setOnClickListener(onClickListener);
         next_btn.setOnClickListener(onClickListener);
+        nickname_edit.addTextChangedListener(textWatcherNickname);
         id_edit.addTextChangedListener(textWatcherEmail);
         pw_edit.addTextChangedListener(textWatcherPw);
         pw_confirm_edit.addTextChangedListener(textWatcherConf);
@@ -125,14 +132,39 @@ public class SignUpActivity extends BaseActivity {
                 imageSelectModeDialog.show();
                 break;
             case R.id.next_btn :
-                if (isId && isConfirmPw && isPw) {
-                    checkUserId(id_edit.getText().toString());
+                if (isNickname && isId && isConfirmPw && isPw) {
+                    checkUserId(id_edit.getText().toString(), nickname_edit.getText().toString());
                 }
                 else {
                     Toasty.error(getBaseContext(), "양식을 확인해주세요.", Toasty.LENGTH_SHORT).show();
                 }
 
                 break;
+        }
+    };
+
+    private TextWatcher textWatcherNickname = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String nickname = nickname_edit.getText().toString();
+            if (nickname.length() >= 2) {
+                nickname_check.setVisibility(View.INVISIBLE);
+                isNickname = true;
+            }
+            else {
+                nickname_check.setVisibility(View.VISIBLE);
+                isNickname = false;
+            }
         }
     };
 
@@ -204,36 +236,50 @@ public class SignUpActivity extends BaseActivity {
         }
     };
 
-    private void checkUserId(String id) {
+    private void checkUserId(String id, String userNick) {
         showProgress();
-        RetrofitClient.getInstance().getService().ConfirmUserId(id).enqueue(new Callback<SuccessResponse>() {
+        RetrofitClient.getInstance().getService().ConfirmIdAndUserNick(id, userNick).enqueue(new Callback<SuccessResponse>() {
             @Override
             public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
                 if (response.isSuccessful()) {
-                    int state = response.body().state;
-                    if (state == 200) {
-                        Commons.processingSignUp.setUserId(id_edit.getText().toString());
-                        Commons.processingSignUp.setUserPw(pw_edit.getText().toString());
+                    SuccessResponse successResponse = response.body();
+                    if (successResponse != null) {
+                        int state = successResponse.state;
 
-                        if (userImagePath != null) {
-                            Uri uri = Uri.fromFile(new File(userImagePath));
-                            try {
-                                byte[] image = StreamUtils.getBytes(getBaseContext(), uri);
-                                Commons.processingSignUp.setUserImg(image);
-                            }
-                            catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else { // 프로필 이미지 등록 안했을 경우.
-                            Commons.processingSignUp.setUserImg(null);
-                        }
+                        if (state == 200) {
+                            Commons.processingSignUp.setUserNick(nickname_edit.getText().toString());
+                            Commons.processingSignUp.setUserId(id_edit.getText().toString());
+                            Commons.processingSignUp.setUserPw(pw_edit.getText().toString());
 
-                        Intent intent = MemberInfoInputActivity.newIntent(SignUpActivity.this);
-                        startActivity(intent);
-                    }
-                    else {
-                        Toasty.error(getBaseContext(), "현재 사용중인 아이디입니다.", Toasty.LENGTH_SHORT).show();
+                            if (userImagePath != null) {
+                                Uri uri = Uri.fromFile(new File(userImagePath));
+                                try {
+                                    byte[] image = StreamUtils.getBytes(getBaseContext(), uri);
+                                    Commons.processingSignUp.setUserImg(image);
+                                }
+                                catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else { // 프로필 이미지 등록 안했을 경우.
+                                Commons.processingSignUp.setUserImg(null);
+                            }
+
+                            Intent intent = MemberInfoInputActivity.newIntent(SignUpActivity.this);
+                            startActivity(intent);
+                        }
+                        else if (state == 230) {
+                            Toasty.error(getBaseContext(), "현재 사용중인 닉네임 입니다.", Toasty.LENGTH_SHORT).show();
+                        }
+                        else if (state == 260) {
+                            Toasty.error(getBaseContext(), "현재 사용중인 아이디입니다.", Toasty.LENGTH_SHORT).show();
+                        }
+                        else if (state == 300) {
+                            Toasty.error(getBaseContext(), "현재 사용중인 아이디, 닉네임 입니다.", Toasty.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 else {

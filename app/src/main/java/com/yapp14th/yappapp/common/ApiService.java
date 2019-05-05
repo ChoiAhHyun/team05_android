@@ -8,9 +8,9 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @GET("login/join/userId")
-    Call<SuccessResponse> ConfirmUserId (
-            @Query("userId") String id
+    @GET("login/join/check")
+    Call<SuccessResponse> ConfirmIdAndUserNick (
+            @Query("userId") String id, @Query("userNick") String userNick
     );
 
 
