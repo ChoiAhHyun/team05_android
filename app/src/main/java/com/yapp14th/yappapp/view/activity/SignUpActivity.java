@@ -3,6 +3,7 @@ package com.yapp14th.yappapp.view.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,9 +16,14 @@ import android.widget.TextView;
 import com.yanzhenjie.album.Album;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.common.Commons;
 import com.yapp14th.yappapp.common.RetrofitClient;
+import com.yapp14th.yappapp.common.StreamUtils;
 import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
+
+import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,6 +68,8 @@ public class SignUpActivity extends BaseActivity {
 
     private boolean isId, isPw, isConfirmPw = false;
 
+    private String userImagePath;
+
     public static Intent newIntent(Context context) {
         return new Intent(context, SignUpActivity.class);
     }
@@ -93,9 +101,12 @@ public class SignUpActivity extends BaseActivity {
                 Album.getAlbumConfig()
                         .getAlbumLoader()
                         .load(profile_image, path);
+
+                userImagePath = path;
             }
             else {
                 profile_image.setImageResource(R.drawable.profile_pic);
+                userImagePath = null;
             }
         }
 
@@ -201,6 +212,23 @@ public class SignUpActivity extends BaseActivity {
                 if (response.isSuccessful()) {
                     int state = response.body().state;
                     if (state == 200) {
+                        Commons.processingSignUp.setUserId(id_edit.getText().toString());
+                        Commons.processingSignUp.setUserPw(pw_edit.getText().toString());
+
+                        if (userImagePath != null) {
+                            Uri uri = Uri.fromFile(new File(userImagePath));
+                            try {
+                                byte[] image = StreamUtils.getBytes(getBaseContext(), uri);
+                                Commons.processingSignUp.setUserImg(image);
+                            }
+                            catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else { // 프로필 이미지 등록 안했을 경우.
+                            Commons.processingSignUp.setUserImg(null);
+                        }
+
                         Intent intent = MemberInfoInputActivity.newIntent(SignUpActivity.this);
                         startActivity(intent);
                     }
@@ -221,5 +249,11 @@ public class SignUpActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Commons.processingSignUp = null;
     }
 }

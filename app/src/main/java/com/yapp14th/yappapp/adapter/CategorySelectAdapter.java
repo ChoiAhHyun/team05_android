@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.model.Category;
@@ -13,7 +12,7 @@ import com.yapp14th.yappapp.model.Category;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CategorySelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CategorySelectAdapter extends RecyclerView.Adapter<CategorySelectAdapter.CategorySelectViewHolder> {
 
     private Context mContext;
 
@@ -23,14 +22,13 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CategorySelectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CategorySelectViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_category_select, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        CategorySelectViewHolder viewHolder = (CategorySelectViewHolder) holder;
-        viewHolder.category_text.setText(Category.values()[position].getName());
+    public void onBindViewHolder(@NonNull CategorySelectViewHolder holder, int position) {
+        holder.category_text.setText(Category.values()[position].getName());
     }
 
     @Override
@@ -38,11 +36,11 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return Category.size();
     }
 
-    private class CategorySelectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class CategorySelectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CheckBox category_text;
 
-        public CategorySelectViewHolder(@NonNull View itemView) {
+        CategorySelectViewHolder(@NonNull View itemView) {
             super(itemView);
             category_text = itemView.findViewById(R.id.checkbox);
 

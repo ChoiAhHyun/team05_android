@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.common.Commons;
+import com.yapp14th.yappapp.model.UserModel;
 
 import butterknife.BindView;
 
@@ -53,6 +55,7 @@ public class LoginActivity extends BaseActivity {
             case R.id.signup_btn :
                 intent = SignUpActivity.newIntent(LoginActivity.this);
                 startActivity(intent);
+                Commons.processingSignUp = new UserModel();
                 break;
         }
     };

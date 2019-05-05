@@ -13,6 +13,7 @@ import com.yapp14th.yappapp.view.fragment.AddFragment;
 import com.yapp14th.yappapp.view.fragment.AlarmFragment;
 import com.yapp14th.yappapp.view.fragment.HomeFragment;
 import com.yapp14th.yappapp.view.fragment.MypageFragment;
+import com.yapp14th.yappapp.view.fragment.SearchFragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
