@@ -9,8 +9,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.view.alarm.AlarmFragment;
 import com.yapp14th.yappapp.view.fragment.AddFragment;
-import com.yapp14th.yappapp.view.fragment.AlarmFragment;
 import com.yapp14th.yappapp.view.home.HomeFragment;
 import com.yapp14th.yappapp.view.fragment.MypageFragment;
 
