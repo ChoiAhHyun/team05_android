@@ -1,25 +1,25 @@
 package com.yapp14th.yappapp.view.home;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
+import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.GroupCardInfo;
+import com.yapp14th.yappapp.model.NearGroupResponseData;
+import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.PermissionGPS;
+import com.yapp14th.yappapp.view.activity.MemberInfoInputActivity;
+import com.yapp14th.yappapp.view.activity.SignUpActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,9 +29,12 @@ import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment {
 
@@ -60,14 +63,6 @@ public class HomeFragment extends BaseFragment {
     private ArrayList<GroupCardInfo> nearGroupModelList, realTimeGroupModelList;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        gpsCheck();
-
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -78,6 +73,9 @@ public class HomeFragment extends BaseFragment {
         setRealTimeGroupDatas();
 
         setAdapter();
+
+        gpsCheck();
+
 
     }
 
@@ -165,16 +163,16 @@ public class HomeFragment extends BaseFragment {
 
         permissionGPS = new PermissionGPS((AppCompatActivity) getActivity());
 
-        isPermission = permissionGPS.callPermission(this);
-
         permissionGPS.getLocation();
+
+        isPermission = permissionGPS.callPermission(this);
 
         getGPs();
 
     }
 
     private void getGPs(){
-        
+
         if (isPermission) {
 
             if (permissionGPS.isGetLocation()) afterAccessToGPS();
@@ -226,12 +224,43 @@ public class HomeFragment extends BaseFragment {
         }
 
         if (isAccessFineLocation || isAccessCoarseLocation) {
+
             isPermission = true;
 
             permissionGPS.getLocation();
+
             getGPs();
 
         }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        getNearGroups(0.0, 1.1);
+
+        //checkUserId("asdasd");
+
+    }
+
+    private void getNearGroups(Double myLongitude, Double myLatitude){
+
+        RetrofitClient.getInstance().getService().GetNearGroups(myLongitude, myLatitude).enqueue(new Callback<NearGroupResponseData>() {
+            @Override
+            public void onResponse(Call<NearGroupResponseData> call, Response<NearGroupResponseData> response) {
+                String result = response.toString();
+
+                Log.d("tagg","    : "+result);
+
+            }
+
+            @Override
+            public void onFailure(Call<NearGroupResponseData> call, Throwable t) {
+                Log.d("tagg","fail to access !!  "+t);
+            }
+        });
 
     }
 
