@@ -53,6 +53,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @BindView(R.id.btn_now)
     Button btn_now;
 
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MapActivity.class);
+    }
+
     @Override
     protected int getLayout() {
         return R.layout.activity_map;

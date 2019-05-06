@@ -1,6 +1,7 @@
-package com.yapp14th.yappapp.view.fragment;
+package com.yapp14th.yappapp.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,38 +10,36 @@ import android.widget.TextView;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.yapp14th.yappapp.Base.BaseFragment;
+import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
-import com.yapp14th.yappapp.view.activity.MapActivity;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 
-public class AddFragment extends BaseFragment {
-    private static final String TAG = "AddFragment";
+public class AddActivity extends BaseActivity {
+    private static final String TAG = "AddActivity";
 
     String[] meetingPlace = new String[3];
 
     @BindView(R.id.place_picker)
     TextView place_picker;
 
+    public static Intent newIntent(Context context) {
+        return new Intent(context, AddActivity.class);
+    }
+
     @Override
     protected int getLayout() {
-        return R.layout.fragment_add;
-    }
-
-    public static AddFragment newInstance() {
-        return new AddFragment();
+        return R.layout.activity_add;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getBaseActivity().setToolbar("모임 만들기", true);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setToolbar("모임 만들기", true);
 
-        TedPermission.with(getActivity())
+        TedPermission.with(this)
                 .setPermissionListener(permissionlistener)
                 .setRationaleMessage("위치 정보 접근 권한이 필요합니다.")
                 .setDeniedMessage("[설정] > [권한] 에서 권한을 허용해주세요.")
@@ -68,7 +67,7 @@ public class AddFragment extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.place_picker:
-                    Intent intent = new Intent(getActivity(), MapActivity.class);
+                    Intent intent = MapActivity.newIntent(AddActivity.this);
                     if (place_picker.getText().length() != 0) {
                         intent.putExtra("lat", meetingPlace[1]);
                         intent.putExtra("lng", meetingPlace[2]);
