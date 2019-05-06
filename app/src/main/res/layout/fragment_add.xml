@@ -3,11 +3,346 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:gravity="center">
+                android:background="@color/white">
 
-    <TextView
-            android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="ADD"/>
+            android:orientation="vertical"
+            android:paddingBottom="45.6dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="115.2dp"
+                    android:src="@color/color_111861"/>
+
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:background="@drawable/round_upload_background">-->
+
+                    <Button
+                        android:layout_width="171.2dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:text="+     커버 사진 업로드"
+                        android:textColor="@color/white"
+                        android:textSize="15.2sp"
+                        android:lineSpacingExtra="1.8sp"
+                        android:gravity="center"
+                        android:background="@drawable/round_upload_background"
+                        />
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="+"-->
+                        <!--android:textColor="@color/white"-->
+                        <!--android:textSize="15.2sp"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:paddingLeft="19.2dp"/>-->
+                </RelativeLayout>
+            <!--</RelativeLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="28dp"
+                android:paddingRight="28dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="모임이름"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint="모임 이름을 입력해주세요"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="카테고리"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint="숫자+영문 조합, 6자리 이상"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="날짜"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint=""
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="시간"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint=""
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="만남 장소"
+                        />
+
+                    <TextView
+                        android:id="@+id/place_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:text="만남장소 검색"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="참여 인원"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint=""
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="모임 설명"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint="만나서 어떤 활동을 하실 건가요?"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15.2sp"
+                        android:textColor="@color/color_06095e"
+                        android:text="키워드"
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="17.2sp"
+                        android:textColor="@color/color_707070"
+                        android:textColorHint="@color/color_707070"
+                        android:hint="EX. #농구 #오버워치 #고양이"
+                        android:background="@color/white"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:layout_marginTop="12dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:layout_marginTop="12.4dp"
+                        android:background="@color/color_707070"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/color_717486"
+        android:text="모임 만들기"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_alignParentBottom="true"
+        />
+
 </LinearLayout>

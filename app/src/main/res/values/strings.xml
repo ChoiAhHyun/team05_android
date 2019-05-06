@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">YappApp</string>
+    <string name="map_api_key">AIzaSyDwmtFScJE7bAQJ9SYomhlKK0bkanHf8W4</string>
 </resources>
