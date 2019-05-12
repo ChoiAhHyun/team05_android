@@ -5,18 +5,23 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.yanzhenjie.album.Album;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.dialog.MeetingImageSelectDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,6 +38,12 @@ public class AddActivity extends BaseActivity {
     SimpleDateFormat mDateFormat;
     String date, time;
     int currentYear, currentMonth, currentDay, currentHour, currentMinute;
+
+    @BindView(R.id.iv_cover_image)
+    ImageView iv_cover_image;
+
+    @BindView(R.id.btn_upload)
+    Button btn_upload;
 
     @BindView(R.id.tv_place_picker)
     TextView tv_place_picker;
@@ -66,6 +77,7 @@ public class AddActivity extends BaseActivity {
 
         getCurrent();
 
+        btn_upload.setOnClickListener(mOnClickListener);
         tv_place_picker.setOnClickListener(mOnClickListener);
         tv_date.setOnClickListener(mOnClickListener);
         tv_time.setOnClickListener(mOnClickListener);
@@ -82,6 +94,27 @@ public class AddActivity extends BaseActivity {
 
         }
     };
+
+    private MeetingImageSelectDialog.OnDismissListener onDismissListener = new MeetingImageSelectDialog.OnDismissListener() {
+        @Override
+        public void onDismiss(String path) {
+            if (path != null) {
+                Album.getAlbumConfig()
+                        .getAlbumLoader()
+                        .load(iv_cover_image, path);
+            }
+            else {
+                iv_cover_image.setImageResource(R.drawable.profile_pic);
+            }
+        }
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            //랜덤 이미지
+            iv_cover_image.setImageResource(R.drawable.profile_pic);
+        }
+    };
+
     private void getCurrent(){
         mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm:00");
@@ -118,6 +151,13 @@ public class AddActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.btn_upload:
+                    MeetingImageSelectDialog meetingImageSelectDialog;
+                    meetingImageSelectDialog = new MeetingImageSelectDialog(AddActivity.this);
+                    meetingImageSelectDialog.setContentView(R.layout.dialog_meeting_image_select);
+                    meetingImageSelectDialog.setOnDismissListener(onDismissListener);
+                    meetingImageSelectDialog.show();
+                    break;
                 case R.id.tv_place_picker:
                     Intent intent = MapActivity.newIntent(AddActivity.this);
                     if (tv_place_picker.getText().length() != 0) {

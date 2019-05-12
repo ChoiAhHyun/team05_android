@@ -32,7 +32,8 @@
                     android:id="@+id/iv_cover_image"
                     android:layout_width="match_parent"
                     android:layout_height="115.2dp"
-                    android:src="@color/color_111861"/>
+                    android:src="@color/color_111861"
+                    android:scaleType="center"/>
 
                 <!--<RelativeLayout-->
                     <!--android:layout_width="wrap_content"-->
