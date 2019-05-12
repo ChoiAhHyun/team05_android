@@ -1,6 +1,6 @@
 package com.yapp14th.yappapp.common;
 
-import com.yapp14th.yappapp.model.NearGroupResponseData;
+import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface ApiService {
     );
 
     @GET("meet/meetId/near")
-    Call<NearGroupResponseData> GetNearGroups (
+    Call<GroupInfoResData> GetNearGroups (
             @Query("myLongitude") Double myLongitude,
             @Query("myLatitude") Double myLatitude
     );

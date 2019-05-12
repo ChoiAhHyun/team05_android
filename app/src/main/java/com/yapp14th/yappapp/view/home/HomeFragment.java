@@ -7,12 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.GroupCardInfo;
-import com.yapp14th.yappapp.model.NearGroupResponseData;
+import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.PermissionGPS;
 import com.yapp14th.yappapp.view.activity.MemberInfoInputActivity;
@@ -247,17 +248,18 @@ public class HomeFragment extends BaseFragment {
 
     private void getNearGroups(Double myLongitude, Double myLatitude){
 
-        RetrofitClient.getInstance().getService().GetNearGroups(myLongitude, myLatitude).enqueue(new Callback<NearGroupResponseData>() {
+        RetrofitClient.getInstance().getService().GetNearGroups(myLongitude, myLatitude).enqueue(new Callback<GroupInfoResData>() {
             @Override
-            public void onResponse(Call<NearGroupResponseData> call, Response<NearGroupResponseData> response) {
-                String result = response.toString();
+            public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
 
-                Log.d("tagg","    : "+result);
+                ArrayList<GroupInfoResData.GroupInfo> infos = response.body().getList();
+
+
 
             }
 
             @Override
-            public void onFailure(Call<NearGroupResponseData> call, Throwable t) {
+            public void onFailure(Call<GroupInfoResData> call, Throwable t) {
                 Log.d("tagg","fail to access !!  "+t);
             }
         });
