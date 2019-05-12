@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-                android:background="@color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize">
     </androidx.appcompat.widget.Toolbar>
@@ -27,6 +29,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/iv_cover_image"
                     android:layout_width="match_parent"
                     android:layout_height="115.2dp"
                     android:src="@color/color_111861"/>
@@ -38,6 +41,7 @@
                     <!--android:background="@drawable/round_upload_background">-->
 
                     <Button
+                        android:id="@+id/btn_upload"
                         android:layout_width="171.2dp"
                         android:layout_height="40dp"
                         android:layout_centerInParent="true"
@@ -105,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="17.6dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -130,15 +134,41 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
+                        android:layout_marginTop="8.4dp"
                         android:background="@color/color_707070"/>
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_marginTop="28.8dp">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="15.2sp"-->
+                        <!--android:textColor="@color/color_06095e"-->
+                        <!--android:text="날짜"-->
+                        <!--/>-->
+
+                    <!--<EditText-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="17.2sp"-->
+                        <!--android:textColor="@color/color_707070"-->
+                        <!--android:textColorHint="@color/color_707070"-->
+                        <!--android:hint=""-->
+                        <!--android:background="@color/white"-->
+                        <!--android:singleLine="true"-->
+                        <!--android:imeOptions="actionNext"-->
+                        <!--android:layout_marginTop="12dp"/>-->
+                <!--</LinearLayout>-->
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="28.8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -148,30 +178,33 @@
                         android:text="날짜"
                         />
 
-                    <EditText
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="17.2sp"
-                        android:textColor="@color/color_707070"
-                        android:textColorHint="@color/color_707070"
-                        android:hint=""
-                        android:background="@color/white"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
-                        android:background="@color/color_707070"/>
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15.2sp"
+                            android:textColor="@color/color_06095e"
+                            android:text="5월 12일"/>
 
-                <LinearLayout
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/icon_down_arrow"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="36dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -181,30 +214,34 @@
                         android:text="시간"
                         />
 
-                    <EditText
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="17.2sp"
-                        android:textColor="@color/color_707070"
-                        android:textColorHint="@color/color_707070"
-                        android:hint=""
-                        android:background="@color/white"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
-                        android:background="@color/color_707070"/>
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15.2sp"
+                            android:textColor="@color/color_06095e"
+                            android:text="12 : 34 PM"/>
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="8dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/icon_down_arrow"/>
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -215,7 +252,7 @@
                         />
 
                     <TextView
-                        android:id="@+id/place_picker"
+                        android:id="@+id/tv_place_picker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="17.2sp"
@@ -226,7 +263,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
+                        android:layout_marginTop="8.4dp"
                         android:background="@color/color_707070"/>
                 </LinearLayout>
 
@@ -234,7 +271,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="23.6dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -244,63 +281,90 @@
                         android:text="참여 인원"
                         />
 
-                    <EditText
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="17.2sp"
-                        android:textColor="@color/color_707070"
-                        android:textColorHint="@color/color_707070"
-                        android:hint=""
-                        android:background="@color/white"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_height="49.2dp"
+                        android:background="@drawable/add_border"
+                        android:layout_marginTop="9.2dp">
+                        
+                        <ImageView
+                            android:id="@+id/btn_minus"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/minus_btn"
+                            android:layout_marginLeft="20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
-                        android:background="@color/color_707070"/>
+                        <TextView
+                            android:id="@+id/tv_peopleNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="17.2sp"
+                            android:textColor="@color/color_707070"
+                            android:layout_centerInParent="true"/>
+
+                        <ImageView
+                            android:id="@+id/btn_plus"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/plus_btn"
+                            android:layout_marginRight="20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
+
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="21.2dp">
 
                     <TextView
+                        android:id="@+id/textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="9.2dp"
                         android:textSize="15.2sp"
                         android:textColor="@color/color_06095e"
                         android:text="모임 설명"
                         />
 
                     <EditText
+                        android:id="@+id/et_description"
+                        android:layout_below="@+id/textview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="17.2sp"
+                        android:layout_height="91.2dp"
+                        android:textSize="15.2sp"
                         android:textColor="@color/color_707070"
                         android:textColorHint="@color/color_707070"
                         android:hint="만나서 어떤 활동을 하실 건가요?"
-                        android:background="@color/white"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:gravity="start"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="9.2dp"
+                        android:paddingEnd="9.2dp"
+                        android:background="@drawable/add_border"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
-                        android:background="@color/color_707070"/>
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_textNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/textview"
+                        android:text="0 / 100"
+                        android:textSize="11.2sp"
+                        android:textColor="@color/color_707070"
+                        android:layout_alignParentEnd="true"
+                        />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="14dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -311,21 +375,22 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_keyword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="17.2sp"
+                        android:textSize="15.2sp"
                         android:textColor="@color/color_707070"
                         android:textColorHint="@color/color_707070"
                         android:hint="EX. #농구 #오버워치 #고양이"
                         android:background="@color/white"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:imeOptions="actionDone"
+                        android:layout_marginTop="15.2dp"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
+                        android:layout_marginTop="8.4dp"
                         android:background="@color/color_707070"/>
                 </LinearLayout>
 
@@ -335,14 +400,13 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/next_btn"
+        android:id="@+id/btn_make"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/color_717486"
         android:text="모임 만들기"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_alignParentBottom="true"
         />
 
 </LinearLayout>
