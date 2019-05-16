@@ -47,6 +47,8 @@
         </activity>
         <activity android:name=".view.activity.AddActivity">
         </activity>
+        <activity android:name=".view.activity.AddCategoryActivity">
+        </activity>
     </application>
 
 </manifest>

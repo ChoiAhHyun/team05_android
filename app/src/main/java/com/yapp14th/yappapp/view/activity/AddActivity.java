@@ -8,16 +8,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.volokh.danylo.hashtaghelper.HashTagHelper;
 import com.yanzhenjie.album.Album;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
@@ -37,13 +41,17 @@ public class AddActivity extends BaseActivity {
     String[] meetingPlace = new String[3];
     SimpleDateFormat mDateFormat;
     String date, time;
-    int currentYear, currentMonth, currentDay, currentHour, currentMinute;
+    int currentYear, currentMonth, currentDay, currentHour, currentMinute, peopleNumber = 2;
+    List<String> allHashTags;
 
     @BindView(R.id.iv_cover_image)
     ImageView iv_cover_image;
 
     @BindView(R.id.btn_upload)
     Button btn_upload;
+
+    @BindView(R.id.et_name)
+    EditText et_name;
 
     @BindView(R.id.tv_place_picker)
     TextView tv_place_picker;
@@ -53,6 +61,39 @@ public class AddActivity extends BaseActivity {
 
     @BindView(R.id.tv_time)
     TextView tv_time;
+
+    @BindView(R.id.btn_plus)
+    ImageView btn_plus;
+
+    @BindView(R.id.btn_minus)
+    ImageView btn_minus;
+
+    @BindView(R.id.tv_peopleNumber)
+    TextView tv_peopleNumber;
+
+    @BindView(R.id.et_description)
+    EditText et_description;
+
+    @BindView(R.id.tv_textNumber)
+    TextView tv_textNumber;
+
+    @BindView(R.id.warning_description)
+    TextView warning_description;
+
+    @BindView(R.id.et_keyword)
+    EditText et_keyword;
+
+    @BindView(R.id.warning_keyword)
+    TextView warning_keyword;
+
+    @BindView(R.id.v_keyword)
+    View v_keyword;
+
+    @BindView(R.id.tv_category)
+    TextView tv_category;
+
+    @BindView(R.id.btn_make)
+    Button btn_make;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, AddActivity.class);
@@ -75,12 +116,35 @@ public class AddActivity extends BaseActivity {
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
                 .check();
 
-        getCurrent();
+        getCurrentDateTime();
+        initialize();
+    }
 
+    private void initialize() {
         btn_upload.setOnClickListener(mOnClickListener);
+        et_name.addTextChangedListener(textWatcherName);
         tv_place_picker.setOnClickListener(mOnClickListener);
         tv_date.setOnClickListener(mOnClickListener);
         tv_time.setOnClickListener(mOnClickListener);
+        btn_plus.setOnClickListener(mOnClickListener);
+        btn_minus.setOnClickListener(mOnClickListener);
+        et_description.addTextChangedListener(textWatcherDescription);
+        et_keyword.addTextChangedListener(textWatcherKeyword);
+        tv_category.setOnClickListener(mOnClickListener);
+        btn_make.setOnClickListener(mOnClickListener);
+    }
+
+    private void makeButtonEnable(){
+        if (iv_cover_image.getDrawable() != null &&
+                et_name.getText().length() != 0 &&
+                tv_category.getText().length() != 0 && //TODO 관심사 list != null 로 바꾸기
+                date !=  null && time != null &&
+                meetingPlace[0] != null &&
+                et_description.getText().length() != 0 &&
+                allHashTags != null && !allHashTags.isEmpty())
+            btn_make.setBackgroundColor(getColor(R.color.color_3346ff));
+        else
+            btn_make.setBackgroundColor(getColor(R.color.color_717486));
     }
 
     PermissionListener permissionlistener = new PermissionListener() {
@@ -115,7 +179,71 @@ public class AddActivity extends BaseActivity {
         }
     };
 
-    private void getCurrent(){
+    private TextWatcher textWatcherName = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            makeButtonEnable();
+        }
+    };
+
+    private TextWatcher textWatcherDescription = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int length = et_description.getText().toString().length();
+            tv_textNumber.setText(length + " / 100");
+            if (length <= 100){
+                et_description.setBackground(getDrawable(R.drawable.add_border));
+                warning_description.setVisibility(View.INVISIBLE);
+            }
+            else {
+                et_description.setBackground(getDrawable(R.drawable.add_border_red));
+                warning_description.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            makeButtonEnable();
+        }
+    };
+
+    private TextWatcher textWatcherKeyword = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int length = et_keyword.getText().toString().length();
+            if (length <= 100){
+                v_keyword.setBackgroundColor(getColor(R.color.color_707070));
+                warning_keyword.setVisibility(View.INVISIBLE);
+            }
+            else {
+                v_keyword.setBackgroundColor(getColor(R.color.color_ff2807));
+                warning_keyword.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            makeButtonEnable();
+        }
+    };
+
+    private void getCurrentDateTime(){
         mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm:00");
         long mNow = System.currentTimeMillis();
@@ -150,6 +278,7 @@ public class AddActivity extends BaseActivity {
 
         @Override
         public void onClick(View v) {
+            Intent intent;
             switch (v.getId()) {
                 case R.id.btn_upload:
                     MeetingImageSelectDialog meetingImageSelectDialog;
@@ -159,7 +288,7 @@ public class AddActivity extends BaseActivity {
                     meetingImageSelectDialog.show();
                     break;
                 case R.id.tv_place_picker:
-                    Intent intent = MapActivity.newIntent(AddActivity.this);
+                    intent = MapActivity.newIntent(AddActivity.this);
                     if (tv_place_picker.getText().length() != 0) {
                         intent.putExtra("lat", meetingPlace[1]);
                         intent.putExtra("lng", meetingPlace[2]);
@@ -196,9 +325,41 @@ public class AddActivity extends BaseActivity {
                     },currentHour,currentMinute,false);
                     timePickerDialog.show();
                     break;
+                case R.id.btn_plus:
+                    if (peopleNumber < 1000000) {
+                        peopleNumber += 1;
+                        tv_peopleNumber.setText(peopleNumber + "");
+                    }
+                    break;
+                case R.id.btn_minus:
+                    if (peopleNumber > 2) {
+                        peopleNumber -= 1;
+                        tv_peopleNumber.setText(peopleNumber + "");
+                    }
+                    break;
+                case R.id.tv_category:
+                    intent = AddCategoryActivity.newIntent(AddActivity.this);
+                    intent.putExtra("add", "모임 만들기");
+                    startActivityForResult(intent, 200);
+                    break;
+                case R.id.btn_make:
+                    getKeyword();
+                    break;
             }
         }
     };
+
+//    private List<String> getKeyword() {
+    private void getKeyword() {
+        HashTagHelper mHashTagHelper = HashTagHelper.Creator.create(getColor(R.color.color_707070), null);
+        mHashTagHelper.handle(et_keyword);
+        allHashTags = mHashTagHelper.getAllHashTags();
+        Log.d(TAG, "tag: " + allHashTags.isEmpty());
+        for (int i = 0; i < allHashTags.size(); i++){
+            Log.d(TAG, allHashTags.get(i));
+        }
+//        return allHashTags;
+    }
 
     private String toAddZero(int i) {
         String result;
@@ -224,6 +385,11 @@ public class AddActivity extends BaseActivity {
             }
             else {
                 Log.d(TAG, resultCode + "");
+            }
+        }
+        else if (requestCode == 200){
+            if (resultCode == 100){
+            // TODO 카테고리 선택한 것들 받기
             }
         }
     }

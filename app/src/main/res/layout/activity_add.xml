@@ -32,7 +32,7 @@
                     android:id="@+id/iv_cover_image"
                     android:layout_width="match_parent"
                     android:layout_height="115.2dp"
-                    android:src="@color/color_111861"
+                    android:background="@color/color_111861"
                     android:scaleType="center"/>
 
                 <!--<RelativeLayout-->
@@ -87,6 +87,7 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="17.2sp"
@@ -120,17 +121,27 @@
                         android:text="카테고리"
                         />
 
-                    <EditText
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="17.2sp"
-                        android:textColor="@color/color_707070"
-                        android:textColorHint="@color/color_707070"
-                        android:hint="숫자+영문 조합, 6자리 이상"
-                        android:background="@color/white"
-                        android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical">
+                        
+                        <TextView
+                            android:id="@+id/tv_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17.2sp"
+                            android:textColor="@color/color_707070"
+                            android:text="카테고리 선택하러 가기"/>
+                        
+                        <ImageView
+                            android:layout_width="6dp"
+                            android:layout_height="9.6dp"
+                            android:src="@drawable/icon_right_arrow"
+                            android:layout_marginLeft="14dp"/>
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -205,7 +216,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp">
+                    android:layout_marginTop="21.2dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -301,7 +312,7 @@
                             android:id="@+id/tv_peopleNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="2"
                             android:textSize="17.2sp"
                             android:textColor="@color/color_707070"
                             android:layout_centerInParent="true"/>
@@ -333,16 +344,30 @@
                         android:text="모임 설명"
                         />
 
+                    <TextView
+                        android:id="@+id/warning_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100 자 이내로 입력해주세요"
+                        android:textSize="14sp"
+                        android:textColor="@color/color_ff2807"
+                        android:visibility="invisible"
+                        android:layout_alignBottom="@+id/tv_textNumber"
+                        android:layout_toLeftOf="@+id/tv_textNumber"
+                        android:layout_marginRight="28dp"
+                        />
+
                     <EditText
                         android:id="@+id/et_description"
                         android:layout_below="@+id/textview"
                         android:layout_width="match_parent"
-                        android:layout_height="91.2dp"
+                        android:layout_height="wrap_content"
                         android:textSize="15.2sp"
                         android:textColor="@color/color_707070"
                         android:textColorHint="@color/color_707070"
                         android:hint="만나서 어떤 활동을 하실 건가요?"
                         android:gravity="start"
+                        android:minHeight="91.2dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:paddingStart="9.2dp"
@@ -361,18 +386,31 @@
                         />
                 </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginTop="14dp">
 
                     <TextView
+                        android:id="@+id/textview2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15.2sp"
                         android:textColor="@color/color_06095e"
                         android:text="키워드"
+                        />
+
+                    <TextView
+                        android:id="@+id/warning_keyword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100 자 이내로 입력해주세요"
+                        android:textSize="14sp"
+                        android:textColor="@color/color_ff2807"
+                        android:visibility="invisible"
+                        android:layout_alignBottom="@+id/textview2"
+                        android:layout_toRightOf="@+id/textview2"
+                        android:layout_marginLeft="20dp"
                         />
 
                     <EditText
@@ -386,14 +424,17 @@
                         android:background="@color/white"
                         android:singleLine="true"
                         android:imeOptions="actionDone"
-                        android:layout_marginTop="15.2dp"/>
+                        android:layout_marginTop="15.2dp"
+                        android:layout_below="@+id/textview2"/>
 
                     <View
+                        android:id="@+id/v_keyword"
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
                         android:layout_marginTop="8.4dp"
-                        android:background="@color/color_707070"/>
-                </LinearLayout>
+                        android:background="@color/color_707070"
+                        android:layout_below="@+id/et_keyword"/>
+                </RelativeLayout>
 
             </LinearLayout>
 
