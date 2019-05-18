@@ -119,6 +119,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
                         imageView.setImageResource(R.drawable.icon_add);
                         imageView.setOnClickListener(v -> {
                             // TODO 모임 만들기 액티비티 여기에 연결 시키면 됩니다.
+                            Intent intent = AddActivity.newIntent(getBaseContext());
+                            startActivity(intent);
                         });
                         tab.setCustomView(imageView);
                     }

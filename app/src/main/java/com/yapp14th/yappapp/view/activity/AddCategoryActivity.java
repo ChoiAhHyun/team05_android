@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.layouter.breaker.IRowBreaker;
@@ -25,8 +25,8 @@ import butterknife.BindView;
 public class AddCategoryActivity  extends BaseActivity {
     private static final String TAG = "AddCategoryActivity";
 
-    @BindView(R.id.next_btn)
-    Button next_btn2;
+    @BindView(R.id.complete_btn)
+    TextView completeBtn;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, AddCategoryActivity.class);
@@ -63,8 +63,8 @@ public class AddCategoryActivity  extends BaseActivity {
         CategorySelectAdapter categorySelectAdapter = new CategorySelectAdapter(this, interestModels);
         recyclerView.setAdapter(categorySelectAdapter);
 
-        next_btn2.setText("완료");
-        next_btn2.setOnClickListener(new View.OnClickListener() {
+        completeBtn.setText("완료");
+        completeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<String> list = new ArrayList<>();

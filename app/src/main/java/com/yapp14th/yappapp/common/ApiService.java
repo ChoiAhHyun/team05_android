@@ -11,7 +11,6 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -46,7 +45,6 @@ public interface ApiService {
             @Body HashMap<String, String> token
     );
 
-    @FormUrlEncoded
     @POST("meet/detail")
     Call<MakeResponse> makeMeeting (
             @Field("name") String name, @Field("date") String datetime, @Field("location") String location,

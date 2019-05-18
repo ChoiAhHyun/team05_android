@@ -134,7 +134,6 @@ public class SplashActivity extends BaseActivity {
                                         int state = successResponse.state;
                                         if (state == 200) {
                                             // 토큰 서버 저장
-                                            Toasty.success(getBaseContext(), "성공", Toasty.LENGTH_SHORT).show();
                                         }
                                         else {
                                             Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
