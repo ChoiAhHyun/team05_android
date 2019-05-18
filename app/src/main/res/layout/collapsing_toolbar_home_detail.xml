@@ -43,6 +43,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/txt_home_detail_title"
                     android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -51,6 +52,7 @@
                     android:text="모여서 같이 공부해요!" />
 
                 <TextView
+                    android:id="@+id/txt_home_detail_subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -70,12 +72,14 @@
                         app:cardCornerRadius="11dp"
                         android:layout_height="22dp">
                         <ImageView
+                            android:id="@+id/img_home_detail_profile"
                             android:src="@drawable/sample_user1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
+                        android:id="@+id/txt_home_detail_leader_name"
                         android:layout_marginLeft="6dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

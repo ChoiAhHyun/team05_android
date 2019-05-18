@@ -9,6 +9,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +23,11 @@ import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
+import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
 import com.yapp14th.yappapp.model.BoardInfo;
+import com.yapp14th.yappapp.model.GroupDetailResData;
+import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.utils.TransitionIssue;
 
 import java.util.ArrayList;
@@ -35,27 +39,43 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeDetailActivity extends BaseActivity implements Transition.TransitionListener {
 
     @BindView(R.id.ct)
     CollapsingToolbarLayout ct;
-
     @BindView(R.id.img_card_bgr)
     ImageView imgBgr;
-
     @BindView(R.id.blur)
     View blur;
-
     @BindView(R.id.linear_container)
     LinearLayout linear;
-
     @BindView(R.id.rv_user_imgs)
     RecyclerView rv;
-
     @BindView(R.id.btn_home_detail)
     Button btn;
+    @BindView(R.id.txt_home_date)
+    TextView txtDate;
+    @BindView(R.id.txt_home_time)
+    TextView txtTime;
+    @BindView(R.id.txt_home_loc_name)
+    TextView txtLocName;
+    @BindView(R.id.txt_home_num_of_participants)
+    TextView txtNumOfParticipants;
+    @BindView(R.id.txt_home_detail_title)
+    TextView txtTitle;
+    @BindView(R.id.txt_home_detail_subtitle)
+    TextView txtSubTitle;
+    @BindView(R.id.txt_home_detail_leader_name)
+    TextView txtLeaderName;
+    @BindView(R.id.img_home_detail_profile)
+    ImageView imgProfile;
+
+    private GroupDetailResData.GroupDetailInfo model;
 
     @Override
     protected int getLayout() {
@@ -65,11 +85,14 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private UserImagesAdpater adapter;
     private ArrayList<Integer> imgSrcs = new ArrayList<>();
     private ConfirmDialog dialog;
+    private GroupInfoResData.GroupInfo groupInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        getGroupInfoFromParent();
 
         setView();
 
@@ -81,6 +104,31 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        getGroupDetailDatas();
+    }
+
+    private void getGroupDetailDatas(){
+
+        RetrofitClient.getInstance().getService().GetGroupDetailDatas(1).enqueue(new Callback<GroupDetailResData>() {
+            @Override
+            public void onResponse(Call<GroupDetailResData> call, Response<GroupDetailResData> response) {
+
+                model = response.body().getGroupDetailInfo().get(0);
+
+                setTextViews();
+            }
+
+            @Override
+            public void onFailure(Call<GroupDetailResData> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void setView(){
 
         setToolbar();
@@ -90,6 +138,22 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         setDialog();
 
         setButton();
+
+    }
+
+    private void setTextViews(){
+
+        txtTitle.setText(model.meet_name);
+        txtSubTitle.setText(model.meet_explanation);
+        txtLeaderName.setText(model.fk_meetcaptain);
+        txtNumOfParticipants.setText(model.meet_personNum);
+        txtLocName.setText(model.meet_location);
+
+    }
+
+    private void getGroupInfoFromParent(){
+
+        groupInfo = getIntent().getParcelableExtra("groupInfo");
 
     }
 
@@ -131,6 +195,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         adapter = new UserImagesAdpater(this, imgSrcs);
 
         rv.setAdapter(adapter);
+
     }
 
     private void setToolbar(){
@@ -141,7 +206,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         setToolbar("모임 상세", true);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.transparent)));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable( getColor( R.color.transparent ) ) );
 
         toolbar.getNavigationIcon().setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 

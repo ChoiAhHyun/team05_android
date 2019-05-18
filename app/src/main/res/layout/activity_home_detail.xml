@@ -142,6 +142,7 @@
                 />
 
             <TextView
+                android:id="@+id/txt_home_num_of_participants"
                 app:layout_constraintTop_toBottomOf="@id/layout_map"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginTop="32dp"
