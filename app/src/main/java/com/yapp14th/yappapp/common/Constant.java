@@ -10,4 +10,10 @@ public interface Constant {
             + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
             + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
             + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
+    interface Preference {
+        String CONFIG_USER_AUTOLOGIN = "AUTO_LOGIN";
+        String CONFIG_USER_USERNAME = "user.username";
+        String CONFIG_USER_PASSWORD = "user.password";
+    }
 }

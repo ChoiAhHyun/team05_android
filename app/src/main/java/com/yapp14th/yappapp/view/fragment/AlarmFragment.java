@@ -15,8 +15,8 @@ public class AlarmFragment extends BaseFragment {
         return R.layout.fragment_alarm;
     }
 
-    public static AddFragment newInstance() {
-        return new AddFragment();
+    public static AlarmFragment newInstance() {
+        return new AlarmFragment();
     }
 
     @Override

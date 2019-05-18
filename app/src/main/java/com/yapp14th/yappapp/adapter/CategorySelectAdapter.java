@@ -8,6 +8,9 @@ import android.widget.CheckBox;
 
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.model.Category;
+import com.yapp14th.yappapp.model.InterestModel;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +19,11 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<CategorySelectAd
 
     private Context mContext;
 
-    public CategorySelectAdapter(Context context) {
+    private List<InterestModel> interestModels;
+
+    public CategorySelectAdapter(Context context, List<InterestModel> models) {
         this.mContext = context;
+        this.interestModels = models;
     }
 
     @NonNull
@@ -28,7 +34,19 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<CategorySelectAd
 
     @Override
     public void onBindViewHolder(@NonNull CategorySelectViewHolder holder, int position) {
-        holder.category_text.setText(Category.values()[position].getName());
+
+        String title = Category.values()[position].getName();
+
+        holder.category_text.setText(title);
+
+        holder.category_text.setOnClickListener(v -> {
+            if (holder.category_text.isChecked()) {
+                interestModels.get(position).setIsChecked(1);
+            }
+            else {
+                interestModels.get(position).setIsChecked(0);
+            }
+        });
     }
 
     @Override
@@ -36,21 +54,17 @@ public class CategorySelectAdapter extends RecyclerView.Adapter<CategorySelectAd
         return Category.size();
     }
 
-    class CategorySelectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class CategorySelectViewHolder extends RecyclerView.ViewHolder {
 
         CheckBox category_text;
 
         CategorySelectViewHolder(@NonNull View itemView) {
             super(itemView);
             category_text = itemView.findViewById(R.id.checkbox);
-
-            category_text.setOnClickListener(this);
-
         }
+    }
 
-        @Override
-        public void onClick(View v) {
-//            Toast.makeText(mContext, getAdapterPosition() + " 번째 클릭", Toast.LENGTH_SHORT).show();
-        }
+    public List<InterestModel> getInterestModels() {
+        return this.interestModels;
     }
 }

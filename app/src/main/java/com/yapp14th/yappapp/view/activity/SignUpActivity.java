@@ -3,7 +3,6 @@ package com.yapp14th.yappapp.view.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,12 +17,8 @@ import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.common.Commons;
 import com.yapp14th.yappapp.common.RetrofitClient;
-import com.yapp14th.yappapp.common.StreamUtils;
 import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
-
-import java.io.File;
-import java.io.IOException;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -252,17 +247,10 @@ public class SignUpActivity extends BaseActivity {
                             Commons.processingSignUp.setUserPw(pw_edit.getText().toString());
 
                             if (userImagePath != null) {
-                                Uri uri = Uri.fromFile(new File(userImagePath));
-                                try {
-                                    byte[] image = StreamUtils.getBytes(getBaseContext(), uri);
-                                    Commons.processingSignUp.setUserImg(image);
-                                }
-                                catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                Commons.processingUserProfileImage = userImagePath;
                             }
                             else { // 프로필 이미지 등록 안했을 경우.
-                                Commons.processingSignUp.setUserImg(null);
+                                Commons.processingUserProfileImage = null;
                             }
 
                             Intent intent = MemberInfoInputActivity.newIntent(SignUpActivity.this);
@@ -274,16 +262,18 @@ public class SignUpActivity extends BaseActivity {
                         else if (state == 260) {
                             Toasty.error(getBaseContext(), "현재 사용중인 아이디입니다.", Toasty.LENGTH_SHORT).show();
                         }
-                        else if (state == 300) {
-                            Toasty.error(getBaseContext(), "현재 사용중인 아이디, 닉네임 입니다.", Toasty.LENGTH_SHORT).show();
-                        }
                         else {
                             Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
                         }
                     }
                 }
                 else {
-                    Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    if (response.code() == 300) {
+                        Toasty.error(getBaseContext(), "현재 사용중인 아이디, 닉네임 입니다.", Toasty.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
                 }
                 hideProgress();
             }

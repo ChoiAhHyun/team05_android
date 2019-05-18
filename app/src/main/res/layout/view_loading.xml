@@ -11,8 +11,8 @@
             android:id="@+id/progress_circular"
             android:layout_centerInParent="true"
             style="@style/SpinKitView.Small"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             app:SpinKit_Style="FadingCircle"
             app:SpinKit_Color="@color/colorAccent" />
