@@ -43,7 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayout();
 
     // 툴바 필요할 시 사용
-    protected void setToolbar(String title, boolean isBackBtn) {
+    public void setToolbar(String title, boolean isBackBtn) {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
