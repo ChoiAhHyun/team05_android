@@ -14,6 +14,8 @@ import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.GroupCardInfo;
 import com.yapp14th.yappapp.model.GroupInfoResData;
+import com.yapp14th.yappapp.model.GroupRequestBody;
+import com.yapp14th.yappapp.model.NearGroupRequestBody;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.PermissionGPS;
 import com.yapp14th.yappapp.view.activity.MemberInfoInputActivity;
@@ -58,10 +60,9 @@ public class HomeFragment extends BaseFragment {
         return new HomeFragment();
     }
 
+    private GroupCardAdpater adapterNear , adapterRealTime;
 
-    private GroupCardAdpater adapterNear, adapterRealTime;
-
-    private ArrayList<GroupCardInfo> nearGroupModelList, realTimeGroupModelList;
+    private ArrayList<GroupInfoResData.GroupInfo> nearGroupModelList = new ArrayList(), realTimeGroupModelList = new ArrayList();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -77,6 +78,14 @@ public class HomeFragment extends BaseFragment {
 
         gpsCheck();
 
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        getNearGroups(0.0, 1.1);
 
     }
 
@@ -101,33 +110,33 @@ public class HomeFragment extends BaseFragment {
 
     private void setNearGroupDatas(){
 
-        nearGroupModelList = new ArrayList<GroupCardInfo>();
-
-        for (int i=0; i<40;i ++){
-
-            ArrayList<String> strs = new ArrayList<>();
-
-            for(int j=0; j<i+1; j++) strs.add("s");
-
-            nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
-
-        }
+//        nearGroupModelList = new ArrayList<GroupCardInfo>();
+//
+//        for (int i=0; i<40;i ++){
+//
+//            ArrayList<String> strs = new ArrayList<>();
+//
+//            for(int j=0; j<i+1; j++) strs.add("s");
+//
+//            nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
+//
+//        }
 
     }
 
     private void setRealTimeGroupDatas(){
 
-        realTimeGroupModelList = new ArrayList<GroupCardInfo>();
-
-        for (int i=0; i<40;i ++){
-
-            ArrayList<String> strs = new ArrayList<>();
-
-            for(int j=0; j<i+1; j++) strs.add("s");
-
-            realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
-
-        }
+//        realTimeGroupModelList = new ArrayList<GroupCardInfo>();
+//
+//        for (int i=0; i<40;i ++){
+//
+//            ArrayList<String> strs = new ArrayList<>();
+//
+//            for(int j=0; j<i+1; j++) strs.add("s");
+//
+//            realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
+//
+//        }
 
     }
 
@@ -236,35 +245,35 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        getNearGroups(0.0, 1.1);
-
-        //checkUserId("asdasd");
-
-    }
-
     private void getNearGroups(Double myLongitude, Double myLatitude){
 
-        RetrofitClient.getInstance().getService().GetNearGroups(myLongitude, myLatitude).enqueue(new Callback<GroupInfoResData>() {
-            @Override
-            public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
+        RetrofitClient.getInstance().getService()
+                .GetNearGroupDatas(new GroupRequestBody("",myLongitude,myLatitude))
+                .enqueue(new Callback<GroupInfoResData>() {
+                @Override
+                public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
 
-                ArrayList<GroupInfoResData.GroupInfo> infos = response.body().getList();
+                    nearGroupModelList = response.body().getList();
 
+                    setAdapter();
 
+                }
 
-            }
-
-            @Override
-            public void onFailure(Call<GroupInfoResData> call, Throwable t) {
-                Log.d("tagg","fail to access !!  "+t);
-            }
+                @Override
+                public void onFailure(Call<GroupInfoResData> call, Throwable t) {
+                    Log.d("tagg", t.getMessage());
+                }
         });
 
     }
+
+    private void getRealTimeGroups(){
+
+
+
+    }
+
+
 
 
 }

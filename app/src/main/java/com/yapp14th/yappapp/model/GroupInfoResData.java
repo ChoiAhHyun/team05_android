@@ -1,5 +1,8 @@
 package com.yapp14th.yappapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -26,7 +29,7 @@ public class GroupInfoResData implements Serializable {
      }
 
 
-     public class GroupInfo{
+     public static class GroupInfo implements Parcelable {
 
           private String meet_name;
           private String meet_datetime;
@@ -35,6 +38,27 @@ public class GroupInfoResData implements Serializable {
           private String meet_personNumMax;
           private String meet_location;
 
+
+          protected GroupInfo(Parcel in) {
+               meet_name = in.readString();
+               meet_datetime = in.readString();
+               meed_Id = in.readString();
+               fk_meetcaptain = in.readString();
+               meet_personNumMax = in.readString();
+               meet_location = in.readString();
+          }
+
+          public static final Creator<GroupInfo> CREATOR = new Creator<GroupInfo>() {
+               @Override
+               public GroupInfo createFromParcel(Parcel in) {
+                    return new GroupInfo(in);
+               }
+
+               @Override
+               public GroupInfo[] newArray(int size) {
+                    return new GroupInfo[size];
+               }
+          };
 
           public String getMeet_name() {
                return meet_name;
@@ -82,6 +106,23 @@ public class GroupInfoResData implements Serializable {
 
           public void setMeet_location(String meet_location) {
                this.meet_location = meet_location;
+          }
+
+          public String getFull(){return this.meet_name+" "+this.meet_datetime+ " "+this.meed_Id +" "+this.fk_meetcaptain+" "+this.meet_personNumMax+ " "+this.meet_location;}
+
+          @Override
+          public int describeContents() {
+               return 0;
+          }
+
+          @Override
+          public void writeToParcel(Parcel dest, int flags) {
+               dest.writeString(meet_name);
+               dest.writeString(meet_datetime);
+               dest.writeString(meed_Id);
+               dest.writeString(fk_meetcaptain);
+               dest.writeString(meet_personNumMax);
+               dest.writeString(meet_location);
           }
      }
 }

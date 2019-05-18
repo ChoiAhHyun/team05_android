@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.model.GroupCardInfo;
+import com.yapp14th.yappapp.model.GroupInfoResData;
 
 import java.util.ArrayList;
 
@@ -22,13 +23,13 @@ import butterknife.OnClick;
 
 public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<GroupCardInfo> modelList;
+    private ArrayList<GroupInfoResData.GroupInfo> modelList;
     private Context mContext;
     private int viewType;
     private final int VIEW_TYPE_NEAR = 0 , VIEW_TYPE_REAL_TIME = 1;
     private ItemOnCickListener mItemOnClickListener;
 
-    public GroupCardAdpater(Context mContext, ArrayList<GroupCardInfo> modelList, int viewType){
+    public GroupCardAdpater(Context mContext, ArrayList<GroupInfoResData.GroupInfo> modelList, int viewType){
 
         this.mContext = mContext;
         this.modelList = modelList;
@@ -38,7 +39,7 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public interface ItemOnCickListener{
 
-        void onClickListener(GroupCardInfo model, View sharedView);
+        void onClickListener(GroupInfoResData.GroupInfo model, View sharedView);
 
     }
 
@@ -73,11 +74,15 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             GroupCardViewHolder holder = (GroupCardViewHolder) viewHolder;
 
-            GroupCardInfo model = modelList.get(position);
+            GroupInfoResData.GroupInfo model = modelList.get(position);
 
-            holder.imgCardBgr.setTransitionName(model.getTitle());
+            holder.imgCardBgr.setTransitionName(model.getMeet_name());
 
-            setUserImages(holder, model);
+            holder.txtCardTitle.setText( model.getMeet_name() );
+
+            holder.txtDate.setText(model.getMeet_datetime());
+
+            //setUserImages(holder, model);
 
             holder.itemView.setOnClickListener(onClickListener(modelList.get(position), holder.imgCardBgr));
 
@@ -86,25 +91,25 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    private void setUserImages(GroupCardViewHolder holder, GroupCardInfo model){
+//    private void setUserImages(GroupCardViewHolder holder, GroupInfoResData.GroupInfo model){
+//
+//        int cntImgs = model.getImgSrcPath().size();
+//
+//        for (int i=0 ; i < 4; i++){
+//
+//            if (i >= cntImgs) holder.imgGroups.get(i).setVisibility(View.INVISIBLE);
+//
+//            else holder.imgGroups.get(i).setVisibility(View.VISIBLE);
+//
+//            holder.imgGroups.get(i).setImageDrawable(mContext.getDrawable( R.drawable.sample_user1 ));
+//
+//        }
+//
+//        holder.txtUsersCnt.setText(cntImgs <= 4 ? "" : "+"+String.valueOf(cntImgs - 4));
+//
+//    }
 
-        int cntImgs = model.getImgSrcPath().size();
-
-        for (int i=0 ; i < 4; i++){
-
-            if (i >= cntImgs) holder.imgGroups.get(i).setVisibility(View.INVISIBLE);
-
-            else holder.imgGroups.get(i).setVisibility(View.VISIBLE);
-
-            holder.imgGroups.get(i).setImageDrawable(mContext.getDrawable( R.drawable.sample_user1 ));
-
-        }
-
-        holder.txtUsersCnt.setText(cntImgs <= 4 ? "" : "+"+String.valueOf(cntImgs - 4));
-
-    }
-
-    private View.OnClickListener onClickListener(final GroupCardInfo model, final ImageView sharedImage){
+    private View.OnClickListener onClickListener(final GroupInfoResData.GroupInfo model, final ImageView sharedImage){
 
         View.OnClickListener listener = v -> mItemOnClickListener.onClickListener(model, sharedImage);
 
