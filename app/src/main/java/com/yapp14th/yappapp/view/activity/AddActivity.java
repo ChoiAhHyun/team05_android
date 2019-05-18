@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -25,24 +26,33 @@ import com.volokh.danylo.hashtaghelper.HashTagHelper;
 import com.yanzhenjie.album.Album;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.MeetingImageSelectDialog;
+import com.yapp14th.yappapp.model.Category;
+import com.yapp14th.yappapp.model.MakeResponse;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class AddActivity extends BaseActivity {
     private static final String TAG = "AddActivity";
 
     String[] meetingPlace = new String[3];
     SimpleDateFormat mDateFormat;
-    String date, time;
+    String date, time, keyword = "";
     int currentYear, currentMonth, currentDay, currentHour, currentMinute, peopleNumber = 2;
-    List<String> allHashTags;
+    List<String> allHashTags, category;
 
     @BindView(R.id.iv_cover_image)
     ImageView iv_cover_image;
@@ -264,7 +274,7 @@ public class AddActivity extends BaseActivity {
     }
 
     private void setTimeView(int hour, int minute){
-        if (hour >= 12){
+        if (hour > 12){
             tv_time.setText((hour - 12) + " : " + toAddZero(minute) + " PM");
         }
         else {
@@ -343,7 +353,13 @@ public class AddActivity extends BaseActivity {
                     startActivityForResult(intent, 200);
                     break;
                 case R.id.btn_make:
+                    makeButtonEnable();
                     getKeyword();
+                    Log.d(TAG, et_name.getText().toString() + ", " +
+                            date + " " + time + ", " + meetingPlace[0] + ", " + Double.parseDouble(meetingPlace[1]) + ", " + Double.parseDouble(meetingPlace[2]) + ", " +
+                                    et_description.getText().toString() + ", " + Integer.parseInt(tv_peopleNumber.getText().toString()) + ", " +
+                            category + ", " + keyword);
+                    sendMeetingInfo();
                     break;
             }
         }
@@ -357,7 +373,9 @@ public class AddActivity extends BaseActivity {
         Log.d(TAG, "tag: " + allHashTags.isEmpty());
         for (int i = 0; i < allHashTags.size(); i++){
             Log.d(TAG, allHashTags.get(i));
+            keyword += "#" + allHashTags.get(i);
         }
+        Log.d(TAG, "keyword: " + keyword);
 //        return allHashTags;
     }
 
@@ -389,8 +407,50 @@ public class AddActivity extends BaseActivity {
         }
         else if (requestCode == 200){
             if (resultCode == 100){
-            // TODO 카테고리 선택한 것들 받기
+                category = data.getStringArrayListExtra("category");
+                Log.d(TAG, "category: " + category.toString());
+
+                List<String> interest = new ArrayList<>();
+                for (int i = 0; i < category.size(); i++){
+                    interest.add(Category.valueOf(category.get(i)).getName());
+                }
+                String str = interest.toString();
+                tv_category.setText(str.substring(1, str.indexOf(']')));
             }
         }
+    }
+
+    private void sendMeetingInfo() {
+        showProgress();
+        RetrofitClient.getInstance().getService().makeMeeting(et_name.getText().toString(),
+                date + " " + time, meetingPlace[0], Double.parseDouble(meetingPlace[1]), Double.parseDouble(meetingPlace[2]),
+                et_description.getText().toString(), Integer.parseInt(tv_peopleNumber.getText().toString()),
+                category, keyword).enqueue(new Callback<MakeResponse>() {
+            @Override
+            public void onResponse(Call<MakeResponse> call, Response<MakeResponse> response) {
+                if (response.isSuccessful()) {
+                    int state = response.body().state;
+                    if (state == 200) {
+                        finish();
+                    }
+                    else {
+                        Toast.makeText(getBaseContext(), "실패", LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "잠시 후 다시 시도해주세요.", LENGTH_SHORT).show();
+                }
+                Log.d(TAG, "state: " + response.body().state + " meetId: " + response.body().meetId);
+                hideProgress();
+            }
+
+            @Override
+            public void onFailure(Call<MakeResponse> call, Throwable t) {
+                Log.d(TAG, "error: " + t);
+                Toast.makeText(getBaseContext(), "잠시 후 다시 시도해주세요.", LENGTH_SHORT).show();
+                hideProgress();
+            }
+        });
+        Log.d(TAG, "here");
     }
 }

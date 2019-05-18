@@ -3,6 +3,7 @@ package com.yapp14th.yappapp.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,6 +12,11 @@ import com.beloo.widget.chipslayoutmanager.layouter.breaker.IRowBreaker;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.CategorySelectAdapter;
+import com.yapp14th.yappapp.model.Category;
+import com.yapp14th.yappapp.model.InterestModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.IntRange;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +40,11 @@ public class CategorySelectActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        List<InterestModel> interestModels = new ArrayList<>();
+        for (int i = 0; i < Category.size(); i++){
+            interestModels.add(new InterestModel(Category.values()[i].getName(), 0));
+        }
+
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
                 //한 행당 item의 최대 개수
                 .setMaxViewsInRow(3)
@@ -47,7 +58,7 @@ public class CategorySelectActivity extends BaseActivity {
                 .build();
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(chipsLayoutManager);
-        CategorySelectAdapter categorySelectAdapter = new CategorySelectAdapter(this);
+        CategorySelectAdapter categorySelectAdapter = new CategorySelectAdapter(this, interestModels);
         recyclerView.setAdapter(categorySelectAdapter);
 
         setToolbar("회원가입", true);
@@ -55,7 +66,6 @@ public class CategorySelectActivity extends BaseActivity {
         next_btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
     }

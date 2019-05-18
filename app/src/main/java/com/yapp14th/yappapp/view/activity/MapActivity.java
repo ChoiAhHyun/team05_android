@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,7 +42,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     FusedLocationProviderClient mFusedLocationProviderClient;
     GoogleMap mMap;
     Location mLocation;
-    LocationManager lm;
 
     boolean mLocationPermissionGranted;
     Marker currentMarker = null;
@@ -51,7 +51,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     Button btn_ok;
 
     @BindView(R.id.btn_now)
-    Button btn_now;
+    ImageView btn_now;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MapActivity.class);
@@ -65,10 +65,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbar("만남 장소 지정", true);
 
         setMapAPI();
 //        setPlacesAPI();
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        
         btn_ok.setOnClickListener(onClickListener);
         btn_now.setOnClickListener(onClickListener);
     }
@@ -208,21 +209,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
-        Geocoder geocoder = new Geocoder(this);
-        List<Address> matches = null;
-        try {
-            matches = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG, "matches: " + matches.get(0));
-        String bestMatch;
-        if (matches == null || matches.isEmpty() || matches.size() == 0){
-            bestMatch = "만남 장소";
-        }
-        else {
-            bestMatch = matches.get(0).getAddressLine(0);
-        }
+        String bestMatch = getAddressName(currentLocation);
 
 //        List<Address> names = null;
 //        try {
@@ -244,6 +231,25 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         currentMarker.showInfoWindow();
 
 //        mMap.setOnMarkerDragListener(onMarkerDragListener);
+    }
+
+    private String getAddressName(LatLng latLng) {
+        Geocoder geocoder = new Geocoder(this);
+        List<Address> matches = null;
+        try {
+            matches = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "matches: " + matches.get(0));
+        String bestMatch;
+        if (matches == null || matches.isEmpty() || matches.size() == 0){
+            bestMatch = "만남 장소";
+        }
+        else {
+            bestMatch = matches.get(0).getAddressLine(0);
+        }
+        return bestMatch;
     }
 
 /*
@@ -282,8 +288,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_ok:
-                    LatLng position = currentMarker.getPosition();
-                    String address = currentMarker.getSnippet();
+//                    LatLng position = currentMarker.getPosition();
+//                    String address = currentMarker.getSnippet();
+                    LatLng position = mMap.getCameraPosition().target;
+                    String address = getAddressName(position);
                     Intent intent = new Intent();
                     intent.putExtra("lat", position.latitude + "");
                     intent.putExtra("lng", position.longitude + "");
