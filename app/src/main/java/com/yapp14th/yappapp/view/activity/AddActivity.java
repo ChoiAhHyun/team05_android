@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,12 +26,20 @@ import com.gun0912.tedpermission.TedPermission;
 import com.volokh.danylo.hashtaghelper.HashTagHelper;
 import com.yanzhenjie.album.Album;
 import com.yapp14th.yappapp.Base.BaseActivity;
+import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.common.Commons;
+import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
+import com.yapp14th.yappapp.common.StreamUtils;
 import com.yapp14th.yappapp.dialog.MeetingImageSelectDialog;
 import com.yapp14th.yappapp.model.Category;
+import com.yapp14th.yappapp.model.MakeModel;
 import com.yapp14th.yappapp.model.MakeResponse;
+import com.yapp14th.yappapp.model.SuccessResponse;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +48,10 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +66,8 @@ public class AddActivity extends BaseActivity {
     String date, time, keyword = "";
     int currentYear, currentMonth, currentDay, currentHour, currentMinute, peopleNumber = 2;
     List<String> allHashTags, category;
+
+    private String meetingImagePath;
 
     @BindView(R.id.iv_cover_image)
     ImageView iv_cover_image;
@@ -176,9 +191,11 @@ public class AddActivity extends BaseActivity {
                 Album.getAlbumConfig()
                         .getAlbumLoader()
                         .load(iv_cover_image, path);
+                meetingImagePath = path;
             }
             else {
                 iv_cover_image.setImageResource(R.drawable.profile_pic);
+                meetingImagePath = null;
             }
         }
 
@@ -422,35 +439,103 @@ public class AddActivity extends BaseActivity {
 
     private void sendMeetingInfo() {
         showProgress();
-        RetrofitClient.getInstance().getService().makeMeeting(et_name.getText().toString(),
-                date + " " + time, meetingPlace[0], Double.parseDouble(meetingPlace[1]), Double.parseDouble(meetingPlace[2]),
-                et_description.getText().toString(), Integer.parseInt(tv_peopleNumber.getText().toString()),
-                category, keyword).enqueue(new Callback<MakeResponse>() {
+
+        MakeModel processingAdd = new MakeModel();
+        String id = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, "");
+        processingAdd.setUserId(id);
+//        processingAdd.setUserId("dnjsgml");
+        processingAdd.setName(et_name.getText().toString());
+        processingAdd.setDatetime(date + " " + time);
+        processingAdd.setLocation(meetingPlace[0]);
+        processingAdd.setLatitude(Double.parseDouble(meetingPlace[1]));
+        processingAdd.setLongitude(Double.parseDouble(meetingPlace[2]));
+        processingAdd.setExplanation(et_description.getText().toString());
+        processingAdd.setPersonNum(Integer.parseInt(tv_peopleNumber.getText().toString()));
+        processingAdd.setList(category);
+        processingAdd.setKeyword(keyword);
+
+        String processingMeetingImage;
+        if (meetingImagePath != null) {
+            processingMeetingImage = meetingImagePath;
+        }
+        else { // 프로필 이미지 등록 안했을 경우.
+            processingMeetingImage = null;
+        }
+        RetrofitClient.getInstance().getService().makeMeeting(processingAdd).enqueue(new Callback<MakeResponse>() {
             @Override
-            public void onResponse(Call<MakeResponse> call, Response<MakeResponse> response) {
-                if (response.isSuccessful()) {
-                    int state = response.body().state;
-                    if (state == 200) {
-                        finish();
+            public void onResponse(Call<MakeResponse> call, Response<MakeResponse> response) {if (response.isSuccessful()) {
+                MakeResponse makeResponse = response.body();
+                if (makeResponse != null) {
+                    int status = makeResponse.state;
+                    if (status == 200) {
+                        if (processingMeetingImage != null) {
+                            uploadMeetingImageToServer(processingMeetingImage, String.valueOf(makeResponse.meetId));
+                        }
                     }
                     else {
-                        Toast.makeText(getBaseContext(), "실패", LENGTH_SHORT).show();
+                        Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
                     }
+
                 }
                 else {
-                    Toast.makeText(getBaseContext(), "잠시 후 다시 시도해주세요.", LENGTH_SHORT).show();
+                    Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
                 }
-                Log.d(TAG, "state: " + response.body().state + " meetId: " + response.body().meetId);
                 hideProgress();
+                Log.d(TAG, "meeting success");
+            }
             }
 
             @Override
             public void onFailure(Call<MakeResponse> call, Throwable t) {
-                Log.d(TAG, "error: " + t);
                 Toast.makeText(getBaseContext(), "잠시 후 다시 시도해주세요.", LENGTH_SHORT).show();
                 hideProgress();
+                Log.d(TAG, "meeting failure: " + t);
             }
         });
-        Log.d(TAG, "here");
+    }
+
+    private void uploadMeetingImageToServer(String imagePath, String meetId) {
+        showProgress();
+
+        Uri uri = Uri.fromFile(new File(imagePath));
+        try {
+            byte[] image = StreamUtils.getBytes(getBaseContext(), uri);
+            byte[] realimage = Commons.reduceImageSize(image);
+
+            RequestBody requestBody = MultipartBody.create(MediaType.parse("image/*"), realimage);
+            MultipartBody.Part multipart = MultipartBody.Part.createFormData("meetImg", imagePath, requestBody);
+
+            RetrofitClient.getInstance().getService().uploadMeetImage(multipart, meetId).enqueue(new Callback<SuccessResponse>() {
+                @Override
+                public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                    if(response.isSuccessful()) {
+                        SuccessResponse successResponse = response.body();
+                        if (successResponse != null) {
+                            if (successResponse.state == 200) {
+                                finish();
+                            }
+                            else {
+                                Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    else {
+                        Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
+                    hideProgress();
+                    Log.d(TAG, "image success");
+                }
+
+                @Override
+                public void onFailure(Call<SuccessResponse> call, Throwable t) {
+                    Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    hideProgress();
+                    Log.d(TAG, "image failure: " + t);
+                }
+            });
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
