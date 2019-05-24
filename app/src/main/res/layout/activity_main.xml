@@ -16,19 +16,18 @@
             android:id="@+id/shadow_line"
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:layout_above="@id/bottomTabLayout"
+            android:layout_above="@id/bottomnavigation"
             android:alpha="0.5"
             android:background="@drawable/shadow_border_top"/>
 
 
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/bottomTabLayout"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomnavigation"
             android:layout_width="match_parent"
-            style="@style/BottomTabLayout"
-            android:layout_height="48dp"
-            android:background="@color/white"
-            android:layout_alignParentBottom="true">
-    </com.google.android.material.tabs.TabLayout>
+            android:layout_height="46dp"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_navigation_menu"
+            android:layout_alignParentBottom="true"/>
 
 
 
