@@ -70,7 +70,6 @@ public class AlarmFragment extends BaseFragment {
         modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
         modelList.add(new AlarmInfo("",1, 1, "ads","ad","asdsad", true));
 
-
     }
 
     private void setRecyclerView(){

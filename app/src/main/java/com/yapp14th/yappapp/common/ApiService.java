@@ -30,4 +30,5 @@ public interface ApiService {
 
     @GET("meet/detail")
     Call<GroupDetailResData> GetGroupDetailDatas ( @Query("meetId") Integer meetId );
+
 }

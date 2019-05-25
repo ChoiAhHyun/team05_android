@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
@@ -110,6 +111,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         super.onStart();
 
         getGroupDetailDatas();
+
+        getBoardDatas();
     }
 
     private void getGroupDetailDatas(){
@@ -123,6 +126,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
                 setTextViews();
 
                 //setParticipantsImages();
+
+                setImgLeaderProfile();
             }
 
             @Override
@@ -154,6 +159,11 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         txtDate.setText(groupInfo.getStringFormatDate());
         txtTime.setText(groupInfo.getStringFormatTime());
 
+    }
+
+    private void setImgLeaderProfile(){
+        Glide.with(this).load(model.captain_img).centerCrop().into(imgLeaderProfile);
+        Glide.with(this).load(model.captain_img).centerCrop().into(imgProfile);
     }
 
     private void setParticipantsImages(){
@@ -274,6 +284,28 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     @BindView(R.id.layout_board)
     View boardContainer;
+
+    private void getBoardDatas(){
+
+        RetrofitClient.getInstance().getService().GetGroupDetailDatas(1).enqueue(new Callback<GroupDetailResData>() {
+            @Override
+            public void onResponse(Call<GroupDetailResData> call, Response<GroupDetailResData> response) {
+
+                model = response.body().result;
+
+                setTextViews();
+
+                //setParticipantsImages();
+
+                setImgLeaderProfile();
+            }
+
+            @Override
+            public void onFailure(Call<GroupDetailResData> call, Throwable t) {
+
+            }
+        });
+    }
 
     private void setBoard(boolean isExist){
 
