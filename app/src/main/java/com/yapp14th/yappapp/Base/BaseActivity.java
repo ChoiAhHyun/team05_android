@@ -48,7 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // 툴바 필요할 시 사용
     public void setToolbar(String title, boolean isBackBtn) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
