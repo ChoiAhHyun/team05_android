@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.yapp14th.yappapp.R;
 
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class UserImagesAdpater extends RecyclerView.Adapter<UserImagesAdpater.UserImageViewHolder> {
 
     private Context context;
-    private ArrayList<Integer> imgSrcs;
+    private ArrayList<String> imgSrcs;
 
-    public UserImagesAdpater(Context context, ArrayList<Integer> imgSrcs){
+    public UserImagesAdpater(Context context, ArrayList<String> imgSrcs){
 
         this.context = context;
         this.imgSrcs = imgSrcs;
@@ -39,7 +40,7 @@ public class UserImagesAdpater extends RecyclerView.Adapter<UserImagesAdpater.Us
 
         ImageView img = holder.imageView;
 
-        img.setImageResource(imgSrcs.get(position));
+        Glide.with(context).load(imgSrcs.get(position)).into(img);
 
         LinearLayout.LayoutParams layoutParams =
                 new LinearLayout.LayoutParams((int) context.getResources().getDimension(R.dimen.user_img_list_width),

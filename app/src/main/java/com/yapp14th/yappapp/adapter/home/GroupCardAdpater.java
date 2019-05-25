@@ -1,7 +1,6 @@
 package com.yapp14th.yappapp.adapter.home;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.view.LayoutInflater;
@@ -10,16 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.yapp14th.yappapp.R;
-import com.yapp14th.yappapp.model.GroupCardInfo;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.OnClick;
 
 public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -76,13 +73,19 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             GroupInfoResData.GroupInfo model = modelList.get(position);
 
-            holder.imgCardBgr.setTransitionName(model.getMeet_name());
+            holder.imgCardBgr.setTransitionName(model.meetName);
 
-            holder.txtCardTitle.setText( model.getMeet_name() );
+            holder.txtCardTitle.setText( model.meetName );
 
-            holder.txtDate.setText(model.getMeet_datetime());
+            holder.txtDate.setText(model.getStringFormatDate());
 
-            //setUserImages(holder, model);
+            holder.txtTime.setText(model.getStringFormatTime());
+
+            holder.txtLocName.setText(model.meetlocation);
+
+            holder.txtDist.setText(String.valueOf(model.distance)  + "km");
+
+            setUserImages(holder, model);
 
             holder.itemView.setOnClickListener(onClickListener(modelList.get(position), holder.imgCardBgr));
 
@@ -91,23 +94,24 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-//    private void setUserImages(GroupCardViewHolder holder, GroupInfoResData.GroupInfo model){
-//
-//        int cntImgs = model.getImgSrcPath().size();
-//
-//        for (int i=0 ; i < 4; i++){
-//
-//            if (i >= cntImgs) holder.imgGroups.get(i).setVisibility(View.INVISIBLE);
-//
-//            else holder.imgGroups.get(i).setVisibility(View.VISIBLE);
-//
-//            holder.imgGroups.get(i).setImageDrawable(mContext.getDrawable( R.drawable.sample_user1 ));
-//
-//        }
-//
-//        holder.txtUsersCnt.setText(cntImgs <= 4 ? "" : "+"+String.valueOf(cntImgs - 4));
-//
-//    }
+    private void setUserImages(GroupCardViewHolder holder, GroupInfoResData.GroupInfo model){
+
+        int cntImgs = model.participantNum;
+
+        for (int i=0 ; i < 4; i++){
+
+            if (i >= cntImgs) holder.imgGroups.get(i).setVisibility(View.INVISIBLE);
+
+            else {
+                holder.imgGroups.get(i).setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(model.participantImg[i]).centerCrop().into(holder.imgGroups.get(i));
+            }
+
+        }
+
+        holder.txtUsersCnt.setText(cntImgs <= 4 ? "" : "+"+String.valueOf(cntImgs - 4));
+
+    }
 
     private View.OnClickListener onClickListener(final GroupInfoResData.GroupInfo model, final ImageView sharedImage){
 
@@ -151,11 +155,14 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             txtUsersCnt = itemView.findViewById(R.id.txt_user_group_count);
 
+            txtDist = itemView.findViewById(R.id.txt_home_card_dist);
+
         }
 
         private void setImageArray(ImageView img){
 
             img.setBackground(new ShapeDrawable(new OvalShape()));
+            img.setVisibility(View.INVISIBLE);
             img.setClipToOutline(true);
             imgGroups.add(img);
 

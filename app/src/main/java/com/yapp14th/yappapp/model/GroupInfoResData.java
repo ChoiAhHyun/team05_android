@@ -1,128 +1,129 @@
 package com.yapp14th.yappapp.model;
 
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.google.android.gms.dynamic.ObjectWrapper;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class GroupInfoResData implements Serializable {
 
-     private int state;
+    private int state;
 
-     private ArrayList<GroupInfo> list;
+    private ArrayList<GroupInfo> list;
 
-     public int getState() {
-          return state;
-     }
+    public int getState() {
+        return state;
+    }
 
-     public void setState(int state) {
-          this.state = state;
-     }
+    public void setState(int state) {
+        this.state = state;
+    }
 
-     public ArrayList<GroupInfo> getList() {
-          return list;
-     }
+    public ArrayList<GroupInfo> getList() {
+        return list;
+    }
 
-     public void setList(ArrayList<GroupInfo> list) {
-          this.list = list;
-     }
-
-
-     public static class GroupInfo implements Parcelable {
-
-          private String meet_name;
-          private String meet_datetime;
-          private String meed_Id;
-          private String fk_meetcaptain;
-          private String meet_personNumMax;
-          private String meet_location;
+    public void setList(ArrayList<GroupInfo> list) {
+        this.list = list;
+    }
 
 
-          protected GroupInfo(Parcel in) {
-               meet_name = in.readString();
-               meet_datetime = in.readString();
-               meed_Id = in.readString();
-               fk_meetcaptain = in.readString();
-               meet_personNumMax = in.readString();
-               meet_location = in.readString();
-          }
+    public static class GroupInfo implements Parcelable {
 
-          public static final Creator<GroupInfo> CREATOR = new Creator<GroupInfo>() {
-               @Override
-               public GroupInfo createFromParcel(Parcel in) {
-                    return new GroupInfo(in);
-               }
+        public Double distance;
+        public Integer meetId;
+        public String meetName;
+        public Date meetDateTime;
+        public String meetlocation;
+        public String meet_Img;
+        public String meet_personNum;
+        public int participantNum;
+        public String[] participantImg;
 
-               @Override
-               public GroupInfo[] newArray(int size) {
-                    return new GroupInfo[size];
-               }
-          };
+        protected GroupInfo(Parcel in) {
+            if (in.readByte() == 0) {
+                distance = null;
+            } else {
+                distance = in.readDouble();
+            }
+            if (in.readByte() == 0) {
+                meetId = null;
+            } else {
+                meetId = in.readInt();
+            }
+            meetName = in.readString();
+            long tmpDate = in.readLong();
+            meetDateTime = tmpDate == -1 ? null : new Date(tmpDate);
+            meetlocation = in.readString();
+            meet_Img = in.readString();
+            meet_personNum = in.readString();
+            participantNum = in.readInt();
+            participantImg = in.createStringArray();
 
-          public String getMeet_name() {
-               return meet_name;
-          }
+        }
 
-          public void setMeet_name(String meet_name) {
-               this.meet_name = meet_name;
-          }
+        public static final Creator<GroupInfo> CREATOR = new Creator<GroupInfo>() {
+            @Override
+            public GroupInfo createFromParcel(Parcel in) {
+                return new GroupInfo(in);
+            }
 
-          public String getMeet_datetime() {
-               return meet_datetime;
-          }
+            @Override
+            public GroupInfo[] newArray(int size) {
+                return new GroupInfo[size];
+            }
+        };
 
-          public void setMeet_datetime(String meet_datetime) {
-               this.meet_datetime = meet_datetime;
-          }
 
-          public String getMeed_Id() {
-               return meed_Id;
-          }
 
-          public void setMeed_Id(String meed_Id) {
-               this.meed_Id = meed_Id;
-          }
+        @Override
+        public int describeContents() {
+            return 0;
+        }
 
-          public String getFk_meetcaptain() {
-               return fk_meetcaptain;
-          }
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            if (distance == null) {
+                dest.writeByte((byte) 0);
+            } else {
+                dest.writeByte((byte) 1);
+                dest.writeDouble(distance);
+            }
+            if (meetId == null) {
+                dest.writeByte((byte) 0);
+            } else {
+                dest.writeByte((byte) 1);
+                dest.writeInt(meetId);
+            }
+            dest.writeString(meetName);
+            dest.writeLong(meetDateTime != null ? meetDateTime.getTime() : -1);
+            dest.writeString(meetlocation);
+            dest.writeString(meet_Img);
+            dest.writeString(meet_personNum);
+            dest.writeInt(participantNum);
+            dest.writeStringArray(participantImg);
+        }
 
-          public void setFk_meetcaptain(String fk_meetcaptain) {
-               this.fk_meetcaptain = fk_meetcaptain;
-          }
+        public String getStringFormatDate() {
 
-          public String getMeet_personNumMax() {
-               return meet_personNumMax;
-          }
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy.mm.dd");
+            return transFormat.format(this.meetDateTime);
 
-          public void setMeet_personNumMax(String meet_personNumMax) {
-               this.meet_personNumMax = meet_personNumMax;
-          }
+        }
 
-          public String getMeet_location() {
-               return meet_location;
-          }
+        public String getStringFormatTime(){
 
-          public void setMeet_location(String meet_location) {
-               this.meet_location = meet_location;
-          }
+            SimpleDateFormat transFormat = new SimpleDateFormat("h:mm a");
+            return transFormat.format(this.meetDateTime).replace("AM", "am").replace("PM","pm");
 
-          public String getFull(){return this.meet_name+" "+this.meet_datetime+ " "+this.meed_Id +" "+this.fk_meetcaptain+" "+this.meet_personNumMax+ " "+this.meet_location;}
+        }
 
-          @Override
-          public int describeContents() {
-               return 0;
-          }
-
-          @Override
-          public void writeToParcel(Parcel dest, int flags) {
-               dest.writeString(meet_name);
-               dest.writeString(meet_datetime);
-               dest.writeString(meed_Id);
-               dest.writeString(fk_meetcaptain);
-               dest.writeString(meet_personNumMax);
-               dest.writeString(meet_location);
-          }
-     }
+    }
 }

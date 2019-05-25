@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:scrollbarSize="0dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -48,7 +48,8 @@
             android:layout_marginTop="165dp"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            tools:listitem="@layout/model_near_group"
+            android:layout_height="300dp"/>
 
         <TextView
             android:id="@+id/txt_realtime"

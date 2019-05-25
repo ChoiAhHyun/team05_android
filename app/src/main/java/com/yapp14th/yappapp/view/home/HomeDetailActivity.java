@@ -31,6 +31,7 @@ import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.utils.TransitionIssue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -75,7 +76,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     @BindView(R.id.img_home_detail_profile)
     ImageView imgProfile;
 
-    private GroupDetailResData.GroupDetailInfo model;
 
     @Override
     protected int getLayout() {
@@ -83,9 +83,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     }
 
     private UserImagesAdpater adapter;
-    private ArrayList<Integer> imgSrcs = new ArrayList<>();
+    private ArrayList<String> imgSrcs = new ArrayList<>();
     private ConfirmDialog dialog;
     private GroupInfoResData.GroupInfo groupInfo;
+    private GroupDetailResData.GroupDetailInfo model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,9 +118,11 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             @Override
             public void onResponse(Call<GroupDetailResData> call, Response<GroupDetailResData> response) {
 
-                model = response.body().getGroupDetailInfo().get(0);
+                model = response.body().result;
 
                 setTextViews();
+
+                //setParticipantsImages();
             }
 
             @Override
@@ -143,19 +146,25 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void setTextViews(){
 
-        txtTitle.setText(model.meet_name);
+        txtTitle.setText(groupInfo.meetName);
         txtSubTitle.setText(model.meet_explanation);
-        txtLeaderName.setText(model.fk_meetcaptain);
-        txtNumOfParticipants.setText(model.meet_personNum);
-        txtLocName.setText(model.meet_location);
+        txtLeaderName.setText(model.captain_id);
+        txtNumOfParticipants.setText(model.participants_num + " / " + model.person_num);
+        txtLocName.setText(groupInfo.meetlocation);
+        txtDate.setText(groupInfo.getStringFormatDate());
+        txtTime.setText(groupInfo.getStringFormatTime());
 
     }
 
-    private void getGroupInfoFromParent(){
+    private void setParticipantsImages(){
 
-        groupInfo = getIntent().getParcelableExtra("groupInfo");
+        for(String url: model.participants_img) imgSrcs.add(url);
+
+        adapter.notifyDataSetChanged();
 
     }
+
+    private void getGroupInfoFromParent(){ groupInfo = getIntent().getParcelableExtra("groupInfo"); }
 
     private void setDialog(){
 
@@ -179,18 +188,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     }
 
-    private void setTestModel(){
-
-        //demo
-        imgSrcs.add(R.drawable.sample_user1);
-        imgSrcs.add(R.drawable.sample_user1);
-        imgSrcs.add(R.drawable.sample_user1);
-
-    }
-
     private void setAdapter(){
-
-        setTestModel();
 
         adapter = new UserImagesAdpater(this, imgSrcs);
 
@@ -299,8 +297,5 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             boardContainer.setVisibility(View.GONE);
 
         }
-
     }
-
-
 }

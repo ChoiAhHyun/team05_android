@@ -7,22 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.common.RetrofitClient;
-import com.yapp14th.yappapp.model.GroupCardInfo;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
-import com.yapp14th.yappapp.model.NearGroupRequestBody;
-import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.PermissionGPS;
-import com.yapp14th.yappapp.view.activity.MemberInfoInputActivity;
-import com.yapp14th.yappapp.view.activity.SignUpActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +27,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,10 +62,6 @@ public class HomeFragment extends BaseFragment {
 
         setRecyclerView();
 
-        setNearGroupDatas();
-
-        setRealTimeGroupDatas();
-
         setAdapter();
 
         gpsCheck();
@@ -87,7 +75,10 @@ public class HomeFragment extends BaseFragment {
 
         getNearGroups(0.0, 1.1);
 
+        getRealTimeGroups(0.0, 1.1, 1);
+
     }
+
 
     private void setRecyclerView(){
 
@@ -105,38 +96,6 @@ public class HomeFragment extends BaseFragment {
         rvRealTime.setLayoutManager(lm);
         rvRealTime.setNestedScrollingEnabled(false);
         rvRealTime.setHasFixedSize(false);
-
-    }
-
-    private void setNearGroupDatas(){
-
-//        nearGroupModelList = new ArrayList<GroupCardInfo>();
-//
-//        for (int i=0; i<40;i ++){
-//
-//            ArrayList<String> strs = new ArrayList<>();
-//
-//            for(int j=0; j<i+1; j++) strs.add("s");
-//
-//            nearGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
-//
-//        }
-
-    }
-
-    private void setRealTimeGroupDatas(){
-
-//        realTimeGroupModelList = new ArrayList<GroupCardInfo>();
-//
-//        for (int i=0; i<40;i ++){
-//
-//            ArrayList<String> strs = new ArrayList<>();
-//
-//            for(int j=0; j<i+1; j++) strs.add("s");
-//
-//            realTimeGroupModelList.add(new GroupCardInfo("asd","ads","asd","asd","asd",strs));
-//
-//        }
 
     }
 
@@ -253,10 +212,8 @@ public class HomeFragment extends BaseFragment {
                 @Override
                 public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
 
-                    nearGroupModelList = response.body().getList();
-
-                    setAdapter();
-
+                    nearGroupModelList.addAll(response.body().getList());
+                    adapterNear.notifyDataSetChanged();
                 }
 
                 @Override
@@ -267,10 +224,25 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    private void getRealTimeGroups(){
+    private void getRealTimeGroups(Double myLongitude, Double myLatitude, int meetpage){
+
+        RetrofitClient.getInstance().getService()
+                .GetRealTimeGroupDatas(new GroupRequestBody("",myLongitude,myLatitude, meetpage))
+                .enqueue(new Callback<GroupInfoResData>() {
+                    @Override
+                    public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
 
 
+                        realTimeGroupModelList.addAll(response.body().getList());
+                        adapterRealTime.notifyDataSetChanged();
 
+                    }
+
+                    @Override
+                    public void onFailure(Call<GroupInfoResData> call, Throwable t) {
+                        Log.d("tagg", t.getMessage());
+                    }
+                });
     }
 
 

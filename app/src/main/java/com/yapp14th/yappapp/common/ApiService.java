@@ -22,12 +22,6 @@ public interface ApiService {
             @Query("userId") String id
     );
 
-    @GET("meet/meetId/near")
-    Call<GroupInfoResData> GetNearGroups (
-            @Query("myLongitude") Double myLongitude,
-            @Query("myLatitude") Double myLatitude
-    );
-
     @POST("meet/meetId/near")
     Call<GroupInfoResData> GetNearGroupDatas (@Body GroupRequestBody body);
 
