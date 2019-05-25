@@ -47,18 +47,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayout();
 
     // 툴바 필요할 시 사용
-    protected void setToolbar(String title, boolean isBackBtn) {
-        toolbar = findViewById(R.id.toolbar);
+    public void setToolbar(String title, boolean isBackBtn) {
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
                 toolbar.setTitle(title);
             }
-
             setSupportActionBar(toolbar);
 
             ActionBar actionbar = getSupportActionBar();
-
             if (actionbar != null && isBackBtn) { // 이전 버튼을 보여주고 싶지 않을 경우
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 // 이전 버튼 이미지 추가
@@ -73,6 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void bindViews() {
         ButterKnife.bind(this);
@@ -119,10 +118,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                             }
                         }
                         else {
-                                // Api < 17. Unfortunately cannot check for isDestroyed()
-                                if (!((Activity) context).isFinishing()) {
-                                    dismissWithTryCatch(mProgressDialog);
-                                }
+                            // Api < 17. Unfortunately cannot check for isDestroyed()
+                            if (!((Activity) context).isFinishing()) {
+                                dismissWithTryCatch(mProgressDialog);
+                            }
                         }
                     }
                     else

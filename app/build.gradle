@@ -42,7 +42,8 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation "com.google.firebase:firebase-messaging:17.5.0"
+    implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.github.nihad92:SwipeableCards:1.0.19'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.github.GrenderG:Toasty:1.4.2'
@@ -52,5 +53,9 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.github.rubensousa:gravitysnaphelper:2.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.libraries.places:places:1.1.0'
+    implementation 'com.github.danylovolokh:hashtag-helper:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

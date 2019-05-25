@@ -26,4 +26,8 @@
     <color name="color_alarm_state_cancle">#ff2807</color>
     <color name="color_alarm_state_arrive">#11bd48</color>
 
+    <color name="color_d7d7d7">#d7d7d7</color>
+    <color name="color_111861">#111861</color>
+    <color name="color_717486">#717486</color>
+    <color name="color_ff2807">#ff2807</color>
 </resources>

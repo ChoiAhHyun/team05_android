@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="9dp"
-    android:clipToPadding="false">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="9dp"
+              android:clipToPadding="false">
+
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:button="@android:color/transparent"
+            android:button="@android:color/transparent"
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/selector_category_text"
             android:text="텍스트"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:elevation="4dp"
-        android:background="@drawable/selector_category_background"/>
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:elevation="4dp"
+            android:background="@drawable/selector_category_background"/>
+
 </LinearLayout>

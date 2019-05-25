@@ -51,4 +51,8 @@ public abstract class BaseFragment extends Fragment {
 
         activity.hideProgress();
     }
+
+    public interface FragmentNavigation {
+        void pushFragment(Fragment fragment);
+    }
 }
