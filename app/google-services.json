@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "903699327797",
+    "firebase_url": "https://simmo-32407.firebaseio.com",
+    "project_id": "simmo-32407",
+    "storage_bucket": "simmo-32407.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903699327797:android:cf01bf1cd4a12448",
+        "android_client_info": {
+          "package_name": "com.yapp14th.yappapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903699327797-37r75lu88uio84phfn7s6t5tvgh7g4ol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGlNEAYLBhqPQPdEXkPo8GMD102CEJy1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903699327797-37r75lu88uio84phfn7s6t5tvgh7g4ol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
