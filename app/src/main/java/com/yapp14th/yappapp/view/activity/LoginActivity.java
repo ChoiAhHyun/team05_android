@@ -67,6 +67,8 @@ public class LoginActivity extends BaseActivity {
                     requestLogin(id_edit.getText().toString(), pw_edit.getText().toString());
                 }
                 else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
                     Toasty.error(getBaseContext(), "아이디 및 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
 

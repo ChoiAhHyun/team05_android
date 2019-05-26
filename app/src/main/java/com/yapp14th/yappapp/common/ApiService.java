@@ -55,4 +55,9 @@ public interface ApiService {
             @Field("list") List<String> list,
             @Field("keyword") String keyword
     );
+
+    @GET("meet/keyword")
+    Call<SuccessResponse> getKeywordData (
+        @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
+    );
 }
