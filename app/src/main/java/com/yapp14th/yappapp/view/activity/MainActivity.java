@@ -11,9 +11,9 @@ import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.etc.FragNavController;
 import com.yapp14th.yappapp.etc.FragmentHistory;
+import com.yapp14th.yappapp.view.alarm.AlarmFragment;
 import com.yapp14th.yappapp.view.fragment.AddFragment;
-import com.yapp14th.yappapp.view.fragment.AlarmFragment;
-import com.yapp14th.yappapp.view.fragment.HomeFragment;
+import com.yapp14th.yappapp.view.home.HomeFragment;
 import com.yapp14th.yappapp.view.fragment.MypageFragment;
 import com.yapp14th.yappapp.view.fragment.SearchFragment;
 
@@ -57,6 +57,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+
         switch (item.getItemId()) {
             case R.id.home:
                 switchTab(0);
@@ -177,6 +179,14 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
 
         }
         throw new IllegalStateException("Need to send an index that we know");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+
     }
 
 

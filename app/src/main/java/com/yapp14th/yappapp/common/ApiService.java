@@ -1,8 +1,14 @@
 package com.yapp14th.yappapp.common;
 
+import com.yapp14th.yappapp.model.GroupDetailResData;
+import com.yapp14th.yappapp.model.GroupInfoResData;
+import com.yapp14th.yappapp.model.GroupRequestBody;
+import com.yapp14th.yappapp.model.NearGroupRequestBody;
 import com.yapp14th.yappapp.model.MakeResponse;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.model.UserModel;
+
+import java.util.List;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +16,11 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -40,6 +49,14 @@ public interface ApiService {
             @Part MultipartBody.Part userImg, @Query("userId") String userId
     );
 
+    @POST("meet/meetId/near")
+    Call<GroupInfoResData> GetNearGroupDatas (@Body GroupRequestBody body);
+
+    @POST("meet/scheduled")
+    Call<GroupInfoResData> GetRealTimeGroupDatas (@Body GroupRequestBody body);
+
+    @GET("meet/detail")
+    Call<GroupDetailResData> GetGroupDetailDatas ( @Query("meetId") Integer meetId );
     @POST("meet/client-token")
     Call<SuccessResponse> sendToken(
             @Body HashMap<String, String> token

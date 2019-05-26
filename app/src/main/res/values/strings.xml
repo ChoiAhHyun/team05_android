@@ -1,4 +1,6 @@
 <resources>
+    <string name="main_bgr_ratio">391.6:358.6</string>
+    <string name="intent_str_transition_view">transitionNameOfView</string>
     <string name="app_name">심모</string>
     <string name="map_api_key">AIzaSyDwmtFScJE7bAQJ9SYomhlKK0bkanHf8W4</string>
 </resources>
