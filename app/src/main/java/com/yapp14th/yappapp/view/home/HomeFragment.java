@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,9 +42,11 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.rv_home_realtime_group)
     RecyclerView rvRealTime;
 
+    private boolean isFirst = true;
     private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
     private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
     private PermissionGPS permissionGPS;
+    private View mRootLayout;
 
     @Override
     protected int getLayout() {
@@ -58,15 +61,33 @@ public class HomeFragment extends BaseFragment {
 
     private ArrayList<GroupInfoResData.GroupInfo> nearGroupModelList = new ArrayList(), realTimeGroupModelList = new ArrayList();
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        if (isFirst) {
+
+            mRootLayout = inflater.inflate(getLayout(), container, false);
+            ButterKnife.bind(this, mRootLayout);
+
+        }
+
+        return mRootLayout;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setRecyclerView();
+        if (isFirst) {
 
-        setAdapter();
+            gpsCheck();
 
-        gpsCheck();
+            setRecyclerView();
+
+            setAdapter();
+
+        }
 
     }
 
@@ -75,9 +96,15 @@ public class HomeFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        getNearGroups(0.0, 1.1);
+        if (isFirst) {
 
-        getRealTimeGroups(0.0, 1.1, 1);
+            getNearGroups(0.0, 1.1);
+
+            getRealTimeGroups(0.0, 1.1, 1);
+
+            isFirst = false;
+
+        }
 
     }
 
