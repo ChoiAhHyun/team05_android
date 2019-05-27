@@ -3,12 +3,9 @@ package com.yapp14th.yappapp.common;
 import com.yapp14th.yappapp.model.GroupDetailResData;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
-import com.yapp14th.yappapp.model.NearGroupRequestBody;
 import com.yapp14th.yappapp.model.MakeResponse;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.model.UserModel;
-
-import java.util.List;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +13,8 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -74,7 +68,12 @@ public interface ApiService {
     );
 
     @GET("meet/keyword")
-    Call<SuccessResponse> getKeywordData (
+    Call<GroupInfoResData> getSearchResultData (
         @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
+    );
+
+    @GET("meet/dsearch")
+    Call<GroupInfoResData> getSearchDefaultData (
+        @Query("userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude, @Query("distancebool") int distancebool, @Query("page") int page
     );
 }

@@ -60,6 +60,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick({R.id.signin_btn, R.id.signup_btn})
     void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.signin_btn:
                 // 로그인 작업
@@ -99,9 +100,7 @@ public class LoginActivity extends BaseActivity {
                         int state = successResponse.state;
                         hideProgress();
                         if (state == 200) {
-                            if (auto_login_check.isChecked()) {
-                                saveUserInfo(id, pw);
-                            }
+                            saveUserInfo(id, pw, auto_login_check.isChecked());
                             sendFirebaseToken(id);
                         }
                         else if (state == 300) {
@@ -180,8 +179,12 @@ public class LoginActivity extends BaseActivity {
             });
     }
 
-    private void saveUserInfo(String id, String pw) {
-        Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_AUTOLOGIN, true);
+    private void saveUserInfo(String id, String pw, boolean isChecked) {
+        if (isChecked)
+            Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_AUTOLOGIN, true);
+        else
+            Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_AUTOLOGIN, false);
+
         Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, id);
         Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_PASSWORD, pw);
     }
