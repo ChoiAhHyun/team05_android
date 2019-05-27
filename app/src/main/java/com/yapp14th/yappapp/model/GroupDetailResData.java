@@ -17,9 +17,9 @@ public class GroupDetailResData {
         public Double latitude;
         public Double longitude;
         public Integer person_num;
-        public Integer endingflag;
         public String meet_explanation;
         public String user_nick;
+        public Integer endingflag;
         public String[] participants_img;
         public String captain_img;
         public Integer participants_num;

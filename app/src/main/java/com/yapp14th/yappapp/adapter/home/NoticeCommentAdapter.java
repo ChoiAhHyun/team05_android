@@ -3,26 +3,31 @@ package com.yapp14th.yappapp.adapter.home;
 import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.model.BoardInfo;
+import com.yapp14th.yappapp.model.NoticeCommentResData;
+
+import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NoticeCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<BoardInfo> modelList = new ArrayList<>();
+    private ArrayList<NoticeCommentResData.CommentInfo> modelList = new ArrayList<>();
     private Context mContext;
 
-    public BoardAdapter(Context mContext, ArrayList<BoardInfo> modelList){
+    public NoticeCommentAdapter(Context mContext, ArrayList<NoticeCommentResData.CommentInfo> modelList){
 
         this.mContext = mContext;
         this.modelList = modelList;
@@ -40,9 +45,15 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         BoardViewHolder holder = (BoardViewHolder) viewHolder;
 
-        BoardInfo model = modelList.get(position);
+        NoticeCommentResData.CommentInfo model = modelList.get(position);
 
+        Glide.with(mContext).load(model.userImg).centerCrop().into(holder.img);
 
+        holder.txtDate.setText(model.getStringFormatDate(model.date));
+
+        holder.txtContent.setText(model.comment);
+
+        holder.txtName.setText(model.fk_userId);
 
     }
 

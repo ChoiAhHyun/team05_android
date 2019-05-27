@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.yapp14th.yappapp.Base.BaseFragment;
@@ -231,7 +233,6 @@ public class HomeFragment extends BaseFragment {
                 .enqueue(new Callback<GroupInfoResData>() {
                     @Override
                     public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
-
 
                         realTimeGroupModelList.addAll(response.body().getList());
                         adapterRealTime.notifyDataSetChanged();

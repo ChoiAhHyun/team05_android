@@ -1,13 +1,11 @@
 package com.yapp14th.yappapp.view.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.transition.Fade;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
@@ -22,25 +20,20 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.R;
-import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
-import com.yapp14th.yappapp.model.BoardInfo;
 import com.yapp14th.yappapp.model.GroupDetailResData;
 import com.yapp14th.yappapp.model.GroupInfoResData;
+import com.yapp14th.yappapp.model.NoticeInfoResData;
 import com.yapp14th.yappapp.utils.TransitionIssue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindBitmap;
 import butterknife.BindView;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +70,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     @BindView(R.id.img_home_detail_profile)
     ImageView imgProfile;
 
-
     @Override
     protected int getLayout() {
         return R.layout.activity_home_detail;
@@ -88,6 +80,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private ConfirmDialog dialog;
     private GroupInfoResData.GroupInfo groupInfo;
     private GroupDetailResData.GroupDetailInfo model;
+    private NoticeInfoResData boardData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,8 +94,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         hideNotTransitionedViews();
 
         setTransitionInfo();
-
-        setBoard(true);
 
     }
 
@@ -121,13 +112,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             @Override
             public void onResponse(Call<GroupDetailResData> call, Response<GroupDetailResData> response) {
 
-                model = response.body().result;
+                if (response.body().state == 200) {
 
-                setTextViews();
+                    model = response.body().result;
 
-                //setParticipantsImages();
+                    setTextViews();
 
-                setImgLeaderProfile();
+                    //setParticipantsImages();
+
+                    setImgLeaderProfile();
+                }
             }
 
             @Override
@@ -156,14 +150,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         txtLeaderName.setText(model.captain_id);
         txtNumOfParticipants.setText(model.participants_num + " / " + model.person_num);
         txtLocName.setText(groupInfo.meetlocation);
-        txtDate.setText(groupInfo.getStringFormatDate());
-        txtTime.setText(groupInfo.getStringFormatTime());
+        txtDate.setText(groupInfo.getStringFormatDate(groupInfo.meetDateTime));
+        txtTime.setText(groupInfo.getStringFormatTime(groupInfo.meetDateTime));
+        txtBoardLeader.setText(model.captain_id);
 
     }
 
     private void setImgLeaderProfile(){
         Glide.with(this).load(model.captain_img).centerCrop().into(imgLeaderProfile);
         Glide.with(this).load(model.captain_img).centerCrop().into(imgProfile);
+        Glide.with(this).load(model.captain_img).centerCrop().into(imgLeaderProfile);
     }
 
     private void setParticipantsImages(){
@@ -278,31 +274,34 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     @BindView(R.id.img_board_leader_profile)
     ImageView imgLeaderProfile;
-
     @BindView(R.id.txt_board_temp)
     TextView txtBoardTemp;
-
     @BindView(R.id.layout_board)
     View boardContainer;
+    @BindView(R.id.txt_board_leader_name)
+    TextView txtBoardLeader;
+    @BindView(R.id.txt_board_content)
+    TextView txtBoardContent;
+    @BindView(R.id.txt_board_cnt_comments)
+    TextView txtBoardCommentCnt;
+    @BindView(R.id.txt_board_date)
+    TextView txtBoardDate;
 
     private void getBoardDatas(){
 
-        RetrofitClient.getInstance().getService().GetGroupDetailDatas(1).enqueue(new Callback<GroupDetailResData>() {
+        RetrofitClient.getInstance().getService().GetNoticeDatas(10).enqueue(new Callback<NoticeInfoResData>() {
             @Override
-            public void onResponse(Call<GroupDetailResData> call, Response<GroupDetailResData> response) {
+            public void onResponse(Call<NoticeInfoResData> call, Response<NoticeInfoResData> response) {
 
-                model = response.body().result;
+                boardData = response.body();
 
-                setTextViews();
+                setBoard(boardData.state == 200);
 
-                //setParticipantsImages();
-
-                setImgLeaderProfile();
             }
 
             @Override
-            public void onFailure(Call<GroupDetailResData> call, Throwable t) {
-
+            public void onFailure(Call<NoticeInfoResData> call, Throwable t) {
+                Log.d("tagg", t.getMessage());
             }
         });
     }
@@ -313,13 +312,17 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
             txtBoardTemp.setVisibility(View.GONE);
 
-            imgLeaderProfile.setImageDrawable(getDrawable(R.drawable.sample_user2));
             imgLeaderProfile.setBackground(new ShapeDrawable(new OvalShape()));
             imgLeaderProfile.setClipToOutline(true);
+            txtBoardDate.setText(boardData.getStringFormatDate(boardData.date));
+            txtBoardContent.setText(boardData.notice);
+            txtBoardCommentCnt.setText(boardData.commentNum.toString());
 
             boardContainer.setOnClickListener(v -> {
                 Intent intent = new Intent(HomeDetailActivity.this, BoardDetailActivity.class);
-                intent.putExtra("leaderInfo",new BoardInfo("","","",""));
+                intent.putExtra("boardInfo", boardData);
+                intent.putExtra("leaderImgPath", model.captain_img);
+                intent.putExtra("leaderId", model.captain_id);
                 startActivity(intent);
             });
 

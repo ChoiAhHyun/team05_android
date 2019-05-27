@@ -5,6 +5,8 @@ import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
 import com.yapp14th.yappapp.model.NearGroupRequestBody;
 import com.yapp14th.yappapp.model.MakeResponse;
+import com.yapp14th.yappapp.model.NoticeCommentResData;
+import com.yapp14th.yappapp.model.NoticeInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.model.UserModel;
 
@@ -57,6 +59,10 @@ public interface ApiService {
 
     @GET("meet/detail")
     Call<GroupDetailResData> GetGroupDetailDatas ( @Query("meetId") Integer meetId );
+
+    @GET("notice/view/")
+    Call<NoticeInfoResData> GetNoticeDatas(@Query("meetId") Integer meetId);
+
     @POST("meet/client-token")
     Call<SuccessResponse> sendToken(
             @Body HashMap<String, String> token
@@ -72,4 +78,7 @@ public interface ApiService {
             @Field("list") List<String> list,
             @Field("keyword") String keyword
     );
+
+    @GET("notice/comment/view")
+    Call<NoticeCommentResData> GetNoticeCommentDatas(@Query("meetId") Integer meetid);
 }

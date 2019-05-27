@@ -77,9 +77,9 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             holder.txtCardTitle.setText( model.meetName );
 
-            holder.txtDate.setText(model.getStringFormatDate());
+            holder.txtDate.setText(model.getStringFormatDate(model.meetDateTime));
 
-            holder.txtTime.setText(model.getStringFormatTime());
+            holder.txtTime.setText(model.getStringFormatTime(model.meetDateTime));
 
             holder.txtLocName.setText(model.meetlocation);
 

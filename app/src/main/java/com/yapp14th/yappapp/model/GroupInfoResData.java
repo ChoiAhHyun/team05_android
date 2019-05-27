@@ -35,7 +35,7 @@ public class GroupInfoResData implements Serializable {
     }
 
 
-    public static class GroupInfo implements Parcelable {
+    public static class GroupInfo extends ModelWithDate implements Parcelable {
 
         public Double distance;
         public Integer meetId;
@@ -109,20 +109,6 @@ public class GroupInfoResData implements Serializable {
             dest.writeString(meet_personNum);
             dest.writeInt(participantNum);
             dest.writeStringArray(participantImg);
-        }
-
-        public String getStringFormatDate() {
-
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy.mm.dd");
-            return transFormat.format(this.meetDateTime);
-
-        }
-
-        public String getStringFormatTime(){
-
-            SimpleDateFormat transFormat = new SimpleDateFormat("h:mm a");
-            return transFormat.format(this.meetDateTime).replace("AM", "am").replace("PM","pm");
-
         }
 
     }
