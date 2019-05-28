@@ -24,6 +24,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:layout_marginRight="20dp"
                 android:textSize="15sp"
+                android:padding="10dp"
                 android:layout_gravity="right"/>
     </androidx.appcompat.widget.Toolbar>
 
