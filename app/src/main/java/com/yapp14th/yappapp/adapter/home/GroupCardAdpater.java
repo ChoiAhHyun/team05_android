@@ -90,8 +90,10 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             holder.itemView.setOnClickListener(onClickListener(modelList.get(position), holder.imgCardBgr));
 
-            Glide.with(mContext).load(model.meet_Img).centerCrop().into(holder.imgCardBgr);
-
+            Glide.with(mContext)
+                    .load(model.meet_Img)
+                    .centerCrop()
+                    .into(holder.imgCardBgr);
 
     }
 

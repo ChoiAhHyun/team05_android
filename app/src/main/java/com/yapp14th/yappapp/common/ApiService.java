@@ -1,5 +1,6 @@
 package com.yapp14th.yappapp.common;
 
+import com.yapp14th.yappapp.model.AlarmResponse;
 import com.yapp14th.yappapp.model.GroupDetailResData;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
@@ -61,6 +62,9 @@ public interface ApiService {
     Call<SuccessResponse> sendToken(
             @Body HashMap<String, String> token
     );
+
+    @POST("meet/alarm")
+    Call<AlarmResponse> GetAlarmDatas(@Body String userId);
 
     @POST("meet/detail")
     Call<MakeResponse> makeMeeting (

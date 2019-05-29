@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
@@ -151,32 +152,28 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         rvRealTime.setLayoutManager(lm);
         rvRealTime.setHasFixedSize(false);
         rvRealTime.setLayoutAnimation(animation);
-        rvRealTime.addOnScrollListener(scrollListener);
-        rvRealTime.getRecycledViewPool().setMaxRecycledViews(1, 20);
+
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView l, int t, int oldl, int oldScrollX, int oldt) {
+
+                View view = (View)l.getChildAt(l.getChildCount()-1);
+
+                int diff = (view.getBottom()-(l.getHeight()+l.getScrollY()));
+
+                if( diff == 0 )
+                {
+                    getRealTimeGroups(0.0,0.0,++page);
+                    Log.d("tagg", String.valueOf(page));
+                }
 
 
-
-    }
-
-    public void refreshList(){
-
-        scrollView.fullScroll(ScrollView.FOCUS_UP);
-
-
-        //getNearGroups(0.0, 1.1);
-
-    }
-
-
-    RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
-            super.onScrollStateChanged(rv, newState);
-            if (!rv.canScrollVertically(1)) {   //end position of scroll
-                getRealTimeGroups(0.0, 0.0, ++page);
             }
-        }
-    };
+        });
+
+
+
+    }
 
     private void setAdapter(){
 
@@ -326,6 +323,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     }
 
                     swipe.setRefreshing(false);
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
 
                 @Override
@@ -371,8 +369,13 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
+
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         nearGroupModelList.clear();
         realTimeGroupModelList.clear();
         getNearGroups(0.0, 1.1);
+
     }
+
+    public void scrollToTop(){ scrollView.fullScroll(ScrollView.FOCUS_UP); }
 }

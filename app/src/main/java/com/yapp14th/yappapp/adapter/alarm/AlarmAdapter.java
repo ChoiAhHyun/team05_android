@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.model.AlarmInfo;
+import com.yapp14th.yappapp.model.AlarmResponse;
 
 import java.util.ArrayList;
 
@@ -26,9 +27,9 @@ public class AlarmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Context mContext;
 
-    private ArrayList<AlarmInfo> modelList;
+    private ArrayList<AlarmResponse.AlarmInfo> modelList;
 
-    public AlarmAdapter(Context mContext, ArrayList<AlarmInfo> modelList){
+    public AlarmAdapter(Context mContext, ArrayList<AlarmResponse.AlarmInfo> modelList){
 
         this.mContext = mContext;
         this.modelList = modelList;
@@ -46,15 +47,13 @@ public class AlarmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         AlarmViewHolder holder = (AlarmViewHolder) viewHolder;
 
-        AlarmInfo model = modelList.get(position);
+        AlarmResponse.AlarmInfo model = modelList.get(position);
 
         initView(holder);
 
         setStateText(model, holder);
 
-        setClosingButton(holder, model.getFull());
-
-        setAnnounceButton(holder, model.getTimeState());
+        setClosingButton(holder, model.isEnded == 0);
 
         setContent(holder, holder.txtContent.getText().toString());
 
@@ -89,21 +88,21 @@ public class AlarmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    private void setAnnounceButton(AlarmViewHolder holder,  int timeState){
+//    private void setAnnounceButton(AlarmViewHolder holder,  int timeState){
+//
+//        if (timeState == 0) {
+//
+//            holder.btnAnnounce.setVisibility(View.VISIBLE);
+//
+//            setWeight(holder.view, true);
+//
+//        }
+//
+//    }
 
-        if (timeState == 0) {
+    private void setStateText(AlarmResponse.AlarmInfo model, AlarmViewHolder holder){
 
-            holder.btnAnnounce.setVisibility(View.VISIBLE);
-
-            setWeight(holder.view, true);
-
-        }
-
-    }
-
-    private void setStateText(AlarmInfo model, AlarmViewHolder holder){
-
-        switch (model.getAlarmType()){
+        switch (model.flag){
 
             case 0:
                 holder.txtState.setText("알림");

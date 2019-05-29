@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
             case R.id.home:
                 switchTab(0);
                 if (preItem == 0) {
-                    ((HomeFragment) getSupportFragmentManager().findFragmentById(R.id.container)).refreshList();
+                    ((HomeFragment) getSupportFragmentManager().findFragmentById(R.id.container)).scrollToTop();
                     return false;
                 }
                 fragmentHistory.push(0);
