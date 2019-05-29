@@ -3,6 +3,7 @@ package com.yapp14th.yappapp.adapter.home;
 import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,8 +90,8 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             holder.itemView.setOnClickListener(onClickListener(modelList.get(position), holder.imgCardBgr));
 
-            //TODO
-            //set View Data
+            Glide.with(mContext).load(model.meet_Img).centerCrop().into(holder.imgCardBgr);
+
 
     }
 
@@ -137,24 +138,17 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(itemView);
 
             imgCardBgr = itemView.findViewById(R.id.img_card_bgr);
-
             imgGroups = new ArrayList<>();
-
             setImageArray(itemView.findViewById(R.id.img_user_group_1));
             setImageArray(itemView.findViewById(R.id.img_user_group_2));
             setImageArray(itemView.findViewById(R.id.img_user_group_3));
             setImageArray(itemView.findViewById(R.id.img_user_group_4));
 
             txtCardTitle = itemView.findViewById(R.id.txt_home_card_title);
-
             txtDate = itemView.findViewById(R.id.txt_home_card_date);
-
             txtTime = itemView.findViewById(R.id.txt_home_card_time);
-
             txtLocName = itemView.findViewById(R.id.txt_home_card_loc_name);
-
             txtUsersCnt = itemView.findViewById(R.id.txt_user_group_count);
-
             txtDist = itemView.findViewById(R.id.txt_home_card_dist);
 
         }

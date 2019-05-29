@@ -1,11 +1,13 @@
 package com.yapp14th.yappapp.view.home;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.text.Layout;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
@@ -13,14 +15,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.yapp14th.yappapp.Base.BaseActivity;
+import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
+import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
 import com.yapp14th.yappapp.model.GroupDetailResData;
@@ -31,6 +49,9 @@ import com.yapp14th.yappapp.utils.TransitionIssue;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -39,7 +60,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeDetailActivity extends BaseActivity implements Transition.TransitionListener {
+public class HomeDetailActivity extends BaseActivity implements Transition.TransitionListener, OnMapReadyCallback {
 
     @BindView(R.id.ct)
     CollapsingToolbarLayout ct;
@@ -69,6 +90,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     TextView txtLeaderName;
     @BindView(R.id.img_home_detail_profile)
     ImageView imgProfile;
+    @BindView(R.id.scrollview)
+    NestedScrollView scrollView;
 
     @Override
     protected int getLayout() {
@@ -81,11 +104,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private GroupInfoResData.GroupInfo groupInfo;
     private GroupDetailResData.GroupDetailInfo model;
     private NoticeInfoResData boardData;
-
+    private String userId;
+    private int userType = 0;
+    private GoogleApiClient mGoogleApiClient = null;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        userId = Preferences.getInstance().getSharedPreference(this, Constant.Preference.CONFIG_USER_USERNAME, "");
 
         getGroupInfoFromParent();
 
@@ -95,15 +123,43 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         setTransitionInfo();
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         getGroupDetailDatas();
 
         getBoardDatas();
+
+        //checkUserType();
+        setGoogleMap();
+
+    }
+
+    private void setGoogleMap(){
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .build();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        FragmentManager fragmentManager = getFragmentManager();
+        MapFragment mapFragment = (MapFragment)fragmentManager
+                .findFragmentById(R.id.googleMap);
+        mapFragment.getMapAsync(this);
+
+    }
+
+
+
+    private void checkUserType(){
+
+        Log.d("tagg", userId);
+
+        if (userId.equals(model.captain_id)){
+            // im a captain
+            userType = 0;
+
+        }else{
+
+            userType = 1;
+
+        }
+
     }
 
     private void getGroupDetailDatas(){
@@ -118,7 +174,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
                     setTextViews();
 
-                    //setParticipantsImages();
+                    setParticipantsImages();
 
                     setImgLeaderProfile();
                 }
@@ -137,7 +193,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         setRecyclerView();
 
-        setDialog();
+        setViewDependOnUserType();
 
         setButton();
 
@@ -157,9 +213,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     }
 
     private void setImgLeaderProfile(){
+
+        Log.d("tagg","asdasd   "+ model.captain_img);
+
+        imgProfile.setBackground(new ShapeDrawable(new OvalShape()));
+        imgProfile.setClipToOutline(true);
+        imgLeaderProfile.setBackground(new ShapeDrawable(new OvalShape()));
+        imgLeaderProfile.setClipToOutline(true);
         Glide.with(this).load(model.captain_img).centerCrop().into(imgLeaderProfile);
         Glide.with(this).load(model.captain_img).centerCrop().into(imgProfile);
-        Glide.with(this).load(model.captain_img).centerCrop().into(imgLeaderProfile);
+
     }
 
     private void setParticipantsImages(){
@@ -172,15 +235,49 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void getGroupInfoFromParent(){ groupInfo = getIntent().getParcelableExtra("groupInfo"); }
 
-    private void setDialog(){
+    private void setViewDependOnUserType(){
 
-        dialog = new ConfirmDialog(this, "Title","subTitle", true);
+        String title = "";
+        String subTitle = "";
+        Boolean editable = false;
+        String buttonText = "";
+
+        if (userType == 0){
+
+            title = "모임을 마감하시겠어요?";
+            subTitle = "인원을 더 이상 변경할 수 없습니다.";
+            editable = false;
+            buttonText = "마감하기";
+
+        }else{
+
+            title = "참여하시겠습니까?";
+            subTitle = "모임에 참여하시겠습니까?";
+            editable = false;
+            buttonText = "신청하기";
+
+        }
+
+        btn.setText(buttonText);
+
+        dialog = new ConfirmDialog(this, title,subTitle, editable);
 
         dialog.setOkButtonClickListener(okButtonClickListener);
 
     }
 
-    private ConfirmDialog.OkButtonListener okButtonClickListener = (str) -> Toast.makeText(this, "hihi", Toast.LENGTH_SHORT).show();
+    private ConfirmDialog.OkButtonListener okButtonClickListener = (str) -> {
+
+        if (userType == 0) finishMeeting();
+
+
+    };
+
+    private void finishMeeting(){
+
+        onBackPressed();
+
+    }
 
     private void setButton(){ btn.setOnClickListener( v -> dialog.show()); }
 
@@ -229,6 +326,9 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         blur.setVisibility(View.VISIBLE);
         linear.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.FadeIn).playOn(scrollView);
+        YoYo.with(Techniques.FadeIn).playOn(linear);
 
     }
 
@@ -250,7 +350,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         imgBgr.setTransitionName(getIntent().getStringExtra(getString(R.string.intent_str_transition_view)));
 
-        imgBgr.setImageDrawable(getResources().getDrawable(R.drawable.sample_glass));
+        Glide.with(this).load(groupInfo.meet_Img).into(imgBgr);
 
         startPostponedEnterTransition();
     }
@@ -293,9 +393,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             @Override
             public void onResponse(Call<NoticeInfoResData> call, Response<NoticeInfoResData> response) {
 
-                boardData = response.body();
-
-                setBoard(boardData.state == 200);
+                if (response.isSuccessful()){
+                    boardData = response.body();
+                    setBoard(boardData.state == 200);
+                }else setBoard(false);
 
             }
 
@@ -311,9 +412,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         if (isExist) {
 
             txtBoardTemp.setVisibility(View.GONE);
-
-            imgLeaderProfile.setBackground(new ShapeDrawable(new OvalShape()));
-            imgLeaderProfile.setClipToOutline(true);
             txtBoardDate.setText(boardData.getStringFormatDate(boardData.date));
             txtBoardContent.setText(boardData.notice);
             txtBoardCommentCnt.setText(boardData.commentNum.toString());
@@ -332,5 +430,21 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             boardContainer.setVisibility(View.GONE);
 
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        LatLng SEOUL = new LatLng(37.56, 126.97);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(SEOUL);
+        markerOptions.title("서울");
+        markerOptions.snippet("한국의 수도");
+        map.addMarker(markerOptions);
+
+
+        CameraPosition pos = new CameraPosition.Builder().zoom(15).target(SEOUL).build();
+        map.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 }
