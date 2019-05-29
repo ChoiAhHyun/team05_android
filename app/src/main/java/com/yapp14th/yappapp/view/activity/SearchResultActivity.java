@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.yapp14th.yappapp.Base.BaseActivity;
+import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.GroupCardAdpater;
+import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.view.home.HomeDetailActivity;
@@ -37,6 +39,7 @@ public class SearchResultActivity extends BaseActivity {
 
     private String keyword;
     private double longitude, latitude;
+    private String userId;
 
     private GroupCardAdpater searchResultAdapter;
     private ArrayList<GroupInfoResData.GroupInfo> searchResulLists = new ArrayList<>();
@@ -63,9 +66,10 @@ public class SearchResultActivity extends BaseActivity {
         keyword = intent.getStringExtra(KEYWORD);
         longitude = intent.getDoubleExtra(LONGITUDE, -1);
         latitude = intent.getDoubleExtra(LATITUDE, -1);
+        userId = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, null);
 
         if (keyword != null && longitude != -1 && latitude != -1) {
-            getKeywordData(keyword, longitude, latitude, 1);
+            getKeywordData(userId, keyword, longitude, latitude, 1);
         }
         else {
             Toasty.error(getBaseContext(), "잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
@@ -78,10 +82,10 @@ public class SearchResultActivity extends BaseActivity {
         recyclerView.setAdapter(searchResultAdapter);
     }
 
-    private void getKeywordData(String keyword, Double longitude, Double latitude, int page) {
+    private void getKeywordData(String userId, String keyword, Double longitude, Double latitude, int page) {
         showProgress();
 
-        RetrofitClient.getInstance().getService().getSearchResultData(keyword, longitude, latitude, page)
+        RetrofitClient.getInstance().getService().getSearchResultData(userId, keyword, longitude, latitude, page)
                 .enqueue(new Callback<GroupInfoResData>() {
                     @Override
                     public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {

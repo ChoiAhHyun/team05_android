@@ -69,7 +69,7 @@ public interface ApiService {
 
     @GET("meet/keyword")
     Call<GroupInfoResData> getSearchResultData (
-        @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
+        @Query("userId") String userId, @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
     );
 
     @GET("meet/dsearch")
