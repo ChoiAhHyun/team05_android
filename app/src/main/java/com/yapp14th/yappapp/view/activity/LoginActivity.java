@@ -60,6 +60,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick({R.id.signin_btn, R.id.signup_btn})
     void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.signin_btn:
                 // 로그인 작업
@@ -67,6 +68,8 @@ public class LoginActivity extends BaseActivity {
                     requestLogin(id_edit.getText().toString(), pw_edit.getText().toString());
                 }
                 else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
                     Toasty.error(getBaseContext(), "아이디 및 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -97,9 +100,7 @@ public class LoginActivity extends BaseActivity {
                         int state = successResponse.state;
                         hideProgress();
                         if (state == 200) {
-                            if (auto_login_check.isChecked()) {
-                                saveUserInfo(id, pw);
-                            }
+                            saveUserInfo(id, pw, auto_login_check.isChecked());
                             sendFirebaseToken(id);
                         }
                         else if (state == 300) {
@@ -178,8 +179,12 @@ public class LoginActivity extends BaseActivity {
             });
     }
 
-    private void saveUserInfo(String id, String pw) {
-        Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_AUTOLOGIN, true);
+    private void saveUserInfo(String id, String pw, boolean isChecked) {
+        if (isChecked)
+            Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_AUTOLOGIN, true);
+        else
+            Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_AUTOLOGIN, false);
+
         Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, id);
         Preferences.getInstance().putSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_PASSWORD, pw);
     }

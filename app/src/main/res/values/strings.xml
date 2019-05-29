@@ -3,4 +3,9 @@
     <string name="intent_str_transition_view">transitionNameOfView</string>
     <string name="app_name">심모</string>
     <string name="map_api_key">AIzaSyDwmtFScJE7bAQJ9SYomhlKK0bkanHf8W4</string>
+
+    <string-array name="search_filter">
+        <item>가까운 거리 순</item>
+        <item>빠른 시간 순</item>
+    </string-array>
 </resources>

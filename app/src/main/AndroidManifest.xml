@@ -3,14 +3,13 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.yapp14th.yappapp">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
             android:name=".Base.BaseApplication"
@@ -22,11 +21,18 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".view.activity.SearchResultNonActivity">
+        </activity>
+        <activity android:name=".view.activity.SearchResultActivity">
+        </activity>
+
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_api_key"/>
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_api_key"/>
+
         <activity android:name=".view.activity.CategorySelectActivity">
         </activity>
         <activity android:name=".view.activity.MemberInfoInputActivity">
@@ -36,23 +42,21 @@
         <activity android:name=".view.activity.LoginActivity">
         </activity>
         <activity android:name=".view.activity.SplashActivity">
-
-        </activity>
-        <activity android:name=".view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.MainActivity"/>
         <activity android:name=".view.activity.MapActivity">
         </activity>
         <activity android:name=".view.activity.AddActivity">
         </activity>
         <activity android:name=".view.activity.AddCategoryActivity">
         </activity>
-        <activity android:name=".view.home.HomeDetailActivity" />
-        <activity android:name=".view.home.BoardDetailActivity" />
+        <activity android:name=".view.home.HomeDetailActivity"/>
+        <activity android:name=".view.home.BoardDetailActivity"/>
     </application>
 
 </manifest>
