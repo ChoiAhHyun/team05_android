@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    android:clipToPadding="false">
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="음악 / 영화"
+        android:textSize="9.9sp"
+        android:textColor="@color/white"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:elevation="4dp"
+        android:background="@drawable/mypage_interests_background"/>
+
+</LinearLayout>

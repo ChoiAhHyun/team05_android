@@ -4,7 +4,7 @@ public enum Category {
 
     sports("운동 / 스포츠"),
     activity("야외활동 / 액티비티"),
-    write("토론 / 글쓰기 / 독서"),
+    writing("토론 / 글쓰기 / 독서"),
     study("스터디"),
     exhibition("전시회 / 세미나"),
     music("음악 / 악기"),
