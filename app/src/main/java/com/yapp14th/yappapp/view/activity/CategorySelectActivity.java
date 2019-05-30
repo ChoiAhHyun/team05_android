@@ -99,6 +99,7 @@ public class CategorySelectActivity extends BaseActivity {
                                 }
                                 else { // 유저 이미지 없을 경우 바로 회원가입
                                     completeSignUp();
+                                    Toasty.success(getBaseContext(), "회원가입이 완료되었습니다.", Toasty.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -143,6 +144,7 @@ public class CategorySelectActivity extends BaseActivity {
                         if (successResponse != null) {
                             if (successResponse.state == 200) {
                                 completeSignUp();
+                                Toasty.success(getBaseContext(), "회원가입이 완료되었습니다.", Toasty.LENGTH_SHORT).show();
                             }
                             else {
                                 Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();

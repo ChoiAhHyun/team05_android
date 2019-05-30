@@ -25,6 +25,7 @@ import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.common.StreamUtils;
 import com.yapp14th.yappapp.dialog.ImageSelectModeDialog;
 import com.yapp14th.yappapp.model.Category;
+import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.MypageInterestModel;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.view.activity.AddCategoryActivity;
@@ -38,6 +39,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -55,6 +57,12 @@ public class MypageFragment extends BaseFragment {
 
     private JsonObject user;
     private String id;
+    Double latitude = 37.555744;
+    Double longitude = 126.970431;
+    List<ArrayList<GroupInfoResData.GroupInfo>> listData = new ArrayList<>();
+    ArrayList<GroupInfoResData.GroupInfo> historyList = new ArrayList<>();
+    ArrayList<GroupInfoResData.GroupInfo> myList = new ArrayList<>();
+
 
     @BindView(R.id.view_pager)
     ViewPager view_pager;
@@ -100,80 +108,77 @@ public class MypageFragment extends BaseFragment {
         id = Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
 
         getUserInfo();
-        setMeetingInfo();
+        getMeetHistory();
     }
 
-    private void setMeetingInfo() {
-        Double latitude = 37.555744;
-        Double longitude = 126.970431;
-
-        List<List> listData = new ArrayList<>();
-        List<String> historyList = new ArrayList<>();
-        List<String> myList = new ArrayList<>();
-
-        showProgress();
-        RetrofitClient.getInstance().getService().meetHistory(id, latitude, longitude).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()) {
-                JsonObject res = response.body();
-                if (res != null && res.get("state").getAsInt() == 200) {
-                    Log.d(TAG, res.toString());
-                    JsonArray array = res.get("list").getAsJsonArray();
-                    if (array != null) {
-                        for (int i = 0; i < array.size(); i++) {
-                            historyList.add(array.get(i).getAsJsonObject().get("meetName").getAsString());
-                        }
-                    }
-                }
-                else {
-                    Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
-                }
-                }
-                hideProgress();
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
-                hideProgress();
-                Log.d(TAG, "failure: " + t);
-            }
-        });
-        RetrofitClient.getInstance().getService().myMeet(id, latitude, longitude).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.isSuccessful()) {
-                JsonObject res = response.body();
-                if (res != null && res.get("state").getAsInt() == 200) {
-                    Log.d(TAG, res.toString());
-                    JsonArray array = res.get("list").getAsJsonArray();
-                    if (array != null) {
-                        for (int i = 0; i < array.size(); i++) {
-                            myList.add(array.get(i).getAsJsonObject().get("meetName").getAsString());
-                        }
-                    }
-                }
-                else {
-                    Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
-                }
-                }
-                hideProgress();
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
-                hideProgress();
-                Log.d(TAG, "failure: " + t);
-            }
-        });
-
-        listData.add(historyList);
-        listData.add(myList);
-
+    private void setMeetPager() {
+        Log.d(TAG, "list: " + listData.toString());
         view_pager.setAdapter(new MypagePagerAdapter(getActivity(), listData));
         tl_mypage.setupWithViewPager(view_pager);
+        hideProgress();
+    }
+
+    private void getMeetHistory() {
+        if (listData != null)
+            listData.clear();
+        showProgress();
+        RetrofitClient.getInstance().getService().meetHistory(id, latitude, longitude).enqueue(new Callback<GroupInfoResData>() {
+            @Override
+            public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null && response.code() == 200) {
+                        historyList.clear();
+//                        Log.d(TAG, "history: " + response.body().toString());
+                        historyList.addAll(response.body().getList());
+                        listData.add(historyList);
+                    }
+                    else {
+                        Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                        Log.d(TAG, "history: " + response.body().toString());
+                    }
+                }
+                else {
+                    Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    Log.d(TAG, "history: " + response.body().toString());
+                }
+                getMyMeet();
+            }
+
+            @Override
+            public void onFailure(Call<GroupInfoResData> call, Throwable t) {
+                Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                Log.d(TAG, "failure: " + t);
+                getMyMeet();
+            }
+        });
+    }
+
+    private void getMyMeet() {
+        RetrofitClient.getInstance().getService().myMeet(id, latitude, longitude).enqueue(new Callback<GroupInfoResData>() {
+            @Override
+            public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null && response.code() == 200) {
+                        myList.clear();
+//                        Log.d(TAG, "my: " + response.body().getList().get(0));
+                        myList.addAll(response.body().getList());
+                        Log.d(TAG, "my: " + myList.toString());
+                        listData.add(myList);
+                    }
+                    else {
+                        Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
+                }
+                setMeetPager();
+            }
+
+            @Override
+            public void onFailure(Call<GroupInfoResData> call, Throwable t) {
+                Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                Log.d(TAG, "failure: " + t);
+                setMeetPager();
+            }
+        });
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -306,7 +311,7 @@ public class MypageFragment extends BaseFragment {
     }
 
     private void getUserInfo(){
-        showProgress();
+//        showProgress();
 
         RetrofitClient.getInstance().getService().getUserInfo(id).enqueue(new Callback<JsonObject>() {
             @Override
@@ -326,15 +331,16 @@ public class MypageFragment extends BaseFragment {
                         JsonObject object = user.get("interest").getAsJsonObject();
                         for (int i = 0; i < Category.size(); i++) {
                             String category = Category.values()[i].toString();
-                            Log.d(TAG, user.get(category) + "");
-                            if (user.get(category) != null) {
+                            Log.d(TAG, "category: " + object.get(category));
+                            if (object.get(category) != null) {
                                 if (object.get(category).getAsInt() == 1) {
                                     interest.add(Category.valueOf(category).getName());
                                 }
                             }
                         }
-                        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
-//                        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+//                        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
                         rv_my_interests.setLayoutManager(layoutManager);
                         MypageInterestsAdapter interestsAdapter = new MypageInterestsAdapter(getActivity(), interest);
                         rv_my_interests.setAdapter(interestsAdapter);
@@ -343,15 +349,14 @@ public class MypageFragment extends BaseFragment {
                 else {
                     Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
                 }
-                hideProgress();
-                Log.d(TAG, "success");
+//                hideProgress();
             }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
-                hideProgress();
+//                hideProgress();
                 Log.d(TAG, "failure: " + t);
             }
         });

@@ -86,12 +86,12 @@ public interface ApiService {
     );
 
     @GET("mypage/myMeet/")
-    Call<JsonObject> myMeet(
+    Call<GroupInfoResData> myMeet(
             @Query("userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude
     );
 
     @GET("mypage/meetHistory/")
-    Call<JsonObject> meetHistory(
+    Call<GroupInfoResData> meetHistory(
             @Query("userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude
     );
 

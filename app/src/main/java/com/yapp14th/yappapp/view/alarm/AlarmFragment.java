@@ -12,8 +12,10 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.yapp14th.yappapp.Base.BaseFragment;
+import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.alarm.AlarmAdapter;
+import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.AlarmInfo;
 import com.yapp14th.yappapp.model.AlarmResponse;
@@ -92,8 +94,8 @@ public class AlarmFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     private void getAlarmDatas(){
-
-        RetrofitClient.getInstance().getService().GetAlarmDatas(new UserIdModel("dnjsgml")).enqueue(new Callback<AlarmResponse>() {
+        String id = Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
+        RetrofitClient.getInstance().getService().GetAlarmDatas(new UserIdModel(id)).enqueue(new Callback<AlarmResponse>() {
             @Override
             public void onResponse(Call<AlarmResponse> call, Response<AlarmResponse> response) {
 
@@ -101,9 +103,12 @@ public class AlarmFragment extends BaseFragment implements SwipeRefreshLayout.On
 
                     if (response.code() == 200){
 
+                        if (response.body().list != null){
+
                         modelList.addAll(response.body().list);
 
                         adapter.notifyDataSetChanged();
+                        }
 
                     }
                 }

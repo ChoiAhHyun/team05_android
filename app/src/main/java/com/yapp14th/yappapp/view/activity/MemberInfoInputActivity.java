@@ -107,7 +107,7 @@ public class MemberInfoInputActivity extends BaseActivity {
                 sel_day = dayOfMonth;
 
                 year_tv.setText(String.valueOf(year));
-                month_tv.setText(String.valueOf(month));
+                month_tv.setText(String.valueOf(month + 1));
                 day_tv.setText(String.valueOf(dayOfMonth));
             }
         },calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));

@@ -92,6 +92,7 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             Glide.with(mContext)
                     .load(model.meet_Img)
+                    .error(R.color.color_111861)
                     .centerCrop()
                     .into(holder.imgCardBgr);
 

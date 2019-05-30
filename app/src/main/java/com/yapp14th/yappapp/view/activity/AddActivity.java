@@ -464,7 +464,7 @@ public class AddActivity extends BaseActivity {
         showProgress();
 
         MakeModel processingAdd = new MakeModel();
-        String id = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, "");
+        String id = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, null);
         processingAdd.setUserId(id);
         processingAdd.setName(et_name.getText().toString());
         processingAdd.setDatetime(date + " " + time);
@@ -493,6 +493,7 @@ public class AddActivity extends BaseActivity {
                         //이미지 있을 경우 이미지 전송
                         if (processingMeetingImage != null) {
                             uploadMeetingImageToServer(processingMeetingImage, String.valueOf(makeResponse.meetId));
+                            Log.d(TAG, makeResponse.meetId + "");
                         }
                         //이미지 없을 경우 종료
                         else {

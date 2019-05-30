@@ -75,6 +75,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private int page = 1;
     private static final long MIN_CLICK_INTERVAL=600;
     private long mLastClickTime;
+    private String id;
 
     @Override
     protected int getLayout() {
@@ -92,6 +93,8 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        id = Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
 
         if (isFirst) {
 
@@ -286,7 +289,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void getNearGroups(Double myLongitude, Double myLatitude){
 
         RetrofitClient.getInstance().getService()
-                .GetNearGroupDatas(new GroupRequestBody("",myLongitude,myLatitude))
+                .GetNearGroupDatas(new GroupRequestBody(id,myLongitude,myLatitude))
                 .enqueue(new Callback<GroupInfoResData>() {
                 @Override
                 public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
@@ -335,9 +338,8 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 
     private void getRealTimeGroups(Double myLongitude, Double myLatitude, int meetpage){
-
         RetrofitClient.getInstance().getService()
-                .GetRealTimeGroupDatas(new GroupRequestBody("",myLongitude,myLatitude, meetpage))
+                .GetRealTimeGroupDatas(new GroupRequestBody(id,myLongitude,myLatitude, meetpage))
                 .enqueue(new Callback<GroupInfoResData>() {
                     @Override
                     public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {

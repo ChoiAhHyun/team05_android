@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.model.GroupInfoResData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -16,9 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MypageRecyclerAdapter extends RecyclerView.Adapter<MypageRecyclerAdapter.MypageRecyclerViewHolder> {
 
     private Context mContext;
-    private List mList;
+    private ArrayList<GroupInfoResData.GroupInfo> mList;
 
-    public MypageRecyclerAdapter(Context context, List list) {
+    public MypageRecyclerAdapter(Context context, ArrayList<GroupInfoResData.GroupInfo> list) {
         this.mContext = context;
         this.mList = list;
     }
