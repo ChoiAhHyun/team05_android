@@ -8,6 +8,7 @@ import com.yapp14th.yappapp.model.MakeResponse;
 import com.yapp14th.yappapp.model.NoticeCommentResData;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
+import com.yapp14th.yappapp.model.UserIdModel;
 import com.yapp14th.yappapp.model.UserModel;
 
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public interface ApiService {
     );
 
     @POST("meet/alarm")
-    Call<AlarmResponse> GetAlarmDatas(@Body String userId);
+    Call<AlarmResponse> GetAlarmDatas(@Body UserIdModel userIdModel);
 
     @POST("meet/detail")
     Call<MakeResponse> makeMeeting (

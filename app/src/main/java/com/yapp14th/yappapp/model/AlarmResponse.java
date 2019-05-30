@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AlarmResponse implements Serializable {
+public class AlarmResponse {
 
     public int state;
 

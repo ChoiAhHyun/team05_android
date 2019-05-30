@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.model.AlarmInfo;
 import com.yapp14th.yappapp.model.AlarmResponse;
@@ -57,6 +58,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         setContent(holder, holder.txtContent.getText().toString());
 
+        holder.txtTitle.setText(model.title);
+
+        holder.txtDate.setText(model.getStringFormatDate(model.date));
+
+        holder.txtContent.setText(model.content);
+
+        Glide.with(mContext).load(model.profileImage).into(holder.imgProfile);
+
+        holder.imgProfile.setVisibility(View.VISIBLE);
+
     }
 
     private void initView(AlarmViewHolder holder){
@@ -87,18 +98,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     }
-
-//    private void setAnnounceButton(AlarmViewHolder holder,  int timeState){
-//
-//        if (timeState == 0) {
-//
-//            holder.btnAnnounce.setVisibility(View.VISIBLE);
-//
-//            setWeight(holder.view, true);
-//
-//        }
-//
-//    }
 
     private void setStateText(AlarmResponse.AlarmInfo model, AlarmViewHolder holder){
 

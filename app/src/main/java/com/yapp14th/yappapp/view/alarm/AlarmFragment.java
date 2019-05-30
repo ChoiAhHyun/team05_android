@@ -2,14 +2,22 @@ package com.yapp14th.yappapp.view.alarm;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.yapp14th.yappapp.Base.BaseFragment;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.alarm.AlarmAdapter;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.AlarmInfo;
 import com.yapp14th.yappapp.model.AlarmResponse;
+import com.yapp14th.yappapp.model.UserIdModel;
 
 import java.util.ArrayList;
 
@@ -17,18 +25,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AlarmFragment extends BaseFragment {
+public class AlarmFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.rv_alarm)
     RecyclerView rv;
+    @BindView(R.id.txt_empty)
+    TextView txtEmpty;
+    @BindView(R.id.txt_alarm)
+    TextView txtAlarm;
 
     private ArrayList<AlarmResponse.AlarmInfo> modelList = new ArrayList<>();
     private AlarmAdapter adapter;
+    private View mRootLayout;
+    private boolean isFirst = true;
+    @BindView(R.id.swipe)
+    SwipeRefreshLayout swipe;
 
     @Override
     protected int getLayout() {
@@ -39,11 +57,27 @@ public class AlarmFragment extends BaseFragment {
         return new AlarmFragment();
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (isFirst) {
+
+            mRootLayout = inflater.inflate(getLayout(), container, false);
+            ButterKnife.bind(this, mRootLayout);
+            swipe.setOnRefreshListener(this);
+
+            YoYo.with(Techniques.FadeIn).playOn(txtAlarm);
+
+        }
+
+        return mRootLayout;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setRecyclerView();
+        if (isFirst) setRecyclerView();
 
     }
 
@@ -51,17 +85,17 @@ public class AlarmFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        getAlarmDatas();
+        if (isFirst) getAlarmDatas();
+
+        isFirst = false;
 
     }
 
     private void getAlarmDatas(){
 
-        RetrofitClient.getInstance().getService().GetAlarmDatas("10").enqueue(new Callback<AlarmResponse>() {
+        RetrofitClient.getInstance().getService().GetAlarmDatas(new UserIdModel("dnjsgml")).enqueue(new Callback<AlarmResponse>() {
             @Override
             public void onResponse(Call<AlarmResponse> call, Response<AlarmResponse> response) {
-
-                Log.d("tagg", response.toString());
 
                 if (response.isSuccessful()){
 
@@ -74,6 +108,13 @@ public class AlarmFragment extends BaseFragment {
                     }
                 }
 
+                if (modelList.size() == 0) txtEmpty.setVisibility(View.VISIBLE);
+                else txtEmpty.setVisibility(View.INVISIBLE);
+
+                swipe.setRefreshing(false);
+
+                rv.scheduleLayoutAnimation();
+
             }
 
             @Override
@@ -83,41 +124,17 @@ public class AlarmFragment extends BaseFragment {
         });
 
     }
-//
-//    private void setDummyData(){
-//
-//        modelList = new ArrayList<>();
-//
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",2, 1, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",0, 2, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",2, 1, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",0, 2, "ads","ad","asdsad", true));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",2, 0, "ads","ad","asdsad", true));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",1, 1, "ads","ad","asdsad", true));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",2, 1, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",0, 2, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",2, 1, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",0, 2, "ads","ad","asdsad", true));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",2, 0, "ads","ad","asdsad", true));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",1, 0, "ads","ad","asdsad", false));
-//        modelList.add(new AlarmInfo("",1, 1, "ads","ad","asdsad", true));
-//
-//    }
 
     private void setRecyclerView(){
 
         LinearLayoutManager lm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         lm.scrollToPositionWithOffset(0,0);
         rv.setLayoutManager(lm);
+
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(rv.getContext(), R.anim.layout_animation_from_bottom);
+
+        rv.setLayoutAnimation(animation);
+
         setAdapter();
 
     }
@@ -128,5 +145,11 @@ public class AlarmFragment extends BaseFragment {
 
         rv.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onRefresh() {
+        modelList.clear();
+        getAlarmDatas();
     }
 }
