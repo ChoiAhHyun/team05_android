@@ -40,7 +40,7 @@ public class AddCategoryActivity  extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setToolbar("모임 만들기", true);
+        setToolbar("", true);
 
         List<InterestModel> interestModels = new ArrayList<>();
         for (int i = 0; i < Category.size(); i++){

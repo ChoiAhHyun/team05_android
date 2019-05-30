@@ -8,9 +8,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +45,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     FusedLocationProviderClient mFusedLocationProviderClient;
     GoogleMap mMap;
     Location mLocation;
+    View mapView;
 
     boolean mLocationPermissionGranted;
     Marker currentMarker = null;
@@ -50,8 +54,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @BindView(R.id.btn_ok)
     Button btn_ok;
 
-    @BindView(R.id.btn_now)
-    ImageView btn_now;
+//    @BindView(R.id.btn_now)
+//    ImageView btn_now;
+
+    @BindView(R.id.tv_address)
+    TextView tv_address;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MapActivity.class);
@@ -71,7 +78,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 //        setPlacesAPI();
         
         btn_ok.setOnClickListener(onClickListener);
-        btn_now.setOnClickListener(onClickListener);
+//        btn_now.setOnClickListener(onClickListener);
     }
 
     private void setMapAPI() {
@@ -81,6 +88,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        mapView = mapFragment.getView();
         mapFragment.getMapAsync(this);
     }
     /*
@@ -108,7 +116,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-//                 TODO: Get info about the selected place.
+//                 // Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                 Location location = new Location("");
                 location.setLatitude(place.getLatLng().latitude);
@@ -118,7 +126,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
             @Override
             public void onError(Status status) {
-//                 TODO: Handle the error.
+//                 // Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
@@ -128,6 +136,25 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         if (mMap == null) {
             return;
         }
+
+        if (mapView != null &&
+                mapView.findViewById(Integer.parseInt("1")) != null) {
+            // Get the button view
+            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+//            locationButton.setBackground(getDrawable(R.drawable.icon_location));
+            // and next place it, on bottom left (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    locationButton.getLayoutParams();
+            // position on left bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+
+            layoutParams.setMargins(dpToPx(this, 23), 0, 0, dpToPx(this, 61));
+//            locationButton.setLayoutParams(layoutParams);
+        }
+
         try {
 //            if (mLocationPermissionGranted) {
             mMap.setMyLocationEnabled(true);
@@ -140,6 +167,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    private int dpToPx(Context context, float dp){
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+        return px;
     }
 
     private void getDeviceLocation(boolean drawMarker) {
@@ -176,7 +208,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMapClickListener(onMapClickListener);
+//        mMap.setOnMapClickListener(onMapClickListener);
+//        mMap.setOnCameraMoveListener(onCameraMoveListener);
+        mMap.setOnCameraIdleListener(onCameraIdleListener);
 
         updateLocationUI();
 
@@ -220,17 +254,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 //        for (int i = 0; i < names.size(); i++){
 //            Log.d(TAG, "names: " + names.get(i));
 //        }
-
-        MarkerOptions marker = new MarkerOptions();
         Log.d(TAG, "address: " + bestMatch);
+        tv_address.setText(bestMatch);
+        /*
+        MarkerOptions marker = new MarkerOptions();
         marker.position(currentLocation)
 //                .draggable(true)
                 .snippet(bestMatch)
                 .title("만남 장소");
         currentMarker = mMap.addMarker(marker);
-        currentMarker.showInfoWindow();
-
-//        mMap.setOnMarkerDragListener(onMarkerDragListener);
+        currentMarker.showInfoWindow();*/
     }
 
     private String getAddressName(LatLng latLng) {
@@ -264,7 +297,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 location.setLongitude(place.getLatLng().longitude);
                 addMarker(location);
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
+                // Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i(TAG, status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
@@ -273,10 +306,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         }
     }*/
 
-    GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
+    GoogleMap.OnCameraIdleListener onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
         @Override
-        public void onMapClick(LatLng point) {
+        public void onCameraIdle() {
             Location location = new Location("");
+            LatLng point = mMap.getCameraPosition().target;
             location.setLatitude(point.latitude);
             location.setLongitude(point.longitude);
             addMarker(location);
@@ -302,34 +336,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     setResult(100, intent);
                     finish();
                     break;
-                case R.id.btn_now:
-                    getDeviceLocation(true);
-                    break;
+//                case R.id.btn_now:
+//                    getDeviceLocation(true);
+//                    break;
             }
         }
     };
-
-//    GoogleMap.OnMarkerDragListener onMarkerDragListener = new GoogleMap.OnMarkerDragListener() {
-//        @Override
-//        public void onMarkerDragStart(Marker marker) {
-//
-//        }
-//
-//        @Override
-//        public void onMarkerDrag(Marker marker) {
-//
-//        }
-//
-//        @Override
-//        public void onMarkerDragEnd(Marker marker) {
-//            LatLng position = marker.getPosition();
-//            Intent intent = new Intent();
-//            intent.putExtra("lat", position.latitude + "");
-//            intent.putExtra("lng", position.longitude + "");
-//            Log.d(TAG, position.latitude + "");
-//            Log.d(TAG, position.longitude + "");
-//            setResult(100, intent);
-//            finish();
-//        }
-//    };
 }

@@ -326,8 +326,11 @@ public class MypageFragment extends BaseFragment {
                         JsonObject object = user.get("interest").getAsJsonObject();
                         for (int i = 0; i < Category.size(); i++) {
                             String category = Category.values()[i].toString();
-                            if (object.get(category).getAsInt() == 1) {
-                                interest.add(Category.valueOf(category).getName());
+                            Log.d(TAG, user.get(category) + "");
+                            if (user.get(category) != null) {
+                                if (object.get(category).getAsInt() == 1) {
+                                    interest.add(Category.valueOf(category).getName());
+                                }
                             }
                         }
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);

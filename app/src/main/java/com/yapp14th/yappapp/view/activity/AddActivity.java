@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -68,6 +69,7 @@ public class AddActivity extends BaseActivity {
     List<String> allHashTags, category;
 
     private String meetingImagePath;
+    private boolean isImage, isName, isDescription, isKeyword, isCategory, isPlace;
 
     @BindView(R.id.iv_cover_image)
     ImageView iv_cover_image;
@@ -86,6 +88,12 @@ public class AddActivity extends BaseActivity {
 
     @BindView(R.id.tv_time)
     TextView tv_time;
+
+    @BindView(R.id.ll_date)
+    LinearLayout ll_date;
+
+    @BindView(R.id.ll_time)
+    LinearLayout ll_time;
 
     @BindView(R.id.btn_plus)
     ImageView btn_plus;
@@ -149,8 +157,8 @@ public class AddActivity extends BaseActivity {
         btn_upload.setOnClickListener(mOnClickListener);
         et_name.addTextChangedListener(textWatcherName);
         tv_place_picker.setOnClickListener(mOnClickListener);
-        tv_date.setOnClickListener(mOnClickListener);
-        tv_time.setOnClickListener(mOnClickListener);
+        ll_date.setOnClickListener(mOnClickListener);
+        ll_time.setOnClickListener(mOnClickListener);
         btn_plus.setOnClickListener(mOnClickListener);
         btn_minus.setOnClickListener(mOnClickListener);
         et_description.addTextChangedListener(textWatcherDescription);
@@ -158,11 +166,11 @@ public class AddActivity extends BaseActivity {
         tv_category.setOnClickListener(mOnClickListener);
         btn_make.setOnClickListener(mOnClickListener);
     }
-
+/*
     private void makeButtonEnable(){
         if (iv_cover_image.getDrawable() != null &&
                 et_name.getText().length() != 0 &&
-                tv_category.getText().length() != 0 && //TODO 관심사 list != null 로 바꾸기
+                tv_category.getText().length() != 0 && // 관심사 list != null 로 바꾸기
                 date !=  null && time != null &&
                 meetingPlace[0] != null &&
                 et_description.getText().length() != 0 &&
@@ -170,7 +178,7 @@ public class AddActivity extends BaseActivity {
             btn_make.setBackgroundColor(getColor(R.color.color_3346ff));
         else
             btn_make.setBackgroundColor(getColor(R.color.color_717486));
-    }
+    }*/
 
     PermissionListener permissionlistener = new PermissionListener() {
         @Override
@@ -194,15 +202,16 @@ public class AddActivity extends BaseActivity {
                 meetingImagePath = path;
             }
             else {
-                iv_cover_image.setImageResource(R.drawable.profile_pic);
                 meetingImagePath = null;
             }
+            isImage = true;
         }
 
         @Override
         public void onDismiss(DialogInterface dialog) {
             //랜덤 이미지
-            iv_cover_image.setImageResource(R.drawable.profile_pic);
+            meetingImagePath = null;
+            isImage = true;
         }
     };
 
@@ -217,7 +226,9 @@ public class AddActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            makeButtonEnable();
+            if (et_name.getText().length() > 0){
+                isName = true;
+            }
         }
     };
 
@@ -230,19 +241,13 @@ public class AddActivity extends BaseActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             int length = et_description.getText().toString().length();
             tv_textNumber.setText(length + " / 100");
-            if (length <= 100){
-                et_description.setBackground(getDrawable(R.drawable.add_border));
-                warning_description.setVisibility(View.INVISIBLE);
-            }
-            else {
-                et_description.setBackground(getDrawable(R.drawable.add_border_red));
-                warning_description.setVisibility(View.VISIBLE);
-            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            makeButtonEnable();
+            if (et_description.getText().length() > 0){
+                isDescription = true;
+            }
         }
     };
 
@@ -253,20 +258,13 @@ public class AddActivity extends BaseActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            int length = et_keyword.getText().toString().length();
-            if (length <= 100){
-                v_keyword.setBackgroundColor(getColor(R.color.color_707070));
-                warning_keyword.setVisibility(View.INVISIBLE);
-            }
-            else {
-                v_keyword.setBackgroundColor(getColor(R.color.color_ff2807));
-                warning_keyword.setVisibility(View.VISIBLE);
-            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            makeButtonEnable();
+            if (et_keyword.getText().length() > 0){
+                isKeyword = true;
+            }
         }
     };
 
@@ -353,13 +351,13 @@ public class AddActivity extends BaseActivity {
                     timePickerDialog.show();
                     break;
                 case R.id.btn_plus:
-                    if (peopleNumber < 1000000) {
+                    if (peopleNumber < 99) {
                         peopleNumber += 1;
                         tv_peopleNumber.setText(peopleNumber + "");
                     }
                     break;
                 case R.id.btn_minus:
-                    if (peopleNumber > 2) {
+                    if (peopleNumber > 3) {
                         peopleNumber -= 1;
                         tv_peopleNumber.setText(peopleNumber + "");
                     }
@@ -370,13 +368,32 @@ public class AddActivity extends BaseActivity {
                     startActivityForResult(intent, 200);
                     break;
                 case R.id.btn_make:
-                    makeButtonEnable();
-                    getKeyword();
-                    Log.d(TAG, et_name.getText().toString() + ", " +
-                            date + " " + time + ", " + meetingPlace[0] + ", " + Double.parseDouble(meetingPlace[1]) + ", " + Double.parseDouble(meetingPlace[2]) + ", " +
-                                    et_description.getText().toString() + ", " + Integer.parseInt(tv_peopleNumber.getText().toString()) + ", " +
-                            category + ", " + keyword);
-                    sendMeetingInfo();
+                    if (isName && et_name.getText().toString().getBytes().length > 50){
+                        Toasty.error(getBaseContext(), "50 바이트 미만으로 입력해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
+                    else if (isPlace && meetingPlace[0].getBytes().length > 100){
+                        Toasty.error(getBaseContext(), "100 바이트 미만으로 입력해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
+                    else if (et_description.getText().toString().length() > 100){
+                        et_description.setBackground(getDrawable(R.drawable.add_border_red));
+                        warning_description.setVisibility(View.VISIBLE);
+                    }
+                    else if (et_keyword.getText().toString().length() > 100){
+                        v_keyword.setBackgroundColor(getColor(R.color.color_ff2807));
+                        warning_keyword.setVisibility(View.VISIBLE);
+                    }
+                    //TODO getKeyword() 후 keyword.size() > 0
+                    else if (isImage && isName && isDescription && isKeyword && isCategory && isPlace){
+                        getKeyword();
+                        Log.d(TAG, et_name.getText().toString() + ", " +
+                                date + " " + time + ", " + meetingPlace[0] + ", " + Double.parseDouble(meetingPlace[1]) + ", " + Double.parseDouble(meetingPlace[2]) + ", " +
+                                et_description.getText().toString() + ", " + Integer.parseInt(tv_peopleNumber.getText().toString()) + ", " +
+                                category + ", " + keyword);
+                        sendMeetingInfo();
+                    }
+                    else {
+                        Toasty.error(getBaseContext(), "양식을 확인해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
                     break;
             }
         }
@@ -409,17 +426,14 @@ public class AddActivity extends BaseActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "test1");
         if (requestCode == 100) {
-            Log.d(TAG, "test2");
             if (resultCode == 100) {
                 meetingPlace[0] = data.getStringExtra("address");
                 meetingPlace[1] = data.getStringExtra("lat");
                 meetingPlace[2] = data.getStringExtra("lng");
                 tv_place_picker.setText(meetingPlace[0]);
-            }
-            else {
-                Log.d(TAG, resultCode + "");
+
+                isPlace = true;
             }
         }
         else if (requestCode == 200){
@@ -433,6 +447,8 @@ public class AddActivity extends BaseActivity {
                 }
                 String str = interest.toString();
                 tv_category.setText(str.substring(1, str.indexOf(']')));
+
+                isCategory = true;
             }
         }
     }
@@ -443,7 +459,6 @@ public class AddActivity extends BaseActivity {
         MakeModel processingAdd = new MakeModel();
         String id = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, "");
         processingAdd.setUserId(id);
-//        processingAdd.setUserId("dnjsgml");
         processingAdd.setName(et_name.getText().toString());
         processingAdd.setDatetime(date + " " + time);
         processingAdd.setLocation(meetingPlace[0]);
@@ -468,8 +483,13 @@ public class AddActivity extends BaseActivity {
                 if (makeResponse != null) {
                     int status = makeResponse.state;
                     if (status == 200) {
+                        //이미지 있을 경우 이미지 전송
                         if (processingMeetingImage != null) {
                             uploadMeetingImageToServer(processingMeetingImage, String.valueOf(makeResponse.meetId));
+                        }
+                        //이미지 없을 경우 종료
+                        else {
+                            finish();
                         }
                     }
                     else {
@@ -511,7 +531,9 @@ public class AddActivity extends BaseActivity {
                     if(response.isSuccessful()) {
                         SuccessResponse successResponse = response.body();
                         if (successResponse != null) {
+                            //이미지 전송 성공하면 종료
                             if (successResponse.state == 200) {
+                                Log.d(TAG, "image success");
                                 finish();
                             }
                             else {
@@ -523,7 +545,6 @@ public class AddActivity extends BaseActivity {
                         Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
                     }
                     hideProgress();
-                    Log.d(TAG, "image success");
                 }
 
                 @Override
