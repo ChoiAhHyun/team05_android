@@ -1,9 +1,12 @@
 package com.yapp14th.yappapp.view.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
 import com.yapp14th.yappapp.Base.BaseActivity;
@@ -44,6 +47,11 @@ public class SearchResultActivity extends BaseActivity {
     private GroupCardAdpater searchResultAdapter;
     private ArrayList<GroupInfoResData.GroupInfo> searchResulLists = new ArrayList<>();
 
+    private static final long MIN_CLICK_INTERVAL=600;
+    private long mLastClickTime;
+
+    private int page = 1;
+
     public static Intent newIntent(Context context, String keyword, Double longitude, Double latitude) {
         Intent intent = new Intent(context, SearchResultActivity.class);
         intent.putExtra(KEYWORD, keyword);
@@ -80,6 +88,15 @@ public class SearchResultActivity extends BaseActivity {
         searchResultAdapter = new GroupCardAdpater(getBaseContext(), searchResulLists, 1);
         searchResultAdapter.setOnItemClickListener(itemClickListener);
         recyclerView.setAdapter(searchResultAdapter);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(), R.anim.layout_animation_from_bottom);
+        recyclerView.setLayoutAnimation(animation);
+
+        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                // TODO recyclerview  아래 작업..
+            }
+        });
     }
 
     private void getKeywordData(String userId, String keyword, Double longitude, Double latitude, int page) {
@@ -96,6 +113,7 @@ public class SearchResultActivity extends BaseActivity {
                                 if (groupInfoResData.getState() == 200) {
                                     searchResulLists.addAll(groupInfoResData.getList());
                                     searchResultAdapter.notifyDataSetChanged();
+                                    recyclerView.scheduleLayoutAnimation();
                                 }
                                 else if (groupInfoResData.getState() == 300) {
                                     Intent intent = SearchResultNonActivity.newIntent(getBaseContext(), groupInfoResData.getList(), longitude, latitude);
@@ -119,11 +137,21 @@ public class SearchResultActivity extends BaseActivity {
 
     private GroupCardAdpater.ItemOnCickListener itemClickListener = (model, sharedView) -> {
 
-        Intent intent = new Intent(getBaseContext(), HomeDetailActivity.class);
+        long currentClickTime = SystemClock.uptimeMillis();
+        long elapsedTime=currentClickTime-mLastClickTime;
+        mLastClickTime=currentClickTime;
+
+        // 중복 클릭인 경우
+        if(elapsedTime<=MIN_CLICK_INTERVAL){
+            return;
+        }
+
+        Intent intent = new Intent(SearchResultActivity.this, HomeDetailActivity.class);
         intent.putExtra(getString(R.string.intent_str_transition_view), ViewCompat.getTransitionName(sharedView));
         intent.putExtra("groupInfo", model);
 
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) getBaseContext(), Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
         startActivityForResult(intent, 1, options.toBundle());
     };
 
