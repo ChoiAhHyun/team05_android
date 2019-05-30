@@ -1,6 +1,7 @@
 package com.yapp14th.yappapp.view.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -451,6 +452,12 @@ public class AddActivity extends BaseActivity {
                 isCategory = true;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
     private void sendMeetingInfo() {

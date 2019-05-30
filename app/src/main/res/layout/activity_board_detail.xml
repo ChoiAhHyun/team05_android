@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_bgr"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"></androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/board_leader"
+        android:background="@color/white"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_leader"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="37dp"
+            android:layout_height="37dp" />
+
+        <TextView
+            android:id="@+id/txt_leader_name"
+            app:layout_constraintLeft_toRightOf="@id/img_leader"
+            app:layout_constraintTop_toTopOf="@id/img_leader"
+            android:textSize="13dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="#010000"
+            android:text="서유빈"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_leader_date"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            app:layout_constraintLeft_toRightOf="@id/txt_leader_name"
+            app:layout_constraintTop_toTopOf="@id/img_leader"
+            android:textColor="#717486"
+            android:text="2019.04.12"
+            />
+
+        <TextView
+            android:id="@+id/txt_board_content"
+            app:layout_constraintLeft_toLeftOf="@id/txt_leader_name"
+            app:layout_constraintTop_toBottomOf="@id/img_leader"
+            android:layout_marginRight="20dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:textColor="#010000"
+            android:text="모임 끝나고 가볍게 술 마시려고 하는데 참여하실 수 있는 분 계신가요? 댓글로 남겨주시면좋을 것 같아요! 장소는 모임하는 근처인 강남역이 될 것 같구요 참가비는 만원 입니다!"
+            android:layout_marginBottom="25dp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@id/board_leader"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="16dp"
+            android:id="@+id/txt_board_cnt_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:textColor="#010000"
+            android:lineSpacingExtra="1.5sp"
+            android:text="댓글"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_board"
+            app:layout_goneMarginTop="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+    
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

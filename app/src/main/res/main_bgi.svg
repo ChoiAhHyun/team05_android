@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="main-bgi" width="360" height="760" viewBox="0 0 360 760">
+    <defs>
+        <style>
+            .cls-1{fill:#f7f7f7}.cls-2{fill:#3346ff}.cls-3{fill:#7df6ff}.cls-4{fill:#d6f2ff}
+        </style>
+    </defs>
+    <path id="main_bgi" d="M0 0h360v760H0z" class="cls-1"/>
+    <path id="main_top-blue-img" d="M25 191.713V53h194.868A117.728 117.728 0 0 1 240 119c0 65.723-53.726 119-120 119a120.148 120.148 0 0 1-95-46.287z" class="cls-2" transform="translate(-25 -53)"/>
+    <path id="main-top-skyblue-img" d="M31.658 134h185.684a99.909 99.909 0 0 1-185.683 0z" class="cls-3" transform="translate(96 -134)"/>
+    <path id="main_top-white-img" d="M25.658 52.852h69.165A117.717 117.717 0 0 1 113 115.7a99.464 99.464 0 0 1-87.342-62.848z" class="cls-4" transform="translate(102 -52.851)"/>
+</svg>

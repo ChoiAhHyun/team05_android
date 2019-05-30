@@ -1,13 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.core.widget.NestedScrollView
+    android:scrollbarSize="0dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:id="@+id/scrollView"
+    android:gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center">
 
-    <TextView
+        <ImageView
+            android:id="@+id/imgMainBackGround"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/icon_identity"
+            android:scaleType="fitXY"
+            android:layout_width="@dimen/main_bgr_img_width"
+            android:layout_height="@dimen/main_bgr_img_height"
+            android:translationY="@dimen/main_bgr_img_trans_y"
+            android:translationX="@dimen/main_bgr_img_trans_x"
+            />
+
+        <TextView
+            android:id="@+id/txt_main_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="70dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="HOME"/>
-</LinearLayout>
+            android:textSize="22dp"
+            android:textColor="#ffffff"
+            android:lineSpacingExtra="2.8sp"
+            android:visibility="invisible"
+            android:text="심심한데\n이런 모임 어떠세요?"
+            android:textStyle="bold"
+            />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_near_group"
+            android:padding="10dp"
+            android:clipToPadding="false"
+            android:layout_marginTop="165dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/model_near_group"
+            android:layout_height="320dp"/>
+
+        <TextView
+            android:id="@+id/txt_realtime"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_home_near_group"
+            android:layout_marginLeft="@dimen/home_card_left_margin"
+            android:layout_marginTop="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:textColor="#1b1a1a"
+            android:text="실시간 심모"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            />
+
+        <com.yanzhenjie.album.widget.ColorProgressBar
+            android:id="@+id/pb_home"
+            android:visibility="invisible"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/txt_realtime"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_centerInParent="true"
+            style="@style/SpinKitView.Small"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            app:SpinKit_Style="FadingCircle"
+            app:SpinKit_Color="@color/colorAccent"
+            />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_home_realtime_group"
+                app:layout_constraintTop_toBottomOf="@id/txt_realtime"
+                android:overScrollMode="never"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginLeft="@dimen/home_card_left_margin"
+                android:layout_marginRight="@dimen/home_card_left_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

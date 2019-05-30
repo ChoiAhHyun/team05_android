@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:elevation="4dp"
+    app:cardCornerRadius="8dp"
+    android:layout_width="212dp"
+    android:layout_height="280dp"
+    android:background="@drawable/card_style_bgr_with_shadow"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    card_view:cardElevation="10dp"
+    card_view:cardPreventCornerOverlap="false"
+    android:layout_margin="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/img_card_bgr"
+            android:scaleType="fitXY"
+            android:src="@drawable/sample_card_bgr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/bgr_card_info"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="9dp"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txt_home_card_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="13.6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15.2sp"
+                android:textColor="#010000"
+                android:textStyle="bold"
+                android:lineSpacingExtra="1.8sp"
+                android:text="모여서 같이 공부해요!"
+                />
+
+            <include
+                android:layout_marginTop="9.2dp"
+                android:layout_marginLeft="22dp"
+                android:layout_width="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/txt_home_card_title"
+                layout="@layout/model_group_card_time_info"
+                android:id="@+id/model_group_card_time_info"
+                />
+
+            <include
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="22dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/model_group_card_time_info"
+                layout="@layout/model_group_card_loc_info"
+                android:id="@+id/model_group_card_loc_info"
+                />
+
+            <include
+                layout="@layout/model_user_group_imgs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/model_group_card_loc_info"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10.8dp"
+                android:layout_marginBottom="10.8dp"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

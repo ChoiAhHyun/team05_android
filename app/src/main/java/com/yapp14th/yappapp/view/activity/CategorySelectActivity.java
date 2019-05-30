@@ -56,7 +56,7 @@ public class CategorySelectActivity extends BaseActivity {
     private void initialize() {
         List<InterestModel> interestModels = new ArrayList<>();
         for (int i = 0; i < Category.size(); i++) {
-            InterestModel model = new InterestModel(Category.values()[i].getName(), 0);
+            InterestModel model = new InterestModel(Category.getValueOf(Category.values()[i].getName()), 0);
             interestModels.add(model);
         }
 

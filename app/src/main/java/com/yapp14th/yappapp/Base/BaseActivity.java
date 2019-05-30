@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,6 +16,7 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private int mProgressCount = 0;
     private boolean mIsShowProgress = false;
+    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // 툴바 필요할 시 사용
     public void setToolbar(String title, boolean isBackBtn) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
@@ -61,6 +65,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, this.getResources().getDisplayMetrics());
                 Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, px, px, true));
                 getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+
+                toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
             }
         }
