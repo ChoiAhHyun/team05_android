@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.text.Layout;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
@@ -31,14 +28,11 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.yapp14th.yappapp.Base.BaseActivity;
-import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
-import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
 import com.yapp14th.yappapp.dialog.MeetingEditDialog;
@@ -48,16 +42,16 @@ import com.yapp14th.yappapp.model.MeetingDetailReqModel;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.TransitionIssue;
+import com.yapp14th.yappapp.view.activity.addNoticeActivity;
 
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -464,9 +458,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     @Override
     public void onTransitionResume(Transition transition) { }
 
-
     @BindView(R.id.img_board_leader_profile)
     ImageView imgLeaderProfile;
+    @BindView(R.id.add_board_temp)
+    ImageView addBoardTemp;
     @BindView(R.id.txt_board_temp)
     TextView txtBoardTemp;
     @BindView(R.id.layout_board)
@@ -504,7 +499,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         if (isExist) {
 
-            txtBoardTemp.setVisibility(View.GONE);
+            addBoardTemp.setVisibility(View.INVISIBLE);
+            txtBoardTemp.setVisibility(View.INVISIBLE);
             txtBoardDate.setText(boardData.getStringFormatDate(boardData.date));
             txtBoardContent.setText(boardData.notice);
             txtBoardCommentCnt.setText(boardData.commentNum.toString());
@@ -540,4 +536,19 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         map.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
         map.animateCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == addNoticeActivity.NOTICE_REQUEST_CODE && resultCode == RESULT_OK) {
+            getBoardDatas();
+        }
+    }
+
+    @OnClick(R.id.add_board_temp)
+    void onClick() {
+        Intent intent = addNoticeActivity.newIntent(this, groupInfo.meetId);
+        startActivityForResult(intent, addNoticeActivity.NOTICE_REQUEST_CODE);
+    }
+
 }
