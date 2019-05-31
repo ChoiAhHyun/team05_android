@@ -124,7 +124,7 @@ public interface ApiService {
     @GET("notice/comment/view")
     Call<NoticeCommentResData> GetNoticeCommentDatas(@Query("meetId") Integer meetid);
 
-    @POST("meet/reason")
+    @POST("meet/meetId")
     Call<SuccessResponse> DeleteMeeting(@Body MeetingDeleteBody meetingDeleteBody);
 
     @GET("meet/keyword")

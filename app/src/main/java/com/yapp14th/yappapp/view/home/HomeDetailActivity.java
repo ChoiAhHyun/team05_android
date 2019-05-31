@@ -97,6 +97,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     ImageView imgProfile;
     @BindView(R.id.scrollview)
     NestedScrollView scrollView;
+    private MenuItem moreButton;
 
     @Override
     protected int getLayout() {
@@ -250,6 +251,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             subTitle = "인원을 더 이상 변경할 수 없습니다.";
             editable = false;
             buttonText = "마감하기";
+            moreButton.setVisible(true);
 
         }else if (userType == 1){
 
@@ -257,14 +259,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             subTitle = "모임에 참여하지 않으시겠습니까?";
             editable = false;
             buttonText = "신청 취소하기";
-
+            //moreButton.setVisible(false);
+            moreButton.setVisible(true);
         }else {
 
             title = "참여하시겠습니까?";
             subTitle = "모임에 참여하시겠습니까?";
             editable = false;
             buttonText = "신청하기";
-
+            //moreButton.setVisible(false);
+            moreButton.setVisible(true);
         }
 
         btn.setText(buttonText);
@@ -290,7 +294,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void editMeeting(){
 
-        if (userType != 0 ) return;
+        //if (userType != 0 ) return;
         MeetingEditDialog editDialog = new MeetingEditDialog(this);
         editDialog.setContentView(R.layout.dialog_meet_edit);
         editDialog.setOnButtonClickListener(buttonClickListener);
@@ -310,7 +314,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
                 ConfirmDialog confirmDialog = new ConfirmDialog(HomeDetailActivity.this, "급한 일이 생기셨나요?", "모임 메이트들에게 보낼 취소 이유를\n간단히 작성해주세요", true);
                 confirmDialog.setOkButtonClickListener(confirmOkListener);
                 confirmDialog.show();
-                showProgress();
 
             }
 
@@ -321,17 +324,20 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private ConfirmDialog.OkButtonListener confirmOkListener = new ConfirmDialog.OkButtonListener() {
         @Override
         public void onClicked(String text) {
+            showProgress();
             RetrofitClient.getInstance().getService().DeleteMeeting(new MeetingDeleteBody(text, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
                 @Override
                 public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+
+                    Log.d("tagg",response.toString());
                     if (response.isSuccessful()){
                         if (response.code() == 200){
 
-                            hideProgress();
                             finish();
 
                         }
                     }
+                    hideProgress();
                 }
 
                 @Override
@@ -445,6 +451,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.home_detail_action_bar_menu, menu);
+
+        moreButton = menu.findItem(R.id.btn_more);
+
+        moreButton.setVisible(false);
 
         return true;
     }
