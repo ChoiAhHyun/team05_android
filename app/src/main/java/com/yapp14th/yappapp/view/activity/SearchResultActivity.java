@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.AbsListView;
 import android.widget.Toast;
 
 import com.yapp14th.yappapp.Base.BaseActivity;
@@ -20,6 +20,7 @@ import com.yapp14th.yappapp.view.home.HomeDetailActivity;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
@@ -50,7 +51,10 @@ public class SearchResultActivity extends BaseActivity {
     private static final long MIN_CLICK_INTERVAL=600;
     private long mLastClickTime;
 
-    private int page = 1;
+    private int mPage = 1;
+
+    private boolean isScrolling = false;
+    private int currentItems, totalItems, scrollOutItems;
 
     public static Intent newIntent(Context context, String keyword, Double longitude, Double latitude) {
         Intent intent = new Intent(context, SearchResultActivity.class);
@@ -91,10 +95,26 @@ public class SearchResultActivity extends BaseActivity {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(), R.anim.layout_animation_from_bottom);
         recyclerView.setLayoutAnimation(animation);
 
-        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                // TODO recyclerview  아래 작업..
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrollOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+
+                if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
+                    getKeywordData(userId, keyword, longitude, latitude, mPage);
+                }
             }
         });
     }
@@ -117,6 +137,7 @@ public class SearchResultActivity extends BaseActivity {
                                     if (page == 1) {
                                         recyclerView.scheduleLayoutAnimation();
                                     }
+                                    mPage++;
                                 }
                                 else if (groupInfoResData.getState() == 300) {
                                     Intent intent = SearchResultNonActivity.newIntent(getBaseContext(), groupInfoResData.getList(), longitude, latitude);

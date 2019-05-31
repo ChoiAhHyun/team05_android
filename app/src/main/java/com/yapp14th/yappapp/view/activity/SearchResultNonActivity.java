@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static com.yapp14th.yappapp.view.activity.SearchResultActivity.LATITUDE;
@@ -91,6 +92,13 @@ public class SearchResultNonActivity extends BaseActivity {
                 return true;
             }
         });
+    }
+
+    @OnClick(R.id.create_btn)
+    void onClick() {
+        Intent intent = new Intent(SearchResultNonActivity.this, AddActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void settingRecyclerView() {
