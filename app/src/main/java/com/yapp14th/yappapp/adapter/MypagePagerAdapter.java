@@ -57,8 +57,6 @@ public class MypagePagerAdapter extends PagerAdapter {
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_mypage);
         GroupCardAdpater adapter = new GroupCardAdpater(mContext, mListData.get(position), 1);
-        GroupInfoResData.GroupInfo model = mListData.get(position).get(position);
-        Log.d("MypageAdapter", model.meet_Img);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

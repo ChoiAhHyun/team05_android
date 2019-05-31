@@ -538,8 +538,8 @@ public class AddActivity extends BaseActivity {
                         }
                         //이미지 없을 경우 종료
                         else {
+                            setResult(1000);
                             finish();
-                            onBackPressed();
                         }
                     }
                     else {
@@ -581,8 +581,8 @@ public class AddActivity extends BaseActivity {
                             //이미지 전송 성공하면 종료
                             if (successResponse.state == 200) {
                                 Log.d(TAG, "image success");
+                                setResult(1000);
                                 finish();
-                                onBackPressed();
                             }
                             else {
                                 Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
