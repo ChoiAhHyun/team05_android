@@ -9,13 +9,6 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize">
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="완료"
-            android:background="@color/white"
-            android:layout_gravity="right"/>
     </androidx.appcompat.widget.Toolbar>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,14 +22,31 @@
         <TextView
             android:id="@+id/tv_address"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:textSize="14sp"
+            android:text="서울시"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:textColor="@color/black"
             android:background="#80ffffff"/>
         <ImageView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:tint="@color/color_0000ff"
+            android:tint="@color/color_111861"
             android:src="@drawable/center"
             android:layout_centerInParent="true"/>
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="위치지정 완료"
+            android:background="@color/color_111861"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="80dp"
+            android:padding="12dp"/>
         <!--<ImageView-->
             <!--android:id="@+id/btn_now"-->
             <!--android:layout_width="wrap_content"-->

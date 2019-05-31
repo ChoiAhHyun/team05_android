@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:TagsEditText="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +14,7 @@
         android:layout_height="?actionBarSize">
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -31,7 +32,7 @@
                 <ImageView
                     android:id="@+id/iv_cover_image"
                     android:layout_width="match_parent"
-                    android:layout_height="115.2dp"
+                    android:layout_height="220dp"
                     android:background="@color/color_111861"
                     android:scaleType="center"/>
 
@@ -91,18 +92,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="17.2sp"
+                        android:paddingBottom="12.4dp"
+                        android:paddingTop="12dp"
                         android:textColor="@color/color_707070"
                         android:textColorHint="@color/color_707070"
                         android:hint="모임 이름을 입력해주세요"
                         android:background="@color/white"
                         android:singleLine="true"
-                        android:imeOptions="actionNext"
-                        android:layout_marginTop="12dp"/>
+                        android:imeOptions="actionNext"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
-                        android:layout_marginTop="12.4dp"
                         android:background="@color/color_707070"/>
                 </LinearLayout>
 
@@ -122,10 +123,11 @@
                         />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:id="@+id/ll_category"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="12dp"
+                        android:paddingTop="12dp"
                         android:gravity="center_vertical">
                         
                         <TextView
@@ -137,10 +139,11 @@
                             android:text="카테고리 선택하러 가기"/>
                         
                         <ImageView
-                            android:layout_width="6dp"
-                            android:layout_height="9.6dp"
-                            android:src="@drawable/icon_right_arrow"
-                            android:layout_marginLeft="14dp"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_down_arrow"
+                            android:rotation="270"
+                            android:layout_marginLeft="6dp"/>
                     </LinearLayout>
 
                     <View
@@ -180,7 +183,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28.8dp">
+                    android:layout_marginTop="21.8dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -188,6 +192,7 @@
                         android:textSize="15.2sp"
                         android:textColor="@color/color_06095e"
                         android:text="날짜"
+                        android:layout_centerVertical="true"
                         />
 
                     <LinearLayout
@@ -196,7 +201,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:paddingTop="7dp"
+                        android:paddingLeft="7dp"
+                        android:paddingBottom="7dp">
 
                         <TextView
                             android:id="@+id/tv_date"
@@ -207,9 +215,10 @@
                             android:text="5월 12일"/>
 
                         <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
+                            android:paddingTop="3dp"
                             android:src="@drawable/icon_down_arrow"/>
                     </LinearLayout>
                 </RelativeLayout>
@@ -217,7 +226,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="21.2dp">
+                    android:layout_marginTop="14.2dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -225,6 +234,7 @@
                         android:textSize="15.2sp"
                         android:textColor="@color/color_06095e"
                         android:text="시간"
+                        android:layout_centerVertical="true"
                         />
 
                     <LinearLayout
@@ -233,7 +243,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:paddingTop="7dp"
+                        android:paddingLeft="7dp"
+                        android:paddingBottom="7dp">
 
                         <TextView
                             android:id="@+id/tv_time"
@@ -244,9 +257,10 @@
                             android:text="12 : 34 PM"/>
 
                         <ImageView
-                            android:layout_width="12dp"
-                            android:layout_height="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
+                            android:paddingTop="3dp"
                             android:src="@drawable/icon_down_arrow"/>
                     </LinearLayout>
                 </RelativeLayout>
@@ -270,14 +284,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="17.2sp"
+                        android:paddingBottom="8.4dp"
                         android:textColor="@color/color_707070"
                         android:text="만남장소 검색"
-                        android:layout_marginTop="12dp"/>
+                        android:paddingTop="12dp"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
-                        android:layout_marginTop="8.4dp"
                         android:background="@color/color_707070"/>
                 </LinearLayout>
 
@@ -306,8 +320,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/minus_btn"
-                            android:padding="4dp"
-                            android:layout_marginLeft="16dp"
+                            android:padding="14dp"
+                            android:layout_marginLeft="6dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentLeft="true"/>
 
@@ -325,8 +339,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/plus_btn"
-                            android:padding="4dp"
-                            android:layout_marginRight="16dp"
+                            android:padding="14dp"
+                            android:layout_marginRight="6dp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"/>
                     </RelativeLayout>
@@ -428,14 +442,14 @@
                         android:background="@color/white"
                         android:singleLine="true"
                         android:imeOptions="actionDone"
-                        android:layout_marginTop="15.2dp"
+                        android:paddingTop="15.2dp"
+                        android:paddingBottom="8.4dp"
                         android:layout_below="@+id/textview2"/>
 
                     <View
                         android:id="@+id/v_keyword"
                         android:layout_width="match_parent"
                         android:layout_height="0.4dp"
-                        android:layout_marginTop="8.4dp"
                         android:background="@color/color_707070"
                         android:layout_below="@+id/et_keyword"/>
                 </RelativeLayout>
@@ -443,7 +457,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <Button
         android:id="@+id/btn_make"

@@ -95,7 +95,6 @@ public class GroupCardAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .error(R.color.color_111861)
                     .centerCrop()
                     .into(holder.imgCardBgr);
-
     }
 
     private void setUserImages(GroupCardViewHolder holder, GroupInfoResData.GroupInfo model){
