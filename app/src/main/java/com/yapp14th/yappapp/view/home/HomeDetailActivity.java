@@ -41,9 +41,12 @@ import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
 import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
+import com.yapp14th.yappapp.dialog.MeetingEditDialog;
 import com.yapp14th.yappapp.model.GroupDetailResData;
 import com.yapp14th.yappapp.model.GroupInfoResData;
+import com.yapp14th.yappapp.model.MeetingDetailReqModel;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
+import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.TransitionIssue;
 
 import java.util.ArrayList;
@@ -147,15 +150,13 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void checkUserType(){
 
-        if (userId.equals(model.captain_id)){
-            // im a captain
-            userType = 0;
+        if (userId.equals(model.captain_id)) userType = 0;
 
-        }else{
+        else if (model.participants_Id == null) userType = 2;
 
-            userType = 1;
+        else  for (String s: model.participants_Id)  userType = (userId.equals(s) || userType==1 ) ? 1 : 2;
 
-        }
+        setViewDependOnUserType();
 
     }
 
@@ -177,6 +178,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
                     setImgLeaderProfile();
                 }
+
+                hideProgress();
             }
 
             @Override
@@ -192,8 +195,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         setRecyclerView();
 
-        setViewDependOnUserType();
-
         setButton();
 
     }
@@ -202,7 +203,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         txtTitle.setText(groupInfo.meetName);
         txtSubTitle.setText(model.meet_explanation);
-        txtLeaderName.setText(model.captain_id);
+        txtLeaderName.setText(model.user_nick);
         txtNumOfParticipants.setText(model.participants_num + " / " + model.person_num);
         txtLocName.setText(groupInfo.meetlocation);
         txtDate.setText(groupInfo.getStringFormatDate(groupInfo.meetDateTime));
@@ -224,7 +225,9 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void setParticipantsImages(){
 
-        for(String url: model.participants_img) imgSrcs.add(url);
+        imgSrcs.clear();
+
+        if (model.participants_img != null) for(String url: model.participants_img) imgSrcs.add(url);
 
         adapter.notifyDataSetChanged();
 
@@ -246,7 +249,14 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             editable = false;
             buttonText = "마감하기";
 
-        }else{
+        }else if (userType == 1){
+
+            title = "참여를 취소하시겠습니까??";
+            subTitle = "모임에 참여하지 않으시겠습니까?";
+            editable = false;
+            buttonText = "신청 취소하기";
+
+        }else {
 
             title = "참여하시겠습니까?";
             subTitle = "모임에 참여하시겠습니까?";
@@ -265,14 +275,99 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private ConfirmDialog.OkButtonListener okButtonClickListener = (str) -> {
 
-        if (userType == 0) finishMeeting();
+        showProgress();
 
+        switch (userType){
 
+            case 0: finishMeeting(); break;
+            case 1: cancleParticipateMeeting(); break;
+            case 2: applyParticipateMeeting(); break;
+
+        }
     };
+
+    private void editMeeting(){
+
+        if (userType != 0 ) return;
+
+        MeetingEditDialog editDialog = new MeetingEditDialog(this);
+        editDialog.setContentView(R.layout.dialog_meet_edit);
+        editDialog.setOnButtonClickListener(buttonClickListener);
+        editDialog.show();
+
+    }
+
+    private MeetingEditDialog.OnButtonClickListener buttonClickListener = new MeetingEditDialog.OnButtonClickListener() {
+        @Override
+        public void onClicked(int type) {
+            if (type == 0){//revise
+
+
+
+            }else{//cancel
+
+
+
+            }
+        }
+    } ;
 
     private void finishMeeting(){
 
+        RetrofitClient.getInstance().getService().EndMeeting(groupInfo.meetId);
+        hideProgress();
         onBackPressed();
+
+    }
+
+    private void cancleParticipateMeeting(){
+
+        RetrofitClient.getInstance().getService().CancelParticipateInMeeting(new MeetingDetailReqModel(userId, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
+            @Override
+            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                if (response.isSuccessful()){
+                    if (response.code() == 200){
+
+                        getGroupDetailDatas();
+
+                    }
+                }
+
+                Log.d("tagg",response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void applyParticipateMeeting(){
+
+        RetrofitClient.getInstance().getService().ApplyOnMeeting(new MeetingDetailReqModel(userId, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
+            @Override
+            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                if (response.isSuccessful()){
+                    if (response.code() == 200){
+
+                        getGroupDetailDatas();
+
+                    }
+                }
+                if (response.code() == 300){
+
+                    // 인원초과...
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+            }
+        });
 
     }
 
@@ -307,6 +402,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable( getColor( R.color.transparent ) ) );
 
         toolbar.getNavigationIcon().setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+
 
     }
 

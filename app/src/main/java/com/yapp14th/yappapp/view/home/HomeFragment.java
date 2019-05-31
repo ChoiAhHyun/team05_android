@@ -31,9 +31,9 @@ import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
 import com.yapp14th.yappapp.utils.PermissionGPS;
+import com.yapp14th.yappapp.view.activity.AddActivity;
 
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +48,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +71,10 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     SwipeRefreshLayout swipe;
     @BindView(R.id.layout_no_list)
     View layoutNoList;
+    @OnClick(R.id.btn_home_create_meeting)
+    void onCallClick() { startActivity( new Intent(getActivity(), AddActivity.class)); }
+
+
 
     private boolean isFirst = true;
     private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
