@@ -126,9 +126,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         getGroupDetailDatas();
 
         getBoardDatas();
-
-        setGoogleMap();
-
     }
 
     private void setGoogleMap(){
@@ -174,6 +171,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
                     setParticipantsImages();
 
                     setImgLeaderProfile();
+
+                    setGoogleMap();
                 }
 
                 hideProgress();
@@ -565,14 +564,13 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng SEOUL = new LatLng(37.56, 126.97);
+        LatLng SEOUL = new LatLng(model.latitude, model.longitude);
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(SEOUL);
         markerOptions.title("서울");
         markerOptions.snippet("한국의 수도");
         map.addMarker(markerOptions);
-
 
         CameraPosition pos = new CameraPosition.Builder().zoom(15).target(SEOUL).build();
         map.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
