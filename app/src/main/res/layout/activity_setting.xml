@@ -29,7 +29,7 @@
     
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="25dp"
@@ -40,32 +40,22 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="bottom">
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="20.8dp"-->
-                <!--android:layout_marginRight="19dp"-->
-                <!--android:layout_marginBottom="9dp">-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:text="팝업알림 설정"-->
-                    <!--android:textSize="13sp"-->
-                    <!--android:textColor="@color/color_393939"/>-->
-                <!--<Switch-->
-                    <!--android:id="@+id/switch_alarm"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:checked="true"-->
-                    <!--android:layout_alignParentEnd="true"/>-->
-            <!--</RelativeLayout>-->
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1dp"-->
-                <!--android:background="@color/color_d7d7d7"-->
-                <!--android:layout_marginLeft="19dp"-->
-                <!--android:layout_marginRight="19dp"/>-->
+            <TextView
+                android:id="@+id/tv_interests"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_centerVertical="true"
+                android:text="관심사 수정"
+                android:textSize="13sp"
+                android:textColor="@color/color_393939"
+                android:paddingTop="24.3dp"
+                android:paddingLeft="20.8dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_d7d7d7"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="19dp"/>
             <TextView
                 android:id="@+id/tv_logout"
                 android:layout_width="match_parent"

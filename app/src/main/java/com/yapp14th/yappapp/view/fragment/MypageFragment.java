@@ -85,8 +85,8 @@ public class MypageFragment extends BaseFragment {
     @BindView(R.id.rv_my_interests)
     RecyclerView rv_my_interests;
 
-    @BindView(R.id.iv_add_interest)
-    ImageView iv_add_interest;
+//    @BindView(R.id.iv_add_interest)
+//    ImageView iv_add_interest;
 
     @Override
     protected int getLayout() {
@@ -103,7 +103,7 @@ public class MypageFragment extends BaseFragment {
 
         iv_setting.setOnClickListener(mOnClickListener);
         profile_add_btn.setOnClickListener(mOnClickListener);
-        iv_add_interest.setOnClickListener(mOnClickListener);
+//        iv_add_interest.setOnClickListener(mOnClickListener);
 
         id = Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
 
@@ -200,10 +200,6 @@ public class MypageFragment extends BaseFragment {
                     imageSelectModeDialog.setOnDismissListener(onDismissListener);
                     imageSelectModeDialog.show();
                     break;
-                case R.id.iv_add_interest:
-                    intent = AddCategoryActivity.newIntent(getActivity());
-                    intent.putExtra("add", "모임 만들기");
-                    startActivityForResult(intent, 200);
             }
         }
     };
@@ -269,8 +265,8 @@ public class MypageFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100) {
-            //TODO 프래그먼트 새로고침?
+        if (requestCode == 100 && resultCode == 300) {
+            getUserInfo();
         }
         else if (requestCode == 200){
             if (resultCode == 100) {
