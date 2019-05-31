@@ -28,6 +28,12 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int getLayout();
 
+    protected String getUserId(){
+
+        return Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
+
+    }
+
     public BaseActivity getBaseActivity() {
         Activity activity = getActivity();
 

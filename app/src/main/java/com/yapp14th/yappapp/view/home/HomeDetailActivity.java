@@ -113,7 +113,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         super.onCreate(savedInstanceState);
 
-        userId = Preferences.getInstance().getSharedPreference(this, Constant.Preference.CONFIG_USER_USERNAME, "");
+        userId = getUserId();
 
         getGroupInfoFromParent();
 
@@ -127,7 +127,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         getBoardDatas();
 
-        //checkUserType();
         setGoogleMap();
 
     }
@@ -148,8 +147,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void checkUserType(){
 
-        Log.d("tagg", userId);
-
         if (userId.equals(model.captain_id)){
             // im a captain
             userType = 0;
@@ -164,13 +161,15 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void getGroupDetailDatas(){
 
-        RetrofitClient.getInstance().getService().GetGroupDetailDatas(1).enqueue(new Callback<GroupDetailResData>() {
+        RetrofitClient.getInstance().getService().GetGroupDetailDatas(groupInfo.meetId).enqueue(new Callback<GroupDetailResData>() {
             @Override
             public void onResponse(Call<GroupDetailResData> call, Response<GroupDetailResData> response) {
 
                 if (response.body().state == 200) {
 
                     model = response.body().result;
+
+                    checkUserType();
 
                     setTextViews();
 
@@ -213,8 +212,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     }
 
     private void setImgLeaderProfile(){
-
-        Log.d("tagg","asdasd   "+ model.captain_img);
 
         imgProfile.setBackground(new ShapeDrawable(new OvalShape()));
         imgProfile.setClipToOutline(true);
@@ -389,7 +386,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void getBoardDatas(){
 
-        RetrofitClient.getInstance().getService().GetNoticeDatas(10).enqueue(new Callback<NoticeInfoResData>() {
+        RetrofitClient.getInstance().getService().GetNoticeDatas(groupInfo.meetId).enqueue(new Callback<NoticeInfoResData>() {
             @Override
             public void onResponse(Call<NoticeInfoResData> call, Response<NoticeInfoResData> response) {
 
