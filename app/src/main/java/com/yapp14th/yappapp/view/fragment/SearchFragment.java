@@ -93,7 +93,7 @@ public class SearchFragment extends BaseFragment {
 
     private int page = 1;
 
-    private static final long MIN_CLICK_INTERVAL=600;
+    private static final long MIN_CLICK_INTERVAL = 600;
     private long mLastClickTime;
 
     @Override
@@ -168,6 +168,7 @@ public class SearchFragment extends BaseFragment {
 
         nearDistanceBtn.setOnClickListener(v -> {
             if (!isdistanceBtnClicked && istimeBtnClicked) {
+                page = 1;
                 searchType = NEAR_DISTANCE;
                 istimeBtnClicked = false;
                 isdistanceBtnClicked = true;
@@ -180,6 +181,7 @@ public class SearchFragment extends BaseFragment {
 
         nearTimeBtn.setOnClickListener(v -> {
             if (!istimeBtnClicked && isdistanceBtnClicked) {
+                page = 1;
                 searchType = NEAR_TIME;
                 isdistanceBtnClicked = false;
                 istimeBtnClicked = true;
@@ -215,11 +217,11 @@ public class SearchFragment extends BaseFragment {
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                View view = (View)v.getChildAt(v.getChildCount()-1);
+                View view = (View) v.getChildAt(v.getChildCount() - 1);
 
-                int diff = (view.getBottom()-(v.getHeight()+v.getScrollY()));
+                int diff = (view.getBottom() - (v.getHeight() + v.getScrollY()));
 
-                if(diff == 0) {
+                if (diff == 0) {
                     getData(searchType, ++page);
                 }
             }
@@ -264,18 +266,18 @@ public class SearchFragment extends BaseFragment {
                         if (groupInfoResData.getState() == 200) {
                             searchResulLists.addAll(groupInfoResData.getList());
                             searchResultAdapter.notifyDataSetChanged();
-                            recyclerView.scheduleLayoutAnimation();
 
+                            if (page == 1) {
+                                recyclerView.scheduleLayoutAnimation();
+                            }
+                        }
+                        else if (response.code() == 300) {
+                            Toasty.error(getBaseActivity(), "더 이상 정보를 불러 올 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
                 else {
-                    if (response.code() == 300) {
-                        Toasty.error(getBaseActivity(), "더 이상 정보를 불러 올 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toasty.error(getBaseActivity(), "잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                    }
+                    Toasty.error(getBaseActivity(), "잠시 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -291,11 +293,11 @@ public class SearchFragment extends BaseFragment {
     private GroupCardAdpater.ItemOnCickListener itemClickListener = (model, sharedView) -> {
 
         long currentClickTime = SystemClock.uptimeMillis();
-        long elapsedTime=currentClickTime-mLastClickTime;
-        mLastClickTime=currentClickTime;
+        long elapsedTime = currentClickTime - mLastClickTime;
+        mLastClickTime = currentClickTime;
 
         // 중복 클릭인 경우
-        if(elapsedTime<=MIN_CLICK_INTERVAL){
+        if (elapsedTime <= MIN_CLICK_INTERVAL) {
             return;
         }
 

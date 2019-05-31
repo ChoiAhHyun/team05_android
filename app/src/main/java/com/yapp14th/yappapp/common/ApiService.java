@@ -125,11 +125,11 @@ public interface ApiService {
 
     @GET("meet/keyword")
     Call<GroupInfoResData> getSearchResultData (
-        @Query("userId") String userId, @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
+        @Query(encoded = true, value = "userId") String userId, @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
     );
 
     @GET("meet/dsearch")
     Call<GroupInfoResData> getSearchDefaultData (
-        @Query("userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude, @Query("distancebool") int distancebool, @Query("page") int page
+        @Query(encoded = true, value = "userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude, @Query("distancebool") int distancebool, @Query("page") int page
     );
 }

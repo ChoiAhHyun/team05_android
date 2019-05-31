@@ -77,11 +77,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="9.2dp"
+            android:layout_marginTop="5.2dp"
             android:layout_marginBottom="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/model_group_card_time_info"
-            app:layout_constraintTop_toBottomOf="@id/txt_home_card_title" />
+            app:layout_constraintTop_toBottomOf="@id/model_group_card_time_info" />
 
         <include
             layout="@layout/model_user_group_imgs"

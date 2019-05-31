@@ -48,9 +48,7 @@ public class SplashActivity extends BaseActivity {
         }
         else {
             new Handler().postDelayed(() -> {
-                Intent intent = LoginActivity.newIntent(SplashActivity.this);
-                startActivity(intent);
-                finish();
+                jumpToLogin();
                 overridePendingTransition(0, R.anim.splash_animation);
             }, 3000);
         }
@@ -90,18 +88,22 @@ public class SplashActivity extends BaseActivity {
                         }
                         else if (state == 300) {
                             Toasty.error(getBaseContext(), "아이디 및 비밀번호를 확인해주세요.", Toasty.LENGTH_SHORT).show();
+                            jumpToLogin();
                         }
                         else if (state == 400) {
                             Toasty.error(getBaseContext(), "해당 아이디는 존재하지 않습니다.", Toasty.LENGTH_SHORT).show();
+                            jumpToLogin();
                         }
                         else {
                             Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                            jumpToLogin();
                         }
 
                     }
                 }
                 else {
                     Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                    jumpToLogin();
                 }
             }
 
@@ -162,5 +164,11 @@ public class SplashActivity extends BaseActivity {
                         finish();
                     }
                 });
+    }
+
+    private void jumpToLogin() {
+        Intent intent = LoginActivity.newIntent(SplashActivity.this);
+        startActivity(intent);
+        finish();
     }
 }
