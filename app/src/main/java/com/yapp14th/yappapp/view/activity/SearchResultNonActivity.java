@@ -1,10 +1,12 @@
 package com.yapp14th.yappapp.view.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.KeyEvent;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -40,6 +42,9 @@ public class SearchResultNonActivity extends BaseActivity {
     private GroupCardAdpater searchResultAdapter;
     private ArrayList<GroupInfoResData.GroupInfo> datas;
     private double longitude, latitude;
+
+    private static final long MIN_CLICK_INTERVAL=600;
+    private long mLastClickTime;
 
     public static Intent newIntent(Context context, ArrayList<GroupInfoResData.GroupInfo> lists, Double longitude, Double latitude) {
         Intent intent = new Intent(context, SearchResultNonActivity.class);
@@ -93,15 +98,28 @@ public class SearchResultNonActivity extends BaseActivity {
         searchResultAdapter = new GroupCardAdpater(getBaseContext(), datas, 1);
         searchResultAdapter.setOnItemClickListener(itemClickListener);
         recyclerView.setAdapter(searchResultAdapter);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(), R.anim.layout_animation_from_bottom);
+        recyclerView.setLayoutAnimation(animation);
+        recyclerView.scheduleLayoutAnimation();
     }
 
     private GroupCardAdpater.ItemOnCickListener itemClickListener = (model, sharedView) -> {
 
-        Intent intent = new Intent(getBaseContext(), HomeDetailActivity.class);
+        long currentClickTime = SystemClock.uptimeMillis();
+        long elapsedTime=currentClickTime-mLastClickTime;
+        mLastClickTime=currentClickTime;
+
+        // 중복 클릭인 경우
+        if(elapsedTime<=MIN_CLICK_INTERVAL){
+            return;
+        }
+
+        Intent intent = new Intent(SearchResultNonActivity.this, HomeDetailActivity.class);
         intent.putExtra(getString(R.string.intent_str_transition_view), ViewCompat.getTransitionName(sharedView));
         intent.putExtra("groupInfo", model);
 
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) getBaseContext(), Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                Pair.create(sharedView, ViewCompat.getTransitionName(sharedView)));
         startActivityForResult(intent, 1, options.toBundle());
     };
 }

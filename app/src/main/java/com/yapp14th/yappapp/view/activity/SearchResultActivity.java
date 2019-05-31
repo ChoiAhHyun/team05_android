@@ -113,7 +113,10 @@ public class SearchResultActivity extends BaseActivity {
                                 if (groupInfoResData.getState() == 200) {
                                     searchResulLists.addAll(groupInfoResData.getList());
                                     searchResultAdapter.notifyDataSetChanged();
-                                    recyclerView.scheduleLayoutAnimation();
+
+                                    if (page == 1) {
+                                        recyclerView.scheduleLayoutAnimation();
+                                    }
                                 }
                                 else if (groupInfoResData.getState() == 300) {
                                     Intent intent = SearchResultNonActivity.newIntent(getBaseContext(), groupInfoResData.getList(), longitude, latitude);
