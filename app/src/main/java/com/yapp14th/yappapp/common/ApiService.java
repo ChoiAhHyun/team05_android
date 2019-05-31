@@ -3,6 +3,7 @@ package com.yapp14th.yappapp.common;
 import com.google.gson.JsonObject;
 import com.yapp14th.yappapp.model.MakeModel;
 import com.yapp14th.yappapp.model.MakeResponse;
+import com.yapp14th.yappapp.model.MeetingDeleteBody;
 import com.yapp14th.yappapp.model.MeetingDetailReqModel;
 import com.yapp14th.yappapp.model.MypageInterestModel;
 import com.yapp14th.yappapp.model.AlarmResponse;
@@ -122,6 +123,9 @@ public interface ApiService {
 
     @GET("notice/comment/view")
     Call<NoticeCommentResData> GetNoticeCommentDatas(@Query("meetId") Integer meetid);
+
+    @POST("meet/reason")
+    Call<SuccessResponse> DeleteMeeting(@Body MeetingDeleteBody meetingDeleteBody);
 
     @GET("meet/keyword")
     Call<GroupInfoResData> getSearchResultData (

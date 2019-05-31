@@ -45,6 +45,7 @@ import com.yapp14th.yappapp.dialog.ConfirmDialog;
 import com.yapp14th.yappapp.dialog.MeetingEditDialog;
 import com.yapp14th.yappapp.model.GroupDetailResData;
 import com.yapp14th.yappapp.model.GroupInfoResData;
+import com.yapp14th.yappapp.model.MeetingDeleteBody;
 import com.yapp14th.yappapp.model.MeetingDetailReqModel;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
@@ -289,8 +290,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void editMeeting(){
 
-        //if (userType != 0 ) return;
-
+        if (userType != 0 ) return;
         MeetingEditDialog editDialog = new MeetingEditDialog(this);
         editDialog.setContentView(R.layout.dialog_meet_edit);
         editDialog.setOnButtonClickListener(buttonClickListener);
@@ -307,13 +307,41 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
             }else{//delete
 
-                
+                ConfirmDialog confirmDialog = new ConfirmDialog(HomeDetailActivity.this, "급한 일이 생기셨나요?", "모임 메이트들에게 보낼 취소 이유를\n간단히 작성해주세요", true);
+                confirmDialog.setOkButtonClickListener(confirmOkListener);
+                confirmDialog.show();
+                showProgress();
 
             }
 
             dialog.dismiss();
         }
     } ;
+
+    private ConfirmDialog.OkButtonListener confirmOkListener = new ConfirmDialog.OkButtonListener() {
+        @Override
+        public void onClicked(String text) {
+            RetrofitClient.getInstance().getService().DeleteMeeting(new MeetingDeleteBody(text, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
+                @Override
+                public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                    if (response.isSuccessful()){
+                        if (response.code() == 200){
+
+                            hideProgress();
+                            finish();
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+                }
+            });
+
+        }
+    };
 
     private void finishMeeting(){
 
@@ -328,15 +356,13 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         RetrofitClient.getInstance().getService().CancelParticipateInMeeting(new MeetingDetailReqModel(userId, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
             @Override
             public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
-                if (response.isSuccessful()){
-                    if (response.code() == 200){
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
 
                         getGroupDetailDatas();
 
                     }
                 }
-
-                Log.d("tagg",response.toString());
             }
 
             @Override
