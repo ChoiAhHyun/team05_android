@@ -7,17 +7,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.text.Layout;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
@@ -31,33 +29,31 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.yapp14th.yappapp.Base.BaseActivity;
-import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.adapter.home.UserImagesAdpater;
-import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.dialog.ConfirmDialog;
 import com.yapp14th.yappapp.dialog.MeetingEditDialog;
 import com.yapp14th.yappapp.model.GroupDetailResData;
 import com.yapp14th.yappapp.model.GroupInfoResData;
+import com.yapp14th.yappapp.model.MeetingDeleteBody;
 import com.yapp14th.yappapp.model.MeetingDetailReqModel;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.utils.TransitionIssue;
+import com.yapp14th.yappapp.view.activity.addNoticeActivity;
 
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,6 +91,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     ImageView imgProfile;
     @BindView(R.id.scrollview)
     NestedScrollView scrollView;
+    private MenuItem moreButton;
 
     @Override
     protected int getLayout() {
@@ -129,9 +126,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         getGroupDetailDatas();
 
         getBoardDatas();
-
-        setGoogleMap();
-
     }
 
     private void setGoogleMap(){
@@ -177,6 +171,8 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
                     setParticipantsImages();
 
                     setImgLeaderProfile();
+
+                    setGoogleMap();
                 }
 
                 hideProgress();
@@ -248,6 +244,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             subTitle = "인원을 더 이상 변경할 수 없습니다.";
             editable = false;
             buttonText = "마감하기";
+            moreButton.setVisible(true);
 
         }else if (userType == 1){
 
@@ -255,14 +252,14 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             subTitle = "모임에 참여하지 않으시겠습니까?";
             editable = false;
             buttonText = "신청 취소하기";
-
+            moreButton.setVisible(false);
         }else {
 
             title = "참여하시겠습니까?";
             subTitle = "모임에 참여하시겠습니까?";
             editable = false;
             buttonText = "신청하기";
-
+            moreButton.setVisible(false);
         }
 
         btn.setText(buttonText);
@@ -289,7 +286,6 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private void editMeeting(){
 
         if (userType != 0 ) return;
-
         MeetingEditDialog editDialog = new MeetingEditDialog(this);
         editDialog.setContentView(R.layout.dialog_meet_edit);
         editDialog.setOnButtonClickListener(buttonClickListener);
@@ -299,18 +295,50 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private MeetingEditDialog.OnButtonClickListener buttonClickListener = new MeetingEditDialog.OnButtonClickListener() {
         @Override
-        public void onClicked(int type) {
+        public void onClicked(int type, MeetingEditDialog dialog) {
             if (type == 0){//revise
 
 
 
-            }else{//cancel
+            }else{//delete
 
-
+                ConfirmDialog confirmDialog = new ConfirmDialog(HomeDetailActivity.this, "급한 일이 생기셨나요?", "모임 메이트들에게 보낼 취소 이유를\n간단히 작성해주세요", true);
+                confirmDialog.setOkButtonClickListener(confirmOkListener);
+                confirmDialog.show();
 
             }
+
+            dialog.dismiss();
         }
     } ;
+
+    private ConfirmDialog.OkButtonListener confirmOkListener = new ConfirmDialog.OkButtonListener() {
+        @Override
+        public void onClicked(String text) {
+            showProgress();
+            RetrofitClient.getInstance().getService().DeleteMeeting(new MeetingDeleteBody(text, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
+                @Override
+                public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+
+                    Log.d("tagg",response.toString());
+                    if (response.isSuccessful()){
+                        if (response.code() == 200){
+
+                            finish();
+
+                        }
+                    }
+                    hideProgress();
+                }
+
+                @Override
+                public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+                }
+            });
+
+        }
+    };
 
     private void finishMeeting(){
 
@@ -325,15 +353,13 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         RetrofitClient.getInstance().getService().CancelParticipateInMeeting(new MeetingDetailReqModel(userId, groupInfo.meetId)).enqueue(new Callback<SuccessResponse>() {
             @Override
             public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
-                if (response.isSuccessful()){
-                    if (response.code() == 200){
+                if (response.isSuccessful()) {
+                    if (response.code() == 200) {
 
                         getGroupDetailDatas();
 
                     }
                 }
-
-                Log.d("tagg",response.toString());
             }
 
             @Override
@@ -403,13 +429,23 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         toolbar.getNavigationIcon().setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.btn_more) { editMeeting(); return true;}
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.home_detail_action_bar_menu, menu);
+
+        moreButton = menu.findItem(R.id.btn_more);
+
+        moreButton.setVisible(false);
 
         return true;
     }
@@ -464,9 +500,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     @Override
     public void onTransitionResume(Transition transition) { }
 
-
     @BindView(R.id.img_board_leader_profile)
     ImageView imgLeaderProfile;
+    @BindView(R.id.add_board_temp)
+    ImageView addBoardTemp;
     @BindView(R.id.txt_board_temp)
     TextView txtBoardTemp;
     @BindView(R.id.layout_board)
@@ -486,6 +523,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             @Override
             public void onResponse(Call<NoticeInfoResData> call, Response<NoticeInfoResData> response) {
 
+                Log.d("tagg",response.toString());
                 if (response.isSuccessful()){
                     boardData = response.body();
                     setBoard(boardData.state == 200);
@@ -503,8 +541,9 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private void setBoard(boolean isExist){
 
         if (isExist) {
-
-            txtBoardTemp.setVisibility(View.GONE);
+            boardContainer.setVisibility(View.VISIBLE);
+            addBoardTemp.setVisibility(View.INVISIBLE);
+            txtBoardTemp.setVisibility(View.INVISIBLE);
             txtBoardDate.setText(boardData.getStringFormatDate(boardData.date));
             txtBoardContent.setText(boardData.notice);
             txtBoardCommentCnt.setText(boardData.commentNum.toString());
@@ -516,18 +555,16 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
                 intent.putExtra("leaderId", model.captain_id);
                 startActivity(intent);
             });
-
-
-        }else{
-
+        }else   {
+            if (userType==0 ) addBoardTemp.setVisibility(View.VISIBLE);
             boardContainer.setVisibility(View.GONE);
-
         }
+
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng SEOUL = new LatLng(37.56, 126.97);
+        LatLng SEOUL = new LatLng(model.latitude, model.longitude);
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(SEOUL);
@@ -535,9 +572,25 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
         markerOptions.snippet("한국의 수도");
         map.addMarker(markerOptions);
 
-
         CameraPosition pos = new CameraPosition.Builder().zoom(15).target(SEOUL).build();
         map.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
         map.animateCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == addNoticeActivity.NOTICE_REQUEST_CODE && resultCode == RESULT_OK) {
+            getBoardDatas();
+        }
+    }
+
+    @OnClick(R.id.add_board_temp)
+    void onClick() {
+        if (userType == 0) {
+            Intent intent = addNoticeActivity.newIntent(this, groupInfo.meetId);
+            startActivityForResult(intent, addNoticeActivity.NOTICE_REQUEST_CODE);
+        }
+    }
+
 }

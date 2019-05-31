@@ -66,9 +66,9 @@ public class MeetingEditDialog extends BaseDialog implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
 
-            case R.id.btn_revise: onClickListener.onClicked(0); break;
-            case R.id.btn_delete: onClickListener.onClicked(1); break;
-            case R.id.btn_cancel:
+            case R.id.btn_revise: onClickListener.onClicked(0, this); break;
+            case R.id.btn_delete: onClickListener.onClicked(1, this); break;
+            case R.id.btn_cancel: dismiss();
 
         }
     }
@@ -76,5 +76,5 @@ public class MeetingEditDialog extends BaseDialog implements View.OnClickListene
     public void setOnButtonClickListener(OnButtonClickListener listener) {
         onClickListener = listener;
     }
-    public interface OnButtonClickListener{ void onClicked(int type);}
+    public interface OnButtonClickListener{ void onClicked(int type, MeetingEditDialog dialog);}
 }

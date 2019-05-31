@@ -3,6 +3,7 @@ package com.yapp14th.yappapp.common;
 import com.google.gson.JsonObject;
 import com.yapp14th.yappapp.model.MakeModel;
 import com.yapp14th.yappapp.model.MakeResponse;
+import com.yapp14th.yappapp.model.MeetingDeleteBody;
 import com.yapp14th.yappapp.model.MeetingDetailReqModel;
 import com.yapp14th.yappapp.model.MypageInterestModel;
 import com.yapp14th.yappapp.model.AlarmResponse;
@@ -11,6 +12,7 @@ import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
 import com.yapp14th.yappapp.model.NoticeCommentResData;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
+import com.yapp14th.yappapp.model.NoticeUploadData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.model.UserIdModel;
 import com.yapp14th.yappapp.model.UserModel;
@@ -123,6 +125,9 @@ public interface ApiService {
     @GET("notice/comment/view")
     Call<NoticeCommentResData> GetNoticeCommentDatas(@Query("meetId") Integer meetid);
 
+    @POST("meet/meetId")
+    Call<SuccessResponse> DeleteMeeting(@Body MeetingDeleteBody meetingDeleteBody);
+
     @GET("meet/keyword")
     Call<GroupInfoResData> getSearchResultData (
         @Query(encoded = true, value = "userId") String userId, @Query("keyword") String keyword, @Query("longitude") Double longitude, @Query("latitude") Double latitude, @Query("page") int page
@@ -132,4 +137,7 @@ public interface ApiService {
     Call<GroupInfoResData> getSearchDefaultData (
         @Query(encoded = true, value = "userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude, @Query("distancebool") int distancebool, @Query("page") int page
     );
+
+    @POST("notice/upload")
+    Call<SuccessResponse> uploadNotice(@Body NoticeUploadData noticeUploadData);
 }

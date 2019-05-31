@@ -52,6 +52,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -159,13 +160,10 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 if( diff == 0 )
                 {
                     showProgress();
-                    getRealTimeGroups(0.0,0.0,++page);
+                    getRealTimeGroups(longitude,latitude,++page);
                 }
             }
         });
-
-
-
     }
 
     private void setAdapter(){
@@ -219,21 +217,27 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
         if (isPermission) {
 
-            if (permissionGPS.isGetLocation()) afterAccessToGPS();
+            if (permissionGPS.isGetLocation()) afterAccessToGPS(true);
             else permissionGPS.showSettingsAlert();
 
-        }
+        }else afterAccessToGPS(false);
     }
 
     private Double latitude;
     private Double longitude;
 
-    private void afterAccessToGPS(){
+    private void afterAccessToGPS(Boolean gpsSuccess){
 
-        isAccessFineLocation = true;
+        if (gpsSuccess) {
+            isAccessFineLocation = true;
 
-        latitude = permissionGPS.getLatitude();
-        longitude = permissionGPS.getLongitude();
+            latitude = permissionGPS.getLatitude();
+            longitude = permissionGPS.getLongitude();
+        }else{
+
+            latitude = 0.0;
+            longitude = 0.0;
+        }
 
         if (isFirst) {
 
@@ -250,7 +254,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
         if (!isAccessFineLocation) {
             permissionGPS.getLocation();
-            if(permissionGPS.isGetLocation()) afterAccessToGPS();
+            if(permissionGPS.isGetLocation()) afterAccessToGPS(true);
         }
 
     }
@@ -291,9 +295,10 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 .enqueue(new Callback<GroupInfoResData>() {
                 @Override
                 public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
+                    layoutNoList.setVisibility(View.VISIBLE);
                     if (response.isSuccessful()){
                         if (response.code()==200){
-
+                            layoutNoList.setVisibility(View.INVISIBLE);
                             nearGroupModelList.addAll(response.body().getList());
                             adapterNear.notifyDataSetChanged();
                             rvNearGroup.scheduleLayoutAnimation();
@@ -318,7 +323,6 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         txtRealTime.setVisibility(View.VISIBLE);
         txtTitle.setVisibility(View.VISIBLE);
         pb.setVisibility(View.VISIBLE);
-        layoutNoList.setVisibility(View.VISIBLE);
         YoYo.with(Techniques.FadeIn).duration(800).playOn(pb);
         YoYo.with(Techniques.FadeIn).duration(800).playOn(txtRealTime);
         YoYo.with(Techniques.FadeIn).duration(800).playOn(txtTitle);
@@ -332,7 +336,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             @Override
             public void run() {
 
-                getRealTimeGroups(0.0, 0.0, page = 1);
+                getRealTimeGroups(longitude, latitude, page = 1);
                 handler.removeCallbacks(this);
 
             }
