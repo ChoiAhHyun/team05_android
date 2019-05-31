@@ -2,6 +2,7 @@ package com.yapp14th.yappapp.view.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.yanzhenjie.album.Album;
 import com.yapp14th.yappapp.Base.BaseActivity;
 import com.yapp14th.yappapp.Base.Preferences;
 import com.yapp14th.yappapp.R;
 import com.yapp14th.yappapp.common.Constant;
 import com.yapp14th.yappapp.common.RetrofitClient;
+import com.yapp14th.yappapp.dialog.WithdrawDialog;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
 import java.util.HashMap;
@@ -31,14 +34,16 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.iv_back_setting)
     ImageView iv_back_setting;
 
-    @BindView(R.id.switch_alarm)
-    Switch switch_alarm;
+//    @BindView(R.id.switch_alarm)
+//    Switch switch_alarm;
 
     @BindView(R.id.tv_logout)
     TextView tv_logout;
 
     @BindView(R.id.tv_withdraw)
     TextView tv_withdraw;
+
+    private WithdrawDialog withdrawDialog;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, SettingActivity.class);
@@ -54,7 +59,7 @@ public class SettingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         iv_back_setting.setOnClickListener(mOnClickListener);
-        switch_alarm.setOnClickListener(mOnClickListener);
+//        switch_alarm.setOnClickListener(mOnClickListener);
         tv_logout.setOnClickListener(mOnClickListener);
         tv_withdraw.setOnClickListener(mOnClickListener);
     }
@@ -67,18 +72,28 @@ public class SettingActivity extends BaseActivity {
                 case R.id.iv_back_setting:
                     onBackPressed();
                     break;
-                case R.id.switch_alarm:
-                    //TODO 푸시알림 on/off
-                    break;
+//                case R.id.switch_alarm:
+                    //푸시알림 on/off
+//                    break;
                 case R.id.tv_logout:
                     doLogout();
                     break;
                 case R.id.tv_withdraw:
-                    String id = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, null);
-                    String pw = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_PASSWORD, null);
-                    userWithdraw(id, pw);
+                    withdrawDialog = new WithdrawDialog(SettingActivity.this);
+                    withdrawDialog.setContentView(R.layout.dialog_withdraw);
+                    withdrawDialog.setOnDismissListener(onDismissListener);
+                    withdrawDialog.show();
                     break;
             }
+        }
+    };
+
+    private WithdrawDialog.OnDismissListener onDismissListener = new WithdrawDialog.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            String id = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_USERNAME, null);
+            String pw = Preferences.getInstance().getSharedPreference(getBaseContext(), Constant.Preference.CONFIG_USER_PASSWORD, null);
+            userWithdraw(id, pw);
         }
     };
 
