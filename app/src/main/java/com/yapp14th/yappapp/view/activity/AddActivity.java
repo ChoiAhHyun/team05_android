@@ -8,6 +8,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.volokh.danylo.hashtaghelper.HashTagHelper;
@@ -40,6 +45,7 @@ import com.yapp14th.yappapp.model.MakeModel;
 import com.yapp14th.yappapp.model.MakeResponse;
 import com.yapp14th.yappapp.model.SuccessResponse;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
@@ -68,8 +75,10 @@ public class AddActivity extends BaseActivity {
     String date, time, keyword = "";
     int currentYear, currentMonth, currentDay, currentHour, currentMinute, peopleNumber = 2;
     List<String> allHashTags, category;
+    HashTagHelper mHashTagHelper;
 
     private String meetingImagePath;
+    private byte[] image;
     private boolean isImage, isName, isDescription, isKeyword, isCategory, isPlace;
 
     @BindView(R.id.iv_cover_image)
@@ -126,6 +135,9 @@ public class AddActivity extends BaseActivity {
     @BindView(R.id.tv_category)
     TextView tv_category;
 
+    @BindView(R.id.ll_category)
+    LinearLayout ll_category;
+
     @BindView(R.id.btn_make)
     Button btn_make;
 
@@ -164,8 +176,10 @@ public class AddActivity extends BaseActivity {
         btn_minus.setOnClickListener(mOnClickListener);
         et_description.addTextChangedListener(textWatcherDescription);
         et_keyword.addTextChangedListener(textWatcherKeyword);
-        tv_category.setOnClickListener(mOnClickListener);
+        ll_category.setOnClickListener(mOnClickListener);
         btn_make.setOnClickListener(mOnClickListener);
+        mHashTagHelper = HashTagHelper.Creator.create(getColor(R.color.color_0000ff), null);
+        mHashTagHelper.handle(et_keyword);
     }
 /*
     private void makeButtonEnable(){
@@ -201,18 +215,44 @@ public class AddActivity extends BaseActivity {
                         .getAlbumLoader()
                         .load(iv_cover_image, path);
                 meetingImagePath = path;
+                Log.d(TAG, meetingImagePath);
+                isImage = true;
+
+                Uri uri = Uri.fromFile(new File(meetingImagePath));
+                try {
+                    image = StreamUtils.getBytes(getBaseContext(), uri);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else {
                 meetingImagePath = null;
             }
-            isImage = true;
         }
 
         @Override
         public void onDismiss(DialogInterface dialog) {
             //랜덤 이미지
-            meetingImagePath = null;
+            TypedArray imgs = getResources().obtainTypedArray(R.array.meet_random);
+            Random rand = new Random();
+            int rndInt = rand.nextInt(imgs.length());
+            int resID = imgs.getResourceId(rndInt, 0);
+
+            Glide.with(AddActivity.this)
+                    .load(resID)
+                    .error(R.color.black)
+                    .placeholder(R.color.black)
+                    .into(iv_cover_image);
+            meetingImagePath = getResources().getResourceEntryName(resID) + ".jpg";
+            Log.d(TAG, meetingImagePath);
             isImage = true;
+
+            Drawable drawable = getDrawable(resID);
+            Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            image = stream.toByteArray();
         }
     };
 
@@ -321,7 +361,7 @@ public class AddActivity extends BaseActivity {
                     }
                     startActivityForResult(intent, 100);
                     break;
-                case R.id.tv_date:
+                case R.id.ll_date:
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(currentYear, currentMonth - 1, currentDay);
                     DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -340,7 +380,7 @@ public class AddActivity extends BaseActivity {
 //                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                     datePickerDialog.show();
                     break;
-                case R.id.tv_time:
+                case R.id.ll_time:
                     TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, AlertDialog.THEME_HOLO_LIGHT, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
@@ -363,13 +403,17 @@ public class AddActivity extends BaseActivity {
                         tv_peopleNumber.setText(peopleNumber + "");
                     }
                     break;
-                case R.id.tv_category:
+                case R.id.ll_category:
                     intent = AddCategoryActivity.newIntent(AddActivity.this);
                     intent.putExtra("add", "모임 만들기");
                     startActivityForResult(intent, 200);
                     break;
                 case R.id.btn_make:
-                    if (isName && et_name.getText().toString().getBytes().length > 50){
+                    getKeyword();
+                    if (!isImage){
+                        Toasty.error(getBaseContext(), "커버 사진을 설정해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
+                    else if (isName && et_name.getText().toString().getBytes().length > 50){
                         Toasty.error(getBaseContext(), "50 바이트 미만으로 입력해주세요.", Toasty.LENGTH_SHORT).show();
                     }
                     else if (isPlace && meetingPlace[0].getBytes().length > 100){
@@ -383,9 +427,10 @@ public class AddActivity extends BaseActivity {
                         v_keyword.setBackgroundColor(getColor(R.color.color_ff2807));
                         warning_keyword.setVisibility(View.VISIBLE);
                     }
-                    //TODO getKeyword() 후 keyword.size() > 0
-                    else if (isImage && isName && isDescription && isKeyword && isCategory && isPlace){
-                        getKeyword();
+                    else if (allHashTags.size() == 0){
+                        Toasty.error(getBaseContext(), "키워드를 하나 이상 입력해주세요.", Toasty.LENGTH_SHORT).show();
+                    }
+                    else if (isName && isDescription && isKeyword && isCategory && isPlace){
                         Log.d(TAG, et_name.getText().toString() + ", " +
                                 date + " " + time + ", " + meetingPlace[0] + ", " + Double.parseDouble(meetingPlace[1]) + ", " + Double.parseDouble(meetingPlace[2]) + ", " +
                                 et_description.getText().toString() + ", " + Integer.parseInt(tv_peopleNumber.getText().toString()) + ", " +
@@ -400,10 +445,7 @@ public class AddActivity extends BaseActivity {
         }
     };
 
-//    private List<String> getKeyword() {
     private void getKeyword() {
-        HashTagHelper mHashTagHelper = HashTagHelper.Creator.create(getColor(R.color.color_707070), null);
-        mHashTagHelper.handle(et_keyword);
         allHashTags = mHashTagHelper.getAllHashTags();
         Log.d(TAG, "tag: " + allHashTags.isEmpty());
         for (int i = 0; i < allHashTags.size(); i++){
@@ -411,7 +453,6 @@ public class AddActivity extends BaseActivity {
             keyword += "#" + allHashTags.get(i);
         }
         Log.d(TAG, "keyword: " + keyword);
-//        return allHashTags;
     }
 
     private String toAddZero(int i) {
@@ -477,10 +518,10 @@ public class AddActivity extends BaseActivity {
         processingAdd.setKeyword(keyword);
 
         String processingMeetingImage;
-        if (meetingImagePath != null) {
+        if (image != null) {
             processingMeetingImage = meetingImagePath;
         }
-        else { // 프로필 이미지 등록 안했을 경우.
+        else { // 이미지 등록 안했을 경우.
             processingMeetingImage = null;
         }
         RetrofitClient.getInstance().getService().makeMeeting(processingAdd).enqueue(new Callback<MakeResponse>() {
@@ -498,6 +539,7 @@ public class AddActivity extends BaseActivity {
                         //이미지 없을 경우 종료
                         else {
                             finish();
+                            onBackPressed();
                         }
                     }
                     else {
@@ -525,9 +567,6 @@ public class AddActivity extends BaseActivity {
     private void uploadMeetingImageToServer(String imagePath, String meetId) {
         showProgress();
 
-        Uri uri = Uri.fromFile(new File(imagePath));
-        try {
-            byte[] image = StreamUtils.getBytes(getBaseContext(), uri);
             byte[] realimage = Commons.reduceImageSize(image);
 
             RequestBody requestBody = MultipartBody.create(MediaType.parse("image/*"), realimage);
@@ -543,6 +582,7 @@ public class AddActivity extends BaseActivity {
                             if (successResponse.state == 200) {
                                 Log.d(TAG, "image success");
                                 finish();
+                                onBackPressed();
                             }
                             else {
                                 Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
@@ -562,9 +602,6 @@ public class AddActivity extends BaseActivity {
                     Log.d(TAG, "image failure: " + t);
                 }
             });
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }
