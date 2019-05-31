@@ -28,8 +28,10 @@ import com.yapp14th.yappapp.model.Category;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.MypageInterestModel;
 import com.yapp14th.yappapp.model.SuccessResponse;
+import com.yapp14th.yappapp.utils.PermissionGPS;
 import com.yapp14th.yappapp.view.activity.AddCategoryActivity;
 import com.yapp14th.yappapp.view.activity.SettingActivity;
+import com.yapp14th.yappapp.view.home.HomeFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +60,10 @@ public class MypageFragment extends BaseFragment {
 
     private JsonObject user;
     private String id;
+    private PermissionGPS permissionGPS;
+    private Boolean isAccessFineLocation = false;
+    private Boolean isAccessCoarseLocation = false;
+    private Boolean isPermission = false;
     Double latitude = 37.555744;
     Double longitude = 126.970431;
     List<ArrayList<GroupInfoResData.GroupInfo>> listData = new ArrayList<>();
@@ -101,6 +108,8 @@ public class MypageFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        gpsCheck();
+
         iv_setting.setOnClickListener(mOnClickListener);
         profile_add_btn.setOnClickListener(mOnClickListener);
 //        iv_add_interest.setOnClickListener(mOnClickListener);
@@ -108,6 +117,51 @@ public class MypageFragment extends BaseFragment {
         id = Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
 
         getUserInfo();
+    }
+
+    private void gpsCheck(){
+
+        permissionGPS = new PermissionGPS((AppCompatActivity) getActivity());
+        permissionGPS.getLocation();
+        isPermission = permissionGPS.callPermission(this);
+        getGPs();
+
+    }
+
+    private void getGPs(){
+
+        if (isPermission) {
+
+            if (permissionGPS.isGetLocation()) afterAccessToGPS(true);
+            else permissionGPS.showSettingsAlert();
+
+        }else afterAccessToGPS(false);
+    }
+
+    private void afterAccessToGPS(Boolean gpsSuccess){
+
+        if (gpsSuccess) {
+            isAccessFineLocation = true;
+
+            latitude = permissionGPS.getLatitude();
+            longitude = permissionGPS.getLongitude();
+        }else{
+
+            latitude = 0.0;
+            longitude = 0.0;
+        }
+        setMyLocation();
+    }
+
+    private void setMyLocation() {
+//        HomeFragment homeFragment = new HomeFragment();
+//        if (homeFragment.latitude != null && homeFragment.longitude != null){
+//            latitude = homeFragment.latitude;
+//            longitude = homeFragment.longitude;
+//        }
+        latitude = permissionGPS.getLatitude();
+        longitude = permissionGPS.getLongitude();
+        Log.d(TAG, "lat: " + latitude + " lng: " + longitude);
         getMeetHistory();
     }
 
