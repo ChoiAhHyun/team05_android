@@ -91,7 +91,7 @@ public class SearchFragment extends BaseFragment {
 
     private boolean isFirst = true;
 
-    private int page = 1;
+    private int mPage = 1;
 
     private static final long MIN_CLICK_INTERVAL = 600;
     private long mLastClickTime;
@@ -164,11 +164,11 @@ public class SearchFragment extends BaseFragment {
         isdistanceBtnClicked = true;
         istimeBtnClicked = false;
         setClickColor(nearDistanceBtn, true);
-        getData(NEAR_DISTANCE, 1);
+        getData(NEAR_DISTANCE, mPage);
 
         nearDistanceBtn.setOnClickListener(v -> {
             if (!isdistanceBtnClicked && istimeBtnClicked) {
-                page = 1;
+                mPage = 1;
                 searchType = NEAR_DISTANCE;
                 istimeBtnClicked = false;
                 isdistanceBtnClicked = true;
@@ -181,7 +181,7 @@ public class SearchFragment extends BaseFragment {
 
         nearTimeBtn.setOnClickListener(v -> {
             if (!istimeBtnClicked && isdistanceBtnClicked) {
-                page = 1;
+                mPage = 1;
                 searchType = NEAR_TIME;
                 isdistanceBtnClicked = false;
                 istimeBtnClicked = true;
@@ -222,7 +222,7 @@ public class SearchFragment extends BaseFragment {
                 int diff = (view.getBottom() - (v.getHeight() + v.getScrollY()));
 
                 if (diff == 0) {
-                    getData(searchType, ++page);
+                    getData(searchType, mPage);
                 }
             }
         });
@@ -270,6 +270,7 @@ public class SearchFragment extends BaseFragment {
                             if (page == 1) {
                                 recyclerView.scheduleLayoutAnimation();
                             }
+                            mPage++;
                         }
                         else if (response.code() == 300) {
                             Toasty.error(getBaseActivity(), "더 이상 정보를 불러 올 수 없습니다.", Toast.LENGTH_SHORT).show();

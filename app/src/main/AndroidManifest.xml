@@ -21,6 +21,8 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".view.activity.addNoticeActivity">
+        </activity>
         <activity android:name=".view.activity.SearchResultNonActivity">
         </activity>
         <activity android:name=".view.activity.SearchResultActivity">
@@ -55,7 +57,7 @@
         </activity>
         <activity android:name=".view.activity.AddCategoryActivity">
         </activity>
-        <activity android:name=".view.activity.SettingActivity" >
+        <activity android:name=".view.activity.SettingActivity">
         </activity>
         <activity android:name=".view.home.HomeDetailActivity"/>
         <activity android:name=".view.home.BoardDetailActivity"/>

@@ -12,6 +12,7 @@ import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
 import com.yapp14th.yappapp.model.NoticeCommentResData;
 import com.yapp14th.yappapp.model.NoticeInfoResData;
+import com.yapp14th.yappapp.model.NoticeUploadData;
 import com.yapp14th.yappapp.model.SuccessResponse;
 import com.yapp14th.yappapp.model.UserIdModel;
 import com.yapp14th.yappapp.model.UserModel;
@@ -136,4 +137,7 @@ public interface ApiService {
     Call<GroupInfoResData> getSearchDefaultData (
         @Query(encoded = true, value = "userId") String userId, @Query("latitude") Double latitude, @Query("longitude") Double longitude, @Query("distancebool") int distancebool, @Query("page") int page
     );
+
+    @POST("notice/upload")
+    Call<SuccessResponse> uploadNotice(@Body NoticeUploadData noticeUploadData);
 }

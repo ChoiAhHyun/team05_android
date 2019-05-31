@@ -109,8 +109,9 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<SuccessResponse> call, Throwable t) {
-                Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
                 hideProgress();
+                Toasty.error(getBaseContext(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
+                jumpToLogin();
             }
         });
     }
