@@ -11,6 +11,7 @@ import android.text.Layout;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -288,7 +289,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void editMeeting(){
 
-        if (userType != 0 ) return;
+        //if (userType != 0 ) return;
 
         MeetingEditDialog editDialog = new MeetingEditDialog(this);
         editDialog.setContentView(R.layout.dialog_meet_edit);
@@ -299,16 +300,18 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private MeetingEditDialog.OnButtonClickListener buttonClickListener = new MeetingEditDialog.OnButtonClickListener() {
         @Override
-        public void onClicked(int type) {
+        public void onClicked(int type, MeetingEditDialog dialog) {
             if (type == 0){//revise
 
 
 
-            }else{//cancel
+            }else{//delete
 
-
+                
 
             }
+
+            dialog.dismiss();
         }
     } ;
 
@@ -403,7 +406,13 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
         toolbar.getNavigationIcon().setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.btn_more) { editMeeting(); return true;}
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
