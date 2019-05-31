@@ -194,6 +194,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
+                        android:visibility="gone"
                         android:src="@drawable/ic_action_add"
                         android:layout_marginBottom="5dp"
                         app:layout_constraintBottom_toTopOf="@+id/board_layout"/>
@@ -230,7 +231,7 @@
             android:layout_gravity="bottom"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:text="마감하기"
+            android:text=""
             android:background="#3346ff"
             android:layout_width="match_parent"
             android:layout_height="60dp"/>

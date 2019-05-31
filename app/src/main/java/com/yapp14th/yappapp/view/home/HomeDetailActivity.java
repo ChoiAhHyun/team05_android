@@ -253,16 +253,14 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             subTitle = "모임에 참여하지 않으시겠습니까?";
             editable = false;
             buttonText = "신청 취소하기";
-            //moreButton.setVisible(false);
-            moreButton.setVisible(true);
+            moreButton.setVisible(false);
         }else {
 
             title = "참여하시겠습니까?";
             subTitle = "모임에 참여하시겠습니까?";
             editable = false;
             buttonText = "신청하기";
-            //moreButton.setVisible(false);
-            moreButton.setVisible(true);
+            moreButton.setVisible(false);
         }
 
         btn.setText(buttonText);
@@ -288,7 +286,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     private void editMeeting(){
 
-        //if (userType != 0 ) return;
+        if (userType != 0 ) return;
         MeetingEditDialog editDialog = new MeetingEditDialog(this);
         editDialog.setContentView(R.layout.dialog_meet_edit);
         editDialog.setOnButtonClickListener(buttonClickListener);
@@ -526,6 +524,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
             @Override
             public void onResponse(Call<NoticeInfoResData> call, Response<NoticeInfoResData> response) {
 
+                Log.d("tagg",response.toString());
                 if (response.isSuccessful()){
                     boardData = response.body();
                     setBoard(boardData.state == 200);
@@ -543,7 +542,7 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
     private void setBoard(boolean isExist){
 
         if (isExist) {
-
+            boardContainer.setVisibility(View.VISIBLE);
             addBoardTemp.setVisibility(View.INVISIBLE);
             txtBoardTemp.setVisibility(View.INVISIBLE);
             txtBoardDate.setText(boardData.getStringFormatDate(boardData.date));
@@ -557,13 +556,11 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
                 intent.putExtra("leaderId", model.captain_id);
                 startActivity(intent);
             });
-
-
-        }else{
-
+        }else   {
+            if (userType==0 ) addBoardTemp.setVisibility(View.VISIBLE);
             boardContainer.setVisibility(View.GONE);
-
         }
+
     }
 
     @Override
@@ -592,8 +589,10 @@ public class HomeDetailActivity extends BaseActivity implements Transition.Trans
 
     @OnClick(R.id.add_board_temp)
     void onClick() {
-        Intent intent = addNoticeActivity.newIntent(this, groupInfo.meetId);
-        startActivityForResult(intent, addNoticeActivity.NOTICE_REQUEST_CODE);
+        if (userType == 0) {
+            Intent intent = addNoticeActivity.newIntent(this, groupInfo.meetId);
+            startActivityForResult(intent, addNoticeActivity.NOTICE_REQUEST_CODE);
+        }
     }
 
 }
