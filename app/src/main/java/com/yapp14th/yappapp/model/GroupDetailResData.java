@@ -21,6 +21,7 @@ public class GroupDetailResData {
         public String user_nick;
         public Integer endingflag;
         public String[] participants_img;
+        public String[] participants_Id;
         public String captain_img;
         public Integer participants_num;
 
