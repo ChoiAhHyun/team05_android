@@ -58,5 +58,7 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:1.1.0'
     implementation 'com.github.danylovolokh:hashtag-helper:1.1.0'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.victor:lib:1.0.4'
+
 }
 apply plugin: 'com.google.gms.google-services'

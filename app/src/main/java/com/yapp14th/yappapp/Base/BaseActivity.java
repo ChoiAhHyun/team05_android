@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,10 +14,10 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.victor.loading.rotate.RotateLoading;
 import com.yapp14th.yappapp.R;
 
 import androidx.annotation.IdRes;
@@ -89,8 +87,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mProgressDialog.setCancelable(false);
 
-        RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.view_loading, null, false);
-        mProgressDialog.setContentView(relativeLayout);
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.view_loading, null, false);
+        (RotateLoading.class.cast(linearLayout.findViewById(R.id.ID_CP_PROGRESS))).start();
+
+        mProgressDialog.setContentView(linearLayout);
         mProgressDialog.show();
 
         mIsShowProgress = true;
