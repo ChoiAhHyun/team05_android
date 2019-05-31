@@ -32,8 +32,10 @@ public class AddFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
-            getBaseActivity().onBackPressed();
+        if (requestCode == 1000 ) {
+            if (resultCode == Activity.RESULT_OK || resultCode == 1000) {
+                getBaseActivity().onBackPressed();
+            }
         }
     }
 }

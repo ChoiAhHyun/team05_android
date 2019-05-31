@@ -126,11 +126,13 @@ public class MypageFragment extends BaseFragment {
             @Override
             public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
                 if (response.isSuccessful()) {
-                    if (response.body() != null && response.code() == 200) {
-                        historyList.clear();
-//                        Log.d(TAG, "history: " + response.body().toString());
-                        historyList.addAll(response.body().getList());
-                        listData.add(historyList);
+                    GroupInfoResData groupInfoResData = response.body();
+                    if (groupInfoResData != null) {
+                        if (groupInfoResData.getState() == 200) {
+                            historyList.clear();
+                            historyList.addAll(groupInfoResData.getList());
+                            listData.add(historyList);
+                        }
                     }
                     else {
                         Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
@@ -158,12 +160,13 @@ public class MypageFragment extends BaseFragment {
             @Override
             public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
                 if (response.isSuccessful()) {
-                    if (response.body() != null && response.code() == 200) {
-                        myList.clear();
-//                        Log.d(TAG, "my: " + response.body().getList().get(0));
-                        myList.addAll(response.body().getList());
-                        Log.d(TAG, "my: " + myList.toString());
-                        listData.add(myList);
+                    GroupInfoResData groupInfoResData = response.body();
+                    if (groupInfoResData != null) {
+                        if (groupInfoResData.getState() == 200) {
+                            myList.clear();
+                            myList.addAll(groupInfoResData.getList());
+                            listData.add(myList);
+                        }
                     }
                     else {
                         Toasty.error(getActivity(), "잠시 후 다시 시도해주세요.", Toasty.LENGTH_SHORT).show();
