@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +31,9 @@ import com.yapp14th.yappapp.common.RetrofitClient;
 import com.yapp14th.yappapp.model.GroupInfoResData;
 import com.yapp14th.yappapp.model.GroupRequestBody;
 import com.yapp14th.yappapp.utils.PermissionGPS;
+import com.yapp14th.yappapp.view.activity.AddActivity;
 
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,7 +46,9 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,6 +69,12 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     NestedScrollView scrollView;
     @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
+    @BindView(R.id.layout_no_list)
+    View layoutNoList;
+    @OnClick(R.id.btn_home_create_meeting)
+    void onCallClick() { startActivity( new Intent(getActivity(), AddActivity.class)); }
+
+
 
     private boolean isFirst = true;
     private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
@@ -75,7 +84,6 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private int page = 1;
     private static final long MIN_CLICK_INTERVAL=600;
     private long mLastClickTime;
-    private String id;
 
     @Override
     protected int getLayout() {
@@ -93,8 +101,6 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        id = Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
 
         if (isFirst) {
 
@@ -121,20 +127,6 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             setAdapter();
 
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (isFirst) {
-
-            getNearGroups(0.0, 1.1);
-
-            isFirst = false;
-
-        }
-
     }
 
     private void setRecyclerView(){
@@ -166,11 +158,9 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
                 if( diff == 0 )
                 {
+                    showProgress();
                     getRealTimeGroups(0.0,0.0,++page);
-                    Log.d("tagg", String.valueOf(page));
                 }
-
-
             }
         });
 
@@ -235,15 +225,23 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         }
     }
 
+    private Double latitude;
+    private Double longitude;
+
     private void afterAccessToGPS(){
 
         isAccessFineLocation = true;
 
-        double latitude = permissionGPS.getLatitude();
-        double longitude = permissionGPS.getLongitude();
+        latitude = permissionGPS.getLatitude();
+        longitude = permissionGPS.getLongitude();
 
-        //Toast.makeText(getActivity().getApplicationContext(), "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude, Toast.LENGTH_LONG).show();
+        if (isFirst) {
 
+            getNearGroups(longitude, latitude);
+
+            isFirst = false;
+
+        }
     }
 
     @Override
@@ -289,7 +287,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void getNearGroups(Double myLongitude, Double myLatitude){
 
         RetrofitClient.getInstance().getService()
-                .GetNearGroupDatas(new GroupRequestBody(id,myLongitude,myLatitude))
+                .GetNearGroupDatas(new GroupRequestBody(getUserId(),myLongitude,myLatitude))
                 .enqueue(new Callback<GroupInfoResData>() {
                 @Override
                 public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
@@ -299,51 +297,57 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             nearGroupModelList.addAll(response.body().getList());
                             adapterNear.notifyDataSetChanged();
                             rvNearGroup.scheduleLayoutAnimation();
-                            txtRealTime.setVisibility(View.VISIBLE);
-                            txtTitle.setVisibility(View.VISIBLE);
-                            pb.setVisibility(View.VISIBLE);
-                            YoYo.with(Techniques.FadeIn).duration(800).playOn(pb);
-                            YoYo.with(Techniques.FadeIn).duration(800).playOn(txtRealTime);
-                            YoYo.with(Techniques.FadeIn).duration(800).playOn(txtTitle);
-
-                            Handler handler = new Handler();
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    getRealTimeGroups(0.0, 0.0, page = 1);
-                                    handler.removeCallbacks(this);
-
-                                }
-                            }, 800);
-
-
-
                         }
                     }else{
                         adapterNear.notifyDataSetChanged();
                     }
 
-                    swipe.setRefreshing(false);
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    afterNearGroupNetworking();
+
                 }
 
                 @Override
                 public void onFailure(Call<GroupInfoResData> call, Throwable t) {
-                    Log.d("tagg", t.getMessage());
+                    afterNearGroupNetworking();
                 }
         });
     }
 
+    private void afterNearGroupNetworking(){
+
+        txtRealTime.setVisibility(View.VISIBLE);
+        txtTitle.setVisibility(View.VISIBLE);
+        pb.setVisibility(View.VISIBLE);
+        layoutNoList.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.FadeIn).duration(800).playOn(pb);
+        YoYo.with(Techniques.FadeIn).duration(800).playOn(txtRealTime);
+        YoYo.with(Techniques.FadeIn).duration(800).playOn(txtTitle);
+        YoYo.with(Techniques.FadeIn).duration(800).playOn(layoutNoList);
+
+        swipe.setRefreshing(false);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                getRealTimeGroups(0.0, 0.0, page = 1);
+                handler.removeCallbacks(this);
+
+            }
+        }, 800);
+    }
 
     private void getRealTimeGroups(Double myLongitude, Double myLatitude, int meetpage){
         RetrofitClient.getInstance().getService()
-                .GetRealTimeGroupDatas(new GroupRequestBody(id,myLongitude,myLatitude, meetpage))
+                .GetRealTimeGroupDatas(new GroupRequestBody(getUserId(),myLongitude,myLatitude, meetpage))
                 .enqueue(new Callback<GroupInfoResData>() {
                     @Override
                     public void onResponse(Call<GroupInfoResData> call, Response<GroupInfoResData> response) {
                         pb.setVisibility(View.GONE);
+                        hideProgress();
+
                         if (response.isSuccessful()) {
                             if(response.code() == 200) {
                                 realTimeGroupModelList.addAll(response.body().getList());
@@ -353,15 +357,15 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                                 }
 
                                 adapterRealTime.notifyDataSetChanged();
-                                //rvRealTime.scheduleLayoutAnimation();
-                                YoYo.with(Techniques.FadeIn).playOn(rvRealTime);
 
                             }
-                        }else{
-                            adapterRealTime.notifyDataSetChanged();
+                            else if (response.code() == 300){
+                                //there is no realtime meeting data anymore
+
+
+                            }
                         }
                     }
-
                     @Override
                     public void onFailure(Call<GroupInfoResData> call, Throwable t) {
                         Log.d("tagg", t.getMessage());
@@ -375,7 +379,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         nearGroupModelList.clear();
         realTimeGroupModelList.clear();
-        getNearGroups(0.0, 1.1);
+        getNearGroups(longitude, latitude);
 
     }
 

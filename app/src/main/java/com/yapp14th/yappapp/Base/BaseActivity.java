@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.victor.loading.rotate.RotateLoading;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.common.Constant;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
@@ -43,6 +44,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected abstract int getLayout();
+
+    protected String getUserId(){
+
+        return Preferences.getInstance().getSharedPreference(this, Constant.Preference.CONFIG_USER_USERNAME, null);
+
+    }
 
     // 툴바 필요할 시 사용
     public void setToolbar(String title, boolean isBackBtn) {
