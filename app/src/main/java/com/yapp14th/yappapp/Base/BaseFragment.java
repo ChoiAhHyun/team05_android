@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yapp14th.yappapp.common.Constant;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,6 +27,12 @@ public abstract class BaseFragment extends Fragment {
 
 
     protected abstract int getLayout();
+
+    protected String getUserId(){
+
+        return Preferences.getInstance().getSharedPreference(getActivity(), Constant.Preference.CONFIG_USER_USERNAME, null);
+
+    }
 
     public BaseActivity getBaseActivity() {
         Activity activity = getActivity();
@@ -50,5 +58,9 @@ public abstract class BaseFragment extends Fragment {
         if (activity == null) return;
 
         activity.hideProgress();
+    }
+
+    public interface FragmentNavigation {
+        void pushFragment(Fragment fragment);
     }
 }

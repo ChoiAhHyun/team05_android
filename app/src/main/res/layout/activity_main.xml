@@ -20,6 +20,7 @@
             android:alpha="0.5"
             android:background="@drawable/shadow_border_top"/>
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomnavigation"
             android:layout_width="match_parent"

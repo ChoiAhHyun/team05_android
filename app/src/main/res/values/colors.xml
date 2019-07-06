@@ -21,9 +21,20 @@
     <color name="transparent">#00000000</color>
     <color name="page_bgr">#f7f7f7</color>
     <color name="blur_black">#70000000</color>
+    <color name="color_e6e6e6">#e6e6e6</color>
+    <color name="color_b7b7b7">#b7b7b7</color>
 
     <color name="color_alarm_state_alarm">#3f3896</color>
     <color name="color_alarm_state_cancle">#ff2807</color>
     <color name="color_alarm_state_arrive">#11bd48</color>
 
+    <color name="color_d7d7d7">#d7d7d7</color>
+    <color name="color_111861">#111861</color>
+    <color name="color_717486">#717486</color>
+    <color name="color_ff2807">#ff2807</color>
+    <color name="color_66000000">#66000000</color>
+    <color name="color_f3f4f7">#f3f4f7</color>
+    <color name="color_393939">#393939</color>
+    <color name="color_3052ff">#3052ff</color>
+    <color name="color_9da0aa">#9da0aa</color>
 </resources>

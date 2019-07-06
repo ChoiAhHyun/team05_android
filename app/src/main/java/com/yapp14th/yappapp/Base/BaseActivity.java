@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,11 +14,12 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.victor.loading.rotate.RotateLoading;
 import com.yapp14th.yappapp.R;
+import com.yapp14th.yappapp.common.Constant;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
@@ -46,19 +45,23 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract int getLayout();
 
+    protected String getUserId(){
+
+        return Preferences.getInstance().getSharedPreference(this, Constant.Preference.CONFIG_USER_USERNAME, null);
+
+    }
+
     // 툴바 필요할 시 사용
-    protected void setToolbar(String title, boolean isBackBtn) {
+    public void setToolbar(String title, boolean isBackBtn) {
         toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null) {
             if (title != null || !title.isEmpty()) { // 툴바 타이틀이 없을 경우
                 toolbar.setTitle(title);
             }
-
             setSupportActionBar(toolbar);
 
             ActionBar actionbar = getSupportActionBar();
-
             if (actionbar != null && isBackBtn) { // 이전 버튼을 보여주고 싶지 않을 경우
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 // 이전 버튼 이미지 추가
@@ -73,6 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void bindViews() {
         ButterKnife.bind(this);
@@ -90,8 +94,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mProgressDialog.setCancelable(false);
 
-        RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.view_loading, null, false);
-        mProgressDialog.setContentView(relativeLayout);
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.view_loading, null, false);
+        (RotateLoading.class.cast(linearLayout.findViewById(R.id.ID_CP_PROGRESS))).start();
+
+        mProgressDialog.setContentView(linearLayout);
         mProgressDialog.show();
 
         mIsShowProgress = true;
@@ -119,10 +125,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                             }
                         }
                         else {
-                                // Api < 17. Unfortunately cannot check for isDestroyed()
-                                if (!((Activity) context).isFinishing()) {
-                                    dismissWithTryCatch(mProgressDialog);
-                                }
+                            // Api < 17. Unfortunately cannot check for isDestroyed()
+                            if (!((Activity) context).isFinishing()) {
+                                dismissWithTryCatch(mProgressDialog);
+                            }
                         }
                     }
                     else

@@ -1,36 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:background="@color/color_eff5f9"
         tools:context=".view.activity.MemberInfoInputActivity">
+
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"/>
+            android:layout_height="?actionBarSize"
+            app:layout_constraintTop_toTopOf="parent">
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/select_gen_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_9699a6"
-            android:layout_marginTop="68dp"
+            app:layout_constraintVertical_bias="0.472"
+            app:layout_constraintHorizontal_bias="0.164"
             android:textSize="15sp"
-            android:layout_marginLeft="38dp"
             android:text="성별을 선택해 주세요."/>
+
     <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/select_gen_layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintVertical_bias="0.279"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
             android:gravity="center_horizontal">
 
         <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="48dp">
+
             <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_male"
                     android:layout_width="109dp"
@@ -45,9 +60,11 @@
                     android:textColor="@color/color_9699a6"
                     android:text="남"/>
         </RelativeLayout>
+
         <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
             <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_female"
                     android:layout_width="109dp"
@@ -65,71 +82,91 @@
     </LinearLayout>
 
     <TextView
+            android:id="@+id/birth_text"
+            app:layout_constraintTop_toBottomOf="@+id/select_gen_layout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_9699a6"
+            app:layout_constraintHorizontal_bias="0.164"
             android:layout_marginTop="66dp"
             android:textSize="15sp"
-            android:layout_marginLeft="36dp"
             android:text="생년월일을 입력해 주세요."/>
 
     <LinearLayout
-            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/birth_text"
+            app:layout_constraintBottom_toTopOf="@id/next_btn"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:id="@+id/birth_Llayout"
+            app:layout_constraintVertical_bias="0.159"
             android:gravity="center_horizontal">
-        <EditText
+
+        <TextView
+                android:id="@+id/year_tv"
                 android:layout_width="73dp"
-                android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:gravity="right"
-                android:inputType="number"
-                android:imeOptions="actionNext"/>
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_line"/>
+
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
+                android:textColor="@color/color_9699a6"
+                android:layout_marginRight="31dp"
                 android:textSize="17sp"
                 android:text="년"/>
-        <EditText
+
+        <TextView
+                android:id="@+id/month_tv"
                 android:layout_width="32dp"
-                android:layout_marginLeft="31dp"
-                android:layout_marginRight="12dp"
+                android:textSize="17sp"
                 android:gravity="right"
-                android:inputType="number"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
-            android:imeOptions="actionNext"/>
+                android:background="@drawable/textview_line"/>
+
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="19dp"
+                android:layout_marginRight="31dp"
+                android:layout_marginLeft="15dp"
+                android:textColor="@color/color_9699a6"
                 android:textSize="17sp"
                 android:text="월"/>
-        <EditText
+
+        <TextView
+                android:id="@+id/day_tv"
                 android:layout_width="32dp"
-                android:layout_marginRight="6dp"
+                android:textSize="17sp"
                 android:gravity="right"
-                android:inputType="number"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                 android:imeOptions="actionDone"/>
+                android:background="@drawable/textview_line"/>
+
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/color_9699a6"
                 android:textSize="17sp"
+                android:layout_marginLeft="15dp"
                 android:text="일"/>
     </LinearLayout>
 
-    <RelativeLayout
+    <Button
+            android:id="@+id/next_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <Button
-                android:id="@+id/next_btn1"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/color_3346ff"
-                android:text="다음"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:lineSpacingExtra="3sp"
-                android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
-</LinearLayout>
+            android:layout_height="60dp"
+            android:background="@color/color_3346ff"
+            android:text="다음"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="18sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="meet_random">
+        <item>@drawable/meet_random1</item>
+        <item>@drawable/meet_random2</item>
+        <item>@drawable/meet_random3</item>
+        <item>@drawable/meet_random4</item>
+        <item>@drawable/meet_random5</item>
+        <item>@drawable/meet_random6</item>
+        <item>@drawable/meet_random7</item>
+        <item>@drawable/meet_random8</item>
+        <item>@drawable/meet_random9</item>
+        <item>@drawable/meet_random10</item>
+    </array>
+</resources>

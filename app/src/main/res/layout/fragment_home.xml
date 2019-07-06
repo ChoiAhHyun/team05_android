@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<androidx.core.widget.NestedScrollView
     android:scrollbarSize="0dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none"
+    android:id="@+id/scrollView"
     android:gravity="center">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +34,10 @@
             android:translationX="@dimen/main_bgr_img_trans_x"
             />
 
+
+
         <TextView
+            android:id="@+id/txt_main_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginLeft="20dp"
@@ -36,6 +47,7 @@
             android:textSize="22dp"
             android:textColor="#ffffff"
             android:lineSpacingExtra="2.8sp"
+            android:visibility="invisible"
             android:text="심심한데\n이런 모임 어떠세요?"
             android:textStyle="bold"
             />
@@ -49,7 +61,15 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             tools:listitem="@layout/model_near_group"
-            android:layout_height="300dp"/>
+            android:layout_height="320dp"/>
+
+        <include layout="@layout/model_no_list"
+            android:visibility="invisible"
+            android:id="@+id/layout_no_list"
+            app:layout_constraintTop_toTopOf="@id/rv_home_near_group"
+            app:layout_constraintBottom_toBottomOf="@id/rv_home_near_group"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
 
         <TextView
             android:id="@+id/txt_realtime"
@@ -63,17 +83,24 @@
             android:textColor="#1b1a1a"
             android:text="실시간 심모"
             android:textStyle="bold"
+            android:visibility="invisible"
             />
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="0dp"
+        <com.yanzhenjie.album.widget.ColorProgressBar
+            android:id="@+id/pb_home"
+            android:visibility="invisible"
             android:layout_marginTop="20dp"
-            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/txt_realtime"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-
-            >
+            android:layout_centerInParent="true"
+            style="@style/SpinKitView.Small"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            app:SpinKit_Style="FadingCircle"
+            app:SpinKit_Color="@color/colorAccent"
+            />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_home_realtime_group"
@@ -85,8 +112,7 @@
                 android:layout_marginRight="@dimen/home_card_left_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

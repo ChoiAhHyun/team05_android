@@ -17,8 +17,8 @@ public class MediaLoader implements AlbumLoader {
     public void load(ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
-                .error(R.drawable.profile_pic)
-                .placeholder(R.color.white)
+                .error(R.color.black)
+                .placeholder(R.color.black)
                 .into(imageView);
     }
 }

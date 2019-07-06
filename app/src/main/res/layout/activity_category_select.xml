@@ -1,48 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:background="@color/color_eff5f9"
         tools:context=".view.activity.CategorySelectActivity">
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"/>
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintTop_toTopOf="parent">
+        <TextView
+                android:id="@+id/complete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="완료"
+                android:textColor="@color/color_3346ff"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:layout_marginRight="20dp"
+                android:textSize="15sp"
+                android:padding="10dp"
+                android:layout_gravity="right"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
+            android:id="@+id/category_text"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="관심 카테고리를 선택해 주세요."
+            android:textColor="@color/color_9699a6"
+            app:layout_constraintVertical_bias="0.153"
+            app:layout_constraintHorizontal_bias="0.179"
             android:textSize="13sp"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="35dp"
-            android:textColor="@color/color_9699a6"/>
-
+            android:text="관심 카테고리를 선택해 주세요."/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/category_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintWidth_percent="0.9"
             android:layoutDirection="ltr"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            android:id="@+id/next_btn"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/color_3346ff"
-            android:text="다음"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:lineSpacingExtra="3sp"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
-</LinearLayout>
+    <!--<Button-->
+            <!--android:id="@+id/next_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:background="@color/color_3346ff"-->
+            <!--android:text="완료"-->
+            <!--android:textColor="@color/white"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--android:textSize="18sp"/>-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

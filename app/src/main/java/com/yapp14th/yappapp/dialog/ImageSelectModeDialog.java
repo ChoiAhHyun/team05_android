@@ -106,7 +106,7 @@ public class ImageSelectModeDialog extends BaseDialog {
                 break;
             case R.id.delete_image_btn :
                 albumPath = null;
-                onDismissListener.onDismiss(ImageSelectModeDialog.this);
+                onDismissListener.onDismiss(albumPath);
                 ImageSelectModeDialog.this.dismiss();
                 break;
             case R.id.cancel_btn :
